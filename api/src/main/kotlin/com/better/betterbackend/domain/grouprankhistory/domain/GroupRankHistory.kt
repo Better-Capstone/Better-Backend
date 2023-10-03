@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.grouprankhistory.domain
 
-import com.better.betterbackend.domain.study.domain.Study
+import com.better.betterbackend.domain.grouprank.domain.GroupRank
 import jakarta.persistence.*
 
 @Entity
@@ -10,10 +10,10 @@ class GroupRankHistory (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @ManyToOne
-    val study: Study,
-
     val percent: Double,
+
+    @ManyToOne
+    val groupRank: GroupRank,
 
 ) {
 }

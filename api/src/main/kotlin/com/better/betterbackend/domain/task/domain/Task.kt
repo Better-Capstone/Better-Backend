@@ -1,6 +1,7 @@
 package com.better.betterbackend.domain.task.domain
 
 import com.better.betterbackend.domain.challenge.domain.Challenge
+import com.better.betterbackend.domain.member.domain.Member
 import com.better.betterbackend.domain.study.domain.Study
 import com.better.betterbackend.global.common.BaseTimeEntity
 import jakarta.persistence.Entity
@@ -20,6 +21,9 @@ class Task (
 
     @ManyToOne
     val study: Study,
+
+    @ManyToOne
+    val member: Member,
 
     val title: String,
 

@@ -1,12 +1,8 @@
 package com.better.betterbackend.domain.grouprank.domain
 
-import com.better.betterbackend.domain.member.domain.Member
+import com.better.betterbackend.domain.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.domain.study.domain.Study
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 @Entity
 class GroupRank (
@@ -18,12 +14,12 @@ class GroupRank (
     @ManyToOne
     val study: Study,
 
-    @ManyToOne
-    val member: Member,
-
     val numOfLastAttendees: Int,
 
     val score: Int,
+
+    @OneToMany(mappedBy = "groupRank", cascade = [CascadeType.REMOVE])
+    val groupRankHistoryList: List<GroupRankHistory>,
 
 ) {
 }

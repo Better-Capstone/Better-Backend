@@ -1,7 +1,7 @@
 package com.better.betterbackend.domain.member.domain
 
-import com.better.betterbackend.domain.grouprank.domain.GroupRank
 import com.better.betterbackend.domain.study.domain.Study
+import com.better.betterbackend.domain.task.domain.Task
 import com.better.betterbackend.domain.user.domain.User
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
@@ -25,14 +25,14 @@ class Member (
     @ManyToOne
     val user: User,
 
+    @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
+    val taskList: List<Task>,
+
     val kickCount: Int,
 
     val memberType: MemberType,
 
     val notifyTime: LocalDateTime,
-
-    @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
-    val groupRankList: List<GroupRank>,
 
 ) {
 }

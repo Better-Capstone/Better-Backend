@@ -2,9 +2,9 @@ package com.better.betterbackend.domain.study.domain
 
 import com.better.betterbackend.domain.category.domain.Category
 import com.better.betterbackend.domain.grouprank.domain.GroupRank
-import com.better.betterbackend.domain.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.domain.member.domain.Member
 import com.better.betterbackend.domain.task.domain.Task
+import com.better.betterbackend.domain.user.domain.User
 import com.better.betterbackend.domain.userrankhistory.domain.UserRankHistory
 import com.better.betterbackend.global.common.BaseTimeEntity
 import jakarta.persistence.CascadeType
@@ -22,7 +22,8 @@ class Study (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val ownerId: String,
+    @ManyToOne
+    val owner: User,
 
     @ManyToOne
     val category: Category,
@@ -55,8 +56,5 @@ class Study (
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
     val groupRankList: List<GroupRank>,
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val groupRankHistoryList: List<GroupRankHistory>,
-
-): BaseTimeEntity() {
+    ): BaseTimeEntity() {
 }

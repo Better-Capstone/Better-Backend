@@ -1,6 +1,7 @@
 package com.better.betterbackend.domain.user.domain
 
 import com.better.betterbackend.domain.member.domain.Member
+import com.better.betterbackend.domain.study.domain.Study
 import com.better.betterbackend.domain.userrank.domain.UserRank
 import com.better.betterbackend.global.common.BaseTimeEntity
 import jakarta.persistence.*
@@ -10,19 +11,20 @@ class User (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long,
 
     val nickname: String,
 
     val name: String,
-
-    val kakaoId: String,
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.REMOVE])
     val userRank: UserRank,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
     val memberList: List<Member>,
+
+    @OneToMany(mappedBy = "owner", cascade = [CascadeType.REMOVE])
+    val ownedStudy: List<Study>,
 
 ): BaseTimeEntity() {
 }
