@@ -24,7 +24,7 @@ class User (
     val memberList: List<Member>,
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.REMOVE])
-    val ownedStudy: List<Study>,
+    val ownedStudyList: List<Study>,
 
 ): BaseTimeEntity() {
 }
