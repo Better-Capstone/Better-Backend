@@ -9,3 +9,4 @@ class BetterBackendApplication
 fun main(args: Array<String>) {
     runApplication<BetterBackendApplication>(*args)
 }
+
