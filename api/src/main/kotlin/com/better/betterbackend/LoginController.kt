@@ -70,6 +70,8 @@ class LoginController(private val userService: UserService) {
         val objectMapper1 = ObjectMapper().registerModule(KotlinModule())
         val userInfo = objectMapper1.readValue(jsonResponse1, UserInfo::class.java)
         userService.saveUser(userInfo.id, userInfo.kakao_account.profile.nickname)
+        println(userInfo.id)
+        println(userInfo.kakao_account.profile.nickname)
 
 //        val id = userInfo.id
 //        val nickname = userInfo.kakao_account.profile.nickname

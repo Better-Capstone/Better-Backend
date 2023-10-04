@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 class User (
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     var id: Long? = null,
     //    var id: Long? = null,//id 삭제
 
