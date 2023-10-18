@@ -2,11 +2,7 @@ package com.better.betterbackend.challenge.domain
 
 import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.model.BaseTimeEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.OneToOne
+import jakarta.persistence.*
 
 @Entity
 class Challenge (
@@ -22,7 +18,11 @@ class Challenge (
 
     val image: String,
 
-    val approvedMember: Double,
+    @ElementCollection
+    val approveMember: List<Long>,
+
+    @ElementCollection
+    val rejectMember: List<Long>,
 
     ): BaseTimeEntity() {
 }

@@ -32,6 +32,8 @@ class Study (
 
     val description: String,
 
+    var status: StudyStatus,
+
     val period: Period,
 
     val checkDay: CheckDay,
