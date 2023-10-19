@@ -1,6 +1,6 @@
 package com.better.betterbackend.user.dao
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User
+import com.better.betterbackend.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
