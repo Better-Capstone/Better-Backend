@@ -13,11 +13,8 @@ class User (
 
     @Id
     var id: Long? = null,
-    //    var id: Long? = null,//id 삭제
 
     var nickname: String,
-
-//    val kakaoId: String,// 얘 이름 id로 바꿔서 프라이머리키 만들기 type Long으로 바꾸기 Nullable 안해도됨
 
     val name: String,
 

@@ -24,7 +24,7 @@ class UserService (
 ) {
 
     fun getKakaoAuthToken(code: String): String {
-        // test 용 함수
+        // todo: test 용 -> 삭제 필요
         // 카카오 인증토큰 받기
         val restTemplate = RestTemplate()
         val headers = HttpHeaders()
@@ -42,10 +42,8 @@ class UserService (
 
         // 인증토큰 받아서 OAuthToken에 저장하기
         val jsonResponse = responseEntity.body
-        println(jsonResponse)
         val objectMapper = ObjectMapper()
         val oAuthToken = objectMapper.readValue(jsonResponse, OAuthTokenVo::class.java)
-        println(oAuthToken.access_token)
 
         return oAuthToken.access_token!!
     }
@@ -64,7 +62,6 @@ class UserService (
         val requestEntity = HttpEntity(requestBody, headers)
         val responseEntity: ResponseEntity<String> = restTemplate.postForEntity(url, requestEntity, String::class.java)
         val jsonResponse = responseEntity.body
-        println(jsonResponse)
         val objectMapper = ObjectMapper().registerModule(KotlinModule())
 
         return objectMapper.readValue(jsonResponse, UserInfoVo::class.java)
