@@ -36,7 +36,7 @@ jobs:
       - name: Make application.properties in test
         run: |
           mkdir -p ./api/src/test/resources
-          echo: "${{secrets.TEST_APPLICATION_YML}}" | base64 --decode >> ./api/src/test/resources/application.yml
+          echo "${{secrets.TEST_APPLICATION_YML}}" | base64 --decode > ./api/src/test/resources/application.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
