@@ -10,7 +10,7 @@ import jakarta.persistence.*
 class User (
 
     @Id
-    val id: Long,
+    var id: Long? = null,
 
     val nickname: String,
 
@@ -25,5 +25,9 @@ class User (
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.REMOVE])
     val ownedStudyList: List<Study>,
 
-    ): BaseTimeEntity() {
+): BaseTimeEntity() {
+
+    // todo: 생성자에 들어가는 UserRank 수정 필요
+    constructor(id: Long, nickname: String, name: String) : this(id, nickname, name, null, emptyList(), emptyList())
+
 }

@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.user.dto
 
-import com.better.betterbackend.domain.user.domain.User
+import com.better.betterbackend.user.domain.User
 import java.time.LocalDateTime
 
 class UserDto (

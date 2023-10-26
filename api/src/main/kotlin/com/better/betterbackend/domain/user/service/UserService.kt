@@ -1,13 +1,13 @@
 package com.better.betterbackend.domain.user.service
 
 import com.better.betterbackend.domain.user.vo.UserInfoVo
-import com.better.betterbackend.domain.user.dao.UserRepository
-import com.better.betterbackend.domain.user.domain.User
 import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.vo.OAuthTokenVo
+import com.better.betterbackend.user.dao.UserRepository
+import com.better.betterbackend.user.domain.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.http.HttpEntity
