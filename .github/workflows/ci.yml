@@ -32,7 +32,13 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          
+
+      - name: Make application.properties in test
+        run: |
+          mkdir -p ./api/src/test/resources
+          echo: "${{secrets.TEST_APPLICATION_YML}}" | base64 --decode > ./api/src/test/resources/application.yml
+        shell: bash
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
