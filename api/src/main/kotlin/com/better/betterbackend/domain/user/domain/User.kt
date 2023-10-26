@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service
 class User (
 
     @Id
-
     var id: Long? = null,
     //    var id: Long? = null,//id 삭제
 
@@ -27,23 +26,8 @@ class User (
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
     val memberList: List<Member>,
-
+    
 ): BaseTimeEntity() {
-    constructor(id: Long?, nickname: String) : this(id,nickname,"Default Name", null, emptyList()){
-        this.id = id
-        this.nickname = nickname
-    }
-}
-interface SaveData : JpaRepository<User,Long>{
-}
-@Service
-class UserService {
-    @Autowired
-    private lateinit var saveData: SaveData
+    constructor(id: Long?, nickname: String, name: String) : this(id, nickname,name, null, emptyList())
 
-    fun saveUser(id : Long , nickname: String){
-        val user = User(id = id, nickname = nickname)
-        saveData.save(user)
-    }
 }
-
