@@ -35,6 +35,7 @@ class UserController(
 
     @GetMapping("/auth/kakao/callback")
     fun kakaoLogin(@RequestParam(name = "code", defaultValue = "Guest") code: String) : ResponseEntity<String> {
+        // todo: test 용 -> 삭제 필요
         return ResponseEntity.ok().body(userService.getKakaoAuthToken(code))
     }
 
