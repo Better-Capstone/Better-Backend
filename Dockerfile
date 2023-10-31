@@ -39,12 +39,6 @@ COPY core/build.gradle.kts /build/core
 
 COPY build.gradle.kts settings.gradle.kts /build/
 
-RUN gradle clean build
-
-FROM openjdk:17.0.1-jdk-slim AS run
-
-RUN adduser --system --group app-api
-
 RUN ls
 RUN ls /
 RUN ls /build
@@ -52,7 +46,14 @@ RUN ls /build/api
 RUN ls /build/api/build
 RUN ls /build/api/build/libs
 
-COPY --from=build --chown=app-api:app-api /build/api/build/libs/*.jar app.jar
+RUN gradle clean build
+
+FROM openjdk:17.0.1-jdk-slim AS run
+WORKDIR /app
+
+RUN adduser --system --group app-api
+
+COPY --from=build --chown=app-api:app-api /build/api/build/libs/*.jar ./app.jar
 
 EXPOSE 8080
 USER app-api
