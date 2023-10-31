@@ -44,6 +44,10 @@ FROM openjdk:17.0.1-jdk-slim AS run
 
 RUN adduser --system --group app-api
 
+CMD ["ls", "./api"]
+CMD ["ls", "./api/build"]
+CMD ["ls", "./api/build/libs"]
+
 COPY --from=build --chown=app-api:app-api ./api/build/libs/*.jar app.jar
 
 EXPOSE 8080
