@@ -45,11 +45,11 @@ FROM openjdk:17.0.1-jdk-slim AS run
 RUN adduser --system --group app-api
 
 RUN ls
-RUN ls ./api
-RUN ls ./api/build
-RUN ls ./api/build/libs
+RUN ls /api
+RUN ls /api/build
+RUN ls /api/build/libs
 
-COPY --from=build --chown=app-api:app-api ./api/build/libs/*.jar app.jar
+COPY --from=build --chown=app-api:app-api /api/build/libs/*.jar app.jar
 
 EXPOSE 8080
 USER app-api
