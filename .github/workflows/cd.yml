@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "feature/rangjin/cd" ]
 
 permissions:
   contents: read
