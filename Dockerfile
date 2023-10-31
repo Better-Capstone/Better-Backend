@@ -38,13 +38,20 @@ COPY core/build.gradle.kts ./core
 
 COPY build.gradle.kts settings.gradle.kts  ./
 
-RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
+RUN gradle clean build
 
 FROM openjdk:17.0.1-jdk-slim AS run
 
-COPY --from=build /api/build/libs/*.jar app.jar
+RUN adduser --system --group app-api
+
+RUN ls
+RUN ls ./api
+RUN ls ./api/build
+RUN ls ./api/build/libs
+
+COPY --from=build --chown=app-api:app-api ./api/build/libs/*.jar app.jar
 
 EXPOSE 8080
-USER nobody
+USER app-api
 
 CMD ["java", "-jar", "app.jar"]
