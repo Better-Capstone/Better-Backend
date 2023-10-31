@@ -8,6 +8,10 @@ plugins {
     kotlin("plugin.jpa") version "1.8.22" apply false
 }
 
+tasks.jar {
+    enabled = false
+}
+
 allprojects {
     group = "com.better"
     version = "0.0.1-SNAPSHOT"
