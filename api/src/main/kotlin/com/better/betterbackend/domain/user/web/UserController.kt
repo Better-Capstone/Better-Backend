@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 class UserController(
 
     // todo: test 용 -> 삭제 필요

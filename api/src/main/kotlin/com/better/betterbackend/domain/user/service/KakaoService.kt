@@ -55,12 +55,6 @@ class KakaoService {
         val requestEntity = HttpEntity(requestBody, headers)
         val responseEntity: ResponseEntity<String> = restTemplate.postForEntity(url, requestEntity, String::class.java)
 
-        if (responseEntity.statusCode == HttpStatus.UNAUTHORIZED) {
-            throw CustomException(ErrorCode.KAKAO_UNAUTHORIZED)
-        } else {
-            print(responseEntity.statusCode)
-        }
-
         val jsonResponse = responseEntity.body
         val objectMapper = ObjectMapper().registerModule(KotlinModule())
 
