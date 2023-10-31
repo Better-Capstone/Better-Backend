@@ -24,6 +24,9 @@ jobs:
           mkdir -p ./api/src/main/resources
           # GitHub-Actions 에서 설정한 값을 application-database.yml 파일에 쓰기
           echo "${{ secrets.DATABASE }}" > ./api/src/main/resources/application.yml
+          
+          mkdir -p ./api/src/test/resources
+          echo "${{secrets.TEST_APPLICATION_YML}}" | base64 --decode > ./api/src/test/resources/application.yml
         shell: bash
 
       - name: Build with Gradle
