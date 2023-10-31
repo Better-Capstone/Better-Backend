@@ -30,13 +30,13 @@
 
 FROM gradle:7.6-jdk AS build
 
-COPY api/src/main ./api/src/main
-COPY api/build.gradle.kts ./api
+COPY api/src/main /api/src/main
+COPY api/build.gradle.kts /api
 
-COPY core/src/main ./core/src/main
-COPY core/build.gradle.kts ./core
+COPY core/src/main /core/src/main
+COPY core/build.gradle.kts /core
 
-COPY build.gradle.kts settings.gradle.kts  ./
+COPY build.gradle.kts settings.gradle.kts  /
 
 RUN gradle clean build
 
@@ -45,6 +45,7 @@ FROM openjdk:17.0.1-jdk-slim AS run
 RUN adduser --system --group app-api
 
 RUN ls
+RUN ls /
 RUN ls /api
 RUN ls /api/build
 RUN ls /api/build/libs
