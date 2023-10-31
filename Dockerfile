@@ -42,6 +42,7 @@ COPY build.gradle.kts settings.gradle.kts /build/
 RUN gradle clean build
 
 RUN ls /build/api/build/libs
+RUN echo /buid/api/src/main/resources/application.yml
 
 FROM openjdk:17.0.1-jdk-slim AS run
 WORKDIR /app
