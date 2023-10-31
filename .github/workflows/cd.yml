@@ -3,7 +3,7 @@ name: CD
 on:
   push:
     branches:
-      - 'feature/rangjin/cd'
+      - 'main'
 
 permissions:
   contents: read
@@ -39,6 +39,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.KEY }}
           script: |
-            sudo docker-compose stop application
+            sudo docker-compose stop ${{ secrets.SERVER_CONTAINER_NAME }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
             sudo docker-compose up -d
