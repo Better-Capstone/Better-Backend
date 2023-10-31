@@ -11,6 +11,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.13.0
+        with:
+          java-version: 17
+          distribution: temurin
         ## create application-database.yml
       - name: make application-database.yml
         run: |
@@ -21,7 +28,6 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ls
           chmod +x gradlew 
           ./gradlew build
 
