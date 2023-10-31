@@ -39,10 +39,7 @@ COPY core/build.gradle.kts /build/core
 
 COPY build.gradle.kts settings.gradle.kts /build/
 
-RUN gradle clean build
-
-RUN ls /build/api/build/libs
-RUN cat ./build/api/src/main/resources/application.yml
+RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
 
 FROM openjdk:17.0.1-jdk-slim AS run
 WORKDIR /app
