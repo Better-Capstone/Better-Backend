@@ -1,0 +1,50 @@
+name: CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        ## create application-database.yml
+      - name: make application-database.yml
+        run: |
+
+          cd ./api/src/main/resources
+          
+          # application-database.yml 파일 생성
+          touch ./application.yml
+          
+          # GitHub-Actions 에서 설정한 값을 application-database.yml 파일에 쓰기
+          echo "${{ secrets.DATABASE }}" >> ./application.yml
+        shell: bash
+
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew 
+          ./gradlew build
+
+      #          ./gradlew bootJar
+      ## 웹 이미지 빌드 및 도커허브에 push
+      - name: web docker build and push
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} . 
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+      ## docker compose up
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
+          script: |
+            sudo docker rm $(sudo docker ps -a)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            docker-compose up -d
+            sudo docker image prune -f
