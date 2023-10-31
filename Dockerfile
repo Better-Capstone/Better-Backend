@@ -39,14 +39,9 @@ COPY core/build.gradle.kts /build/core
 
 COPY build.gradle.kts settings.gradle.kts /build/
 
-RUN ls
-RUN ls /
-RUN ls /build
-RUN ls /build/api
-RUN ls /build/api/build
-RUN ls /build/api/build/libs
-
 RUN gradle clean build
+
+RUN ls /build/api/build/libs
 
 FROM openjdk:17.0.1-jdk-slim AS run
 WORKDIR /app
