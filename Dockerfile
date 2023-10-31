@@ -31,12 +31,12 @@
 FROM gradle:7.6-jdk AS build
 
 COPY api/src/main ./api/src/main
-COPY api/build.gradle ./api
+COPY api/build.gradle.kts ./api
 
 COPY core/src/main ./core/src/main
-COPY core/build.gradle ./core
+COPY core/build.gradle.kts ./core
 
-COPY build.gradle settings.gradle  ./
+COPY build.gradle.kts settings.gradle.kts  ./
 
 RUN gradle clean build
 
