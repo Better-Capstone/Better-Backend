@@ -21,4 +21,5 @@ class UserRank (
     val userRankHistoryList: List<UserRankHistory>,
 
     ): BaseTimeEntity() {
+
 }
