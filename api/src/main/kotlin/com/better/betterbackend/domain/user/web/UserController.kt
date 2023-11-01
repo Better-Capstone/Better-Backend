@@ -3,12 +3,9 @@ import com.better.betterbackend.domain.user.service.UserService
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
-import com.better.betterbackend.domain.user.dto.response.UserResponseDto
 import com.better.betterbackend.domain.user.service.KakaoService
-import com.better.betterbackend.domain.userrank.dto.SimpleUserRankResponseDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PostMapping
@@ -40,18 +37,6 @@ class UserController(
     fun kakaoLogin(@RequestParam(name = "code", defaultValue = "Guest") code: String) : ResponseEntity<String> {
         // todo: test 용 -> 삭제 필요
         return ResponseEntity.ok().body(kakaoService.getKakaoAuthToken(code))
-    }
-
-    @GetMapping("/{id}")
-    fun getUser(@PathVariable("id") id: Long) : ResponseEntity<UserResponseDto> {
-//        todo: header 에 jwt token 추가
-        return ResponseEntity.ok().body(userService.getUser(id))
-
-    }
-    @GetMapping("/rank/{id}")
-    fun getRank(@PathVariable("id") id: Long) : ResponseEntity<SimpleUserRankResponseDto>{
-//        todo: header 에 jwt token 추가
-        return ResponseEntity.ok().body(userService.getRank(id))
     }
 
 }
