@@ -10,7 +10,8 @@ enum class ErrorCode(
 
 ) {
 
-    KAKAO_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "존재하지 않는 토큰입니다"),
+    KAKAO_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "카카오로부터 정보를 받아올 수 없습니다"),
+    INVALID_TOKEN(HttpStatus.FORBIDDEN, "유효하지 않은 토큰입니다"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다"),
 
 }
