@@ -18,10 +18,22 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService (
+
     private val kakaoService: KakaoService,
+
     private val userRepository: UserRepository,
+
     private val userRankRepository: UserRankRepository,
+  
+    private val tokenProvider: JwtTokenProvider,   
+  
 ) {
+
+    fun test(nickname: String): String {
+        val user = userRepository.save(User(1, nickname, "test"))
+
+        return tokenProvider.createToken(user.id.toString())
+    }
 
     fun register(request: UserRegisterRequestDto): UserRegisterResponseDto {
         val accessToken = request.accessToken
@@ -29,7 +41,7 @@ class UserService (
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
-        val userRank = userRankRepository.save(UserRank(null,4000, emptyList()))//todo userrank저장 잘되는지 확인 필요
+        val userRank = userRankRepository.save(UserRank(null, 4000, emptyList()))//todo userrank저장 잘되는지 확인 필요
         val user = userRepository.save(User(userInfo.id, nickname, userInfo.kakaoAccount.profile.nickname, userRank))
         return UserRegisterResponseDto(user)
     }
@@ -39,8 +51,7 @@ class UserService (
 
         val user = userRepository.findByIdOrNull(userInfo.id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        // todo: jwt token 추가
-        return UserLoginResponseDto("string", SimpleUserResponseDto(user))
+        return UserLoginResponseDto(tokenProvider.createToken(user.id.toString()), SimpleUserResponseDto(user))
     }
 
     fun getUser(id : Long): UserResponseDto {
@@ -62,6 +73,10 @@ class UserService (
         return user.userRank.userRankHistoryList.map {
             UserRankHistoryResponseDto(user.id!!, it)
         }
+    }
+
+    fun hello(): String {
+        return "hello"
     }
 
 }

@@ -9,24 +9,25 @@ import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryRespon
 import com.better.betterbackend.domain.userrank.dto.SimpleUserRankResponseDto
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/user")
 class UserController(
 
-    // todo: test 용 -> 삭제 필요
-    private val kakaoService: KakaoService,
-
     private val userService: UserService,
 
 ) {
+
+    @GetMapping("/test/{nickname}")
+    fun test(@PathVariable("nickname") nickname: String): ResponseEntity<String> {
+        return ResponseEntity.ok().body(userService.test(nickname))
+    }
+
+    @GetMapping("/test2")
+    fun test2(): ResponseEntity<String> {
+        return ResponseEntity.ok().body(userService.hello())
+    }
 
     @PostMapping("/register")
     fun register(@RequestBody request: UserRegisterRequestDto): ResponseEntity<UserRegisterResponseDto> {
@@ -38,27 +39,20 @@ class UserController(
         return ResponseEntity.ok().body(userService.login(kakaoToken))
     }
 
-    @GetMapping("/auth/kakao/callback")
-    fun kakaoLogin(@RequestParam(name = "code", defaultValue = "Guest") code: String) : ResponseEntity<String> {
-        // todo: test 용 -> 삭제 필요
-        return ResponseEntity.ok().body(kakaoService.getKakaoAuthToken(code))
-    }
-
     @GetMapping("/{id}")
     fun getUser(@PathVariable("id") id: Long) : ResponseEntity<UserResponseDto> {
-//        todo: header 에 jwt token 추가
         return ResponseEntity.ok().body(userService.getUser(id))
 
     }
+    
     @GetMapping("/rank/{id}")
     fun getRank(@PathVariable("id") id: Long) : ResponseEntity<UserRankResponseDto>{
-//        todo: header 에 jwt token 추가
         return ResponseEntity.ok().body(userService.getRank(id))
     }
+    
     @GetMapping("/rank/{id}/history")
     fun getRankHistory(@PathVariable("id") id: Long) : ResponseEntity<List<UserRankHistoryResponseDto>>{
-//        todo: header 에 jwt token 추가
         return ResponseEntity.ok().body(userService.getRankHistory(id))
     }
-
+    
 }
