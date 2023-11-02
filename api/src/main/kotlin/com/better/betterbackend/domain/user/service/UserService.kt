@@ -31,7 +31,8 @@ class UserService (
 ) {
 
     fun test(nickname: String): String {
-        val user = userRepository.save(User(1, nickname, "test"))
+        val userRank = userRankRepository.save(UserRank(null, 4000, emptyList()))
+        val user = userRepository.save(User(1, nickname, "test", userRank))
 
         return tokenProvider.createToken(user.id.toString())
     }
