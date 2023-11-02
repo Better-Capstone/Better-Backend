@@ -15,7 +15,7 @@ class UserRankHistory (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val uid: String,
+    val uid: Long,
 
     @ManyToOne
     val userRank: UserRank,
@@ -27,5 +27,5 @@ class UserRankHistory (
 
     val description: String,
 
-    ) {
+) {
 }
