@@ -7,13 +7,7 @@ import com.better.betterbackend.user.domain.User
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import com.better.betterbackend.grouprank.domain.GroupRank
 import com.better.betterbackend.model.BaseTimeEntity
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 @Entity
 class Study (
@@ -22,10 +16,10 @@ class Study (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val owner: User,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val category: Category,
 
     val title: String,
@@ -58,5 +52,21 @@ class Study (
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
     val groupRankList: List<GroupRank>,
 
-    ): BaseTimeEntity() {
+): BaseTimeEntity() {
+
+    constructor(
+        user: User,
+        category: Category,
+        title: String,
+        description: String,
+        checkDay: CheckDay,
+        kickCondition: Int,
+        maximumCount: Int,
+        minRank: Int,
+        period: Period
+    ): this(
+        // todo: member 추가
+        null, user, category, title, description, StudyStatus.INPROGRESS, period, checkDay, 0, kickCondition, maximumCount, minRank, emptyList(), emptyList(), emptyList(), emptyList()
+    )
+
 }

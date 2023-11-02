@@ -5,7 +5,7 @@ import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
-import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryResponseDto
+import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
