@@ -15,5 +15,6 @@ class GroupRankHistory (
     @ManyToOne
     val groupRank: GroupRank,
 
-    ) {
+) {
+
 }

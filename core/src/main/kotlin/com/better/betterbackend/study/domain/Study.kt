@@ -41,32 +41,17 @@ class Study (
     val minRank: Int,
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val memberList: List<Member>,
+    val memberList: List<Member> = ArrayList(),
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val taskList: List<Task>,
+    val taskList: List<Task> = ArrayList(),
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val userRankHistoryList: List<UserRankHistory>,
+    val userRankHistoryList: List<UserRankHistory> = ArrayList(),
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val groupRankList: List<GroupRank>,
+    val groupRankList: List<GroupRank> = ArrayList(),
 
 ): BaseTimeEntity() {
-
-    constructor(
-        user: User,
-        category: Category,
-        title: String,
-        description: String,
-        checkDay: CheckDay,
-        kickCondition: Int,
-        maximumCount: Int,
-        minRank: Int,
-        period: Period
-    ): this(
-        // todo: member 추가
-        null, user, category, title, description, StudyStatus.INPROGRESS, period, checkDay, 0, kickCondition, maximumCount, minRank, emptyList(), emptyList(), emptyList(), emptyList()
-    )
 
 }

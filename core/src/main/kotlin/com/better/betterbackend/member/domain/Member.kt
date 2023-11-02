@@ -20,7 +20,7 @@ class Member (
     val user: User,
 
     @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
-    val taskList: List<Task>,
+    val taskList: List<Task> = ArrayList(),
 
     val kickCount: Int,
 
@@ -28,5 +28,6 @@ class Member (
 
     val notifyTime: LocalDateTime,
 
-    ) {
+) {
+
 }

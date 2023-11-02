@@ -14,7 +14,8 @@ class Category (
     val name: String,
 
     @OneToMany(mappedBy = "category", cascade = [CascadeType.REMOVE])
-    val studyList: List<Study>,
+    val studyList: List<Study> = ArrayList(),
 
-    ): BaseTimeEntity() {
+): BaseTimeEntity() {
+
 }

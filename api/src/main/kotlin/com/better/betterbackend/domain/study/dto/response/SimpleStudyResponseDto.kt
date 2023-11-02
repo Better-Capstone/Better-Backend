@@ -1,6 +1,5 @@
 package com.better.betterbackend.domain.study.dto.response
 
-
 import com.better.betterbackend.study.domain.CheckDay
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study

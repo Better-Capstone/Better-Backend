@@ -22,11 +22,6 @@ class UserController(
         return ResponseEntity.ok().body(userService.test(nickname))
     }
 
-    @GetMapping("/test2")
-    fun test2(): ResponseEntity<String> {
-        return ResponseEntity.ok().body(userService.hello())
-    }
-
     @PostMapping("/register")
     fun register(@RequestBody request: UserRegisterRequestDto): ResponseEntity<UserRegisterResponseDto> {
         return ResponseEntity.ok().body(userService.register(request))
