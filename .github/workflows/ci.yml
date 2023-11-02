@@ -22,6 +22,10 @@ jobs:
         run: |
           mkdir -p ./api/src/test/resources
           echo "${{ secrets.TEST_DATABASE }}" | base64 --decode > ./api/src/test/resources/application.yml
+          
+          mkdir -p ./api/src/main/resources
+          echo "${{ secrets.DATABASE }}" | base64 --decode > ./api/src/main/resources/application.yml
+          echo "${{ secrets.JWT }}" | base64 --decode > ./api/src/main/resources/jwt.yml
         shell: bash
 
       - name: Grant Execute Permission for Gradlew
