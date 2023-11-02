@@ -28,6 +28,6 @@ class User (
 ): BaseTimeEntity() {
 
     // todo: 생성자에 들어가는 UserRank 수정 필요
-    constructor(id: Long, nickname: String, name: String ,userRank : UserRank) : this(id, nickname, name, userRank, emptyList(), emptyList())
-
+    constructor(id: Long, nickname: String, name: String ) : this(id, nickname, name,null , emptyList(), emptyList())
+    constructor(id: Long, nickname: String, name: String ,userRank:UserRank) : this(id, nickname, name, userRank, emptyList(), emptyList())
 }
