@@ -1,6 +1,5 @@
 package com.better.betterbackend.domain.user.service
 
-import com.better.betterbackend.domain.member.dto.SimpleMemberResponseDto
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
@@ -30,11 +29,8 @@ class UserService (
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
-
-//        val user = userRepository.save(User(userInfo.id, nickname, userInfo.kakaoAccount.profile.nickname))//todo 생성자에 userrank 객체 만들어서 추가해줘야함
-        val tempUser = User(userInfo.id, nickname, userInfo.kakaoAccount.profile.nickname)
-        val userRank = userRankRepository.save(UserRank(null,4000,tempUser, emptyList()))//todo userrank저장 잘되는지 확인 필요
-        val user = userRepository.save(User(userInfo.id, nickname, userInfo.kakaoAccount.profile.nickname,userRank))
+        val userRank = userRankRepository.save(UserRank(null,4000, emptyList()))//todo userrank저장 잘되는지 확인 필요
+        val user = userRepository.save(User(userInfo.id, nickname, userInfo.kakaoAccount.profile.nickname, userRank))
         return UserRegisterResponseDto(user)
     }
 
@@ -46,25 +42,26 @@ class UserService (
         // todo: jwt token 추가
         return UserLoginResponseDto("string", SimpleUserResponseDto(user))
     }
+
     fun getUser(id : Long): UserResponseDto {
         //유저의 id에 해당하는 db정보를 불러와서 dto로 감싸서 출력해줌.
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         return UserResponseDto(user)
     }
+
     fun getRank(id : Long) : UserRankResponseDto{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return UserRankResponseDto(user.userRank!!)
+        return UserRankResponseDto(user.userRank)
     }
+
     fun getRankHistory(id: Long) : List<UserRankHistoryResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return user.userRank!!.userRankHistoryList.map {
+        return user.userRank.userRankHistoryList.map {
             UserRankHistoryResponseDto(user.id!!, it)
         }
-
     }
-
 
 }

@@ -16,8 +16,8 @@ class User (
 
     val name: String,
 
-    @OneToOne(mappedBy = "user", cascade = [CascadeType.REMOVE])
-    var userRank: UserRank?,
+    @OneToOne
+    val userRank: UserRank,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
     val memberList: List<Member>,
@@ -27,7 +27,6 @@ class User (
 
 ): BaseTimeEntity() {
 
-    // todo: 생성자에 들어가는 UserRank 수정 필요
-    constructor(id: Long, nickname: String, name: String ) : this(id, nickname, name,null , emptyList(), emptyList())
-    constructor(id: Long, nickname: String, name: String ,userRank:UserRank) : this(id, nickname, name, userRank, emptyList(), emptyList())
+    constructor(id: Long, nickname: String, name: String, userRank:UserRank) : this(id, nickname, name, userRank, emptyList(), emptyList())
+
 }
