@@ -9,6 +9,7 @@ import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryRespon
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
+import com.better.betterbackend.global.security.JwtTokenProvider
 import com.better.betterbackend.user.dao.UserRepository
 import com.better.betterbackend.user.domain.User
 import com.better.betterbackend.userrank.dao.UserRankRepository
