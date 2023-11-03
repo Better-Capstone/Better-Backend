@@ -4,7 +4,7 @@ import com.better.betterbackend.challenge.domain.Challenge
 import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
 
 class SimpleChallengeResponseDto (
-    var id: Long? = null,
+    var id: Long,
 
     val description: String,
 
