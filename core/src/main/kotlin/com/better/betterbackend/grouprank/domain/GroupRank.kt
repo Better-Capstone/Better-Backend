@@ -19,7 +19,8 @@ class GroupRank (
     val score: Int,
 
     @OneToMany(mappedBy = "groupRank", cascade = [CascadeType.REMOVE])
-    val groupRankHistoryList: List<GroupRankHistory>,
+    val groupRankHistoryList: List<GroupRankHistory> = ArrayList(),
 
-    ) {
+) {
+
 }
