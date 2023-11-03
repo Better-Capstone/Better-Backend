@@ -1,5 +1,8 @@
 package com.better.betterbackend.domain.user.service
 
+import com.better.betterbackend.domain.challenge.ChallengeResponseDto
+import com.better.betterbackend.domain.study.dto.SimpleStudyResponseDto
+import com.better.betterbackend.domain.task.dto.TaskResponseDto
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
@@ -76,6 +79,27 @@ class UserService (
             UserRankHistoryResponseDto(user.id!!, it)
         }
     }
+    fun getTask(id: Long) : Array<TaskResponseDto>{
+        val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+        val study = user.ownedStudyList.map { SimpleStudyResponseDto(it)}
+        user.ownedStudyList
+//        val list = ArrayList<SimpleTaskResponseDto>()
+//        for (member:Member in user.memberList) {
+//            for (task:Task in member.taskList) {
+//                list.add(SimpleTaskResponseDto(task))
+//            }
+//        } 이런식으로 이중포문 돌려보기
+
+        return
+
+    }
+
+    fun getChallenge(id: Long) : Array<ChallengeResponseDto>{
+        val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+    }
+
+
+
 
     fun hello(): String {
         return "hello"
