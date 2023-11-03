@@ -53,6 +53,7 @@ class UserController(
     @GetMapping("/{id}/tasks")
     fun getTask(@PathVariable("id") id: Long): ResponseEntity<ArrayList<TaskResponseDto>> {
         return ResponseEntity.ok().body(userService.getTask(id))
+        // todo 리턴타입 ArrayList-> List로 수정해주기
     }
 
     @GetMapping("/{id}/challenges")
