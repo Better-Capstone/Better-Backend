@@ -24,7 +24,7 @@ class ChallengeResponseDto (
 
     //SimpleUserResponseDto(study.owner),
     constructor(challenge: Challenge) :this (
-        challenge.id,
+        challenge.id!!,
         SimpleTaskResponseDto(challenge.task),
         challenge.description,
         challenge.image,

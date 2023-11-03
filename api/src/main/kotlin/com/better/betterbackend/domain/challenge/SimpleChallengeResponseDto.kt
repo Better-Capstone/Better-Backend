@@ -15,7 +15,7 @@ class SimpleChallengeResponseDto (
     val rejectMember: List<Long>,
 ){
     constructor(challenge: Challenge) : this (
-        challenge.id,
+        challenge.id!!,
         challenge.description,
         challenge.image,
         challenge.approveMember,

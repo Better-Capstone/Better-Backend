@@ -107,7 +107,7 @@ class UserService (
 
 
 
-    fun getTask(id: Long) : ArrayList<TaskResponseDto>{
+    fun getTask(id: Long) : List<TaskResponseDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         val list = ArrayList<TaskResponseDto>()
@@ -119,7 +119,7 @@ class UserService (
         return list
     }
 
-    fun getChallenge(id: Long) : ArrayList<ChallengeResponseDto>{
+    fun getChallenge(id: Long) : List<ChallengeResponseDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
         val list = ArrayList<ChallengeResponseDto>()
         for (member : Member in user.memberList) {

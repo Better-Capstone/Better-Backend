@@ -25,7 +25,7 @@ class TaskResponseDto(
     val challenge: SimpleChallengeResponseDto,
 ){
     constructor(task: Task) : this(
-        task.id,
+        task.id!!,
         SimpleStudyResponseDto(task.study),
         SimpleMemberResponseDto(task.member),
         task.title,
