@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 
 class TaskResponseDto(
 
-    var id: Long? = null,
+    var id: Long,
 
     val study: SimpleStudyResponseDto,
 
