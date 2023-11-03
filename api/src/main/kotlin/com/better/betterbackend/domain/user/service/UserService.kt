@@ -5,7 +5,6 @@ import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.domain.challenge.ChallengeResponseDto
 import com.better.betterbackend.domain.task.dto.TaskResponseDto
-import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
 
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto

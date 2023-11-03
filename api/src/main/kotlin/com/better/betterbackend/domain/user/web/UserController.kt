@@ -8,7 +8,6 @@ import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
 import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
-import com.better.betterbackend.task.domain.Task
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -36,26 +35,29 @@ class UserController(
     }
 
     @GetMapping("/{id}")
-    fun getUser(@PathVariable("id") id: Long) : ResponseEntity<UserResponseDto> {
+    fun getUser(@PathVariable("id") id: Long): ResponseEntity<UserResponseDto> {
         return ResponseEntity.ok().body(userService.getUser(id))
 
     }
-    
+
     @GetMapping("/{id}/rank")
-    fun getRank(@PathVariable("id") id: Long) : ResponseEntity<UserRankResponseDto>{
+    fun getRank(@PathVariable("id") id: Long): ResponseEntity<UserRankResponseDto> {
         return ResponseEntity.ok().body(userService.getRank(id))
     }
-    
+
     @GetMapping("/{id}/rank/history")
-    fun getRankHistory(@PathVariable("id") id: Long) : ResponseEntity<List<UserRankHistoryResponseDto>>{
+    fun getRankHistory(@PathVariable("id") id: Long): ResponseEntity<List<UserRankHistoryResponseDto>> {
         return ResponseEntity.ok().body(userService.getRankHistory(id))
     }
+
     @GetMapping("/{id}/tasks")
-    fun getTask(@PathVariable("id") id: Long) : ResponseEntity<ArrayList<TaskResponseDto>>{
+    fun getTask(@PathVariable("id") id: Long): ResponseEntity<ArrayList<TaskResponseDto>> {
         return ResponseEntity.ok().body(userService.getTask(id))
     }
+
     @GetMapping("/{id}/challenges")
-    fun getChallenge(@PathVariable("id") id: Long) : ResponseEntity<ArrayList<ChallengeResponseDto>>{
+    fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<ArrayList<ChallengeResponseDto>> {
         return ResponseEntity.ok().body(userService.getChallenge(id))
     }
+}
 
