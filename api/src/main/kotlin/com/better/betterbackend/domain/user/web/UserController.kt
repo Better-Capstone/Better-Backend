@@ -1,4 +1,6 @@
 package com.better.betterbackend.domain.user.web
+import com.better.betterbackend.domain.challenge.ChallengeResponseDto
+import com.better.betterbackend.domain.task.dto.TaskResponseDto
 import com.better.betterbackend.domain.user.service.UserService
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
@@ -47,5 +49,14 @@ class UserController(
     fun getRankHistory(@PathVariable("id") id: Long) : ResponseEntity<List<UserRankHistoryResponseDto>>{
         return ResponseEntity.ok().body(userService.getRankHistory(id))
     }
-    
+    @GetMapping("/{id}/tasks")
+    fun getTask(@PathVariable("id") id: Long) : ResponseEntity<ArrayList<TaskResponseDto>>{
+        return ResponseEntity.ok().body(userService.getTask(id))
+    }
+    @GetMapping("/{id}/challenges")
+    fun getChallenge(@PathVariable("id") id: Long) : ResponseEntity<ArrayList<ChallengeResponseDto>>{
+        return ResponseEntity.ok().body(userService.getChallenge(id))
+    }
+
+
 }
