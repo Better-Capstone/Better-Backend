@@ -1,4 +1,6 @@
 package com.better.betterbackend.domain.user.web
+import com.better.betterbackend.domain.challenge.ChallengeResponseDto
+import com.better.betterbackend.domain.task.dto.TaskResponseDto
 import com.better.betterbackend.domain.user.service.UserService
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
@@ -33,19 +35,30 @@ class UserController(
     }
 
     @GetMapping("/{id}")
-    fun getUser(@PathVariable("id") id: Long) : ResponseEntity<UserResponseDto> {
+    fun getUser(@PathVariable("id") id: Long): ResponseEntity<UserResponseDto> {
         return ResponseEntity.ok().body(userService.getUser(id))
 
     }
-    
-    @GetMapping("/rank/{id}")
-    fun getRank(@PathVariable("id") id: Long) : ResponseEntity<UserRankResponseDto>{
+
+    @GetMapping("/{id}/rank")
+    fun getRank(@PathVariable("id") id: Long): ResponseEntity<UserRankResponseDto> {
         return ResponseEntity.ok().body(userService.getRank(id))
     }
-    
-    @GetMapping("/rank/{id}/history")
-    fun getRankHistory(@PathVariable("id") id: Long) : ResponseEntity<List<UserRankHistoryResponseDto>>{
+
+    @GetMapping("/{id}/rank/history")
+    fun getRankHistory(@PathVariable("id") id: Long): ResponseEntity<List<UserRankHistoryResponseDto>> {
         return ResponseEntity.ok().body(userService.getRankHistory(id))
     }
-    
+
+    @GetMapping("/{id}/tasks")
+    fun getTask(@PathVariable("id") id: Long): ResponseEntity<List<TaskResponseDto>> {
+        return ResponseEntity.ok().body(userService.getTask(id))
+
+    }
+
+    @GetMapping("/{id}/challenges")
+    fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<List<ChallengeResponseDto>> {
+        return ResponseEntity.ok().body(userService.getChallenge(id))
+    }
 }
+
