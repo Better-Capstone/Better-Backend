@@ -1,17 +1,13 @@
 package com.better.betterbackend.domain.challenge
 
-
-import com.better.betterbackend.challenge.domain.Challenge
-import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
-
+import com.better.betterbackend.task.domain.Task
+import jakarta.persistence.*
 
 class ChallengeResponseDto (
 
     var id: Long? = null,
 
-
-    val task: SimpleTaskResponseDto,
-
+    val task: Task,
 
     val description: String,
 
@@ -22,13 +18,4 @@ class ChallengeResponseDto (
     val rejectMember: List<Long>,
 ){
 
-    //SimpleUserResponseDto(study.owner),
-    constructor(challenge: Challenge) :this (
-        challenge.id,
-        SimpleTaskResponseDto(challenge.task),
-        challenge.description,
-        challenge.image,
-        challenge.approveMember,
-        challenge.rejectMember,
-    )
 }

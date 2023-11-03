@@ -22,12 +22,14 @@ class User (
     val userRank: UserRank,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
-    val memberList: List<Member> = ArrayList(),
+    val memberList: List<Member>,
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.REMOVE])
-    val ownedStudyList: List<Study> = ArrayList(),
+    val ownedStudyList: List<Study>,
 
 ): BaseTimeEntity(), UserDetails {
+
+    constructor(id: Long, nickname: String, name: String, userRank:UserRank) : this(id, nickname, name, userRank, emptyList(), emptyList())
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority>? {
         return null
@@ -38,7 +40,7 @@ class User (
     }
 
     override fun getUsername(): String {
-        return id.toString()
+        return nickname
     }
 
     override fun isAccountNonExpired(): Boolean {

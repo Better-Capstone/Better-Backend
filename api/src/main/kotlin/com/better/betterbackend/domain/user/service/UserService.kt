@@ -1,24 +1,18 @@
 package com.better.betterbackend.domain.user.service
 
-
-import com.better.betterbackend.category.dao.CategoryRepository
-import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.domain.challenge.ChallengeResponseDto
+import com.better.betterbackend.domain.study.dto.SimpleStudyResponseDto
 import com.better.betterbackend.domain.task.dto.TaskResponseDto
-import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
-
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
-import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
+import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryResponseDto
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.global.security.JwtTokenProvider
-import com.better.betterbackend.member.domain.Member
-import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.user.dao.UserRepository
 import com.better.betterbackend.user.domain.User
 import com.better.betterbackend.userrank.dao.UserRankRepository
@@ -35,24 +29,13 @@ class UserService (
 
     private val userRankRepository: UserRankRepository,
   
-    private val tokenProvider: JwtTokenProvider,
-
-    // todo: 테스트 용도, 삭제 필요
-    private val categoryRepository: CategoryRepository,
+    private val tokenProvider: JwtTokenProvider,   
   
 ) {
 
-    // todo: 테스트 용도, 삭제 필요
     fun test(nickname: String): String {
         val userRank = userRankRepository.save(UserRank(null, 4000, emptyList()))
-        val user = userRepository.save(User(
-            id = 1,
-            nickname = nickname,
-            name = "test",
-            userRank = userRank,
-        ))
-
-        categoryRepository.save(Category(1, "string", emptyList()))
+        val user = userRepository.save(User(1, nickname, "test", userRank))
 
         return tokenProvider.createToken(user.id.toString())
     }
@@ -63,18 +46,8 @@ class UserService (
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
-        // todo: userrank 저장 잘 되는지 확인 필요
-        val userRank = userRankRepository.save(UserRank(
-            score = 4000
-        ))
-
-        val user = userRepository.save(User(
-            id = userInfo.id,
-            nickname = nickname,
-            name = userInfo.kakaoAccount.profile.nickname,
-            userRank = userRank,
-        ))
-
+        val userRank = userRankRepository.save(UserRank(null, 4000, emptyList()))//todo userrank저장 잘되는지 확인 필요
+        val user = userRepository.save(User(userInfo.id, nickname, userInfo.kakaoAccount.profile.nickname, userRank))
         return UserRegisterResponseDto(user)
     }
 
@@ -87,6 +60,7 @@ class UserService (
     }
 
     fun getUser(id : Long): UserResponseDto {
+        //유저의 id에 해당하는 db정보를 불러와서 dto로 감싸서 출력해줌.
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         return UserResponseDto(user)
@@ -105,30 +79,30 @@ class UserService (
             UserRankHistoryResponseDto(user.id!!, it)
         }
     }
-
-
-
-    fun getTask(id: Long) : ArrayList<TaskResponseDto>{
+    fun getTask(id: Long) : Array<TaskResponseDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+        val study = user.ownedStudyList.map { SimpleStudyResponseDto(it)}
+        user.ownedStudyList
+//        val list = ArrayList<SimpleTaskResponseDto>()
+//        for (member:Member in user.memberList) {
+//            for (task:Task in member.taskList) {
+//                list.add(SimpleTaskResponseDto(task))
+//            }
+//        } 이런식으로 이중포문 돌려보기
 
-        val list = ArrayList<TaskResponseDto>()
-        for (member:Member in user.memberList){
-            for (task:Task in member.taskList){
-                list.add(TaskResponseDto(task))
-            }
-        }
-        return list
+        return
+
     }
 
-    fun getChallenge(id: Long) : ArrayList<ChallengeResponseDto>{
+    fun getChallenge(id: Long) : Array<ChallengeResponseDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-        val list = ArrayList<ChallengeResponseDto>()
-        for (member : Member in user.memberList) {
-            for (task: Task in member.taskList) {
-                list.add(ChallengeResponseDto(task.challenge))
-            }
-        }
-        return list
+    }
+
+
+
+
+    fun hello(): String {
+        return "hello"
     }
 
 }

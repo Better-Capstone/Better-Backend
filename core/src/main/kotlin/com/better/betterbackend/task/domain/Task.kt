@@ -32,6 +32,5 @@ class Task (
     @OneToOne
     val challenge: Challenge,
 
-): BaseTimeEntity() {
-
+    ): BaseTimeEntity() {
 }

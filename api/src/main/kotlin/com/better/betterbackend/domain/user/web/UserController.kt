@@ -6,7 +6,9 @@ import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
-import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
+import com.better.betterbackend.domain.user.service.KakaoService
+import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryResponseDto
+import com.better.betterbackend.domain.userrank.dto.SimpleUserRankResponseDto
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
 import com.better.betterbackend.task.domain.Task
 import org.springframework.http.ResponseEntity
@@ -23,6 +25,11 @@ class UserController(
     @GetMapping("/test/{nickname}")
     fun test(@PathVariable("nickname") nickname: String): ResponseEntity<String> {
         return ResponseEntity.ok().body(userService.test(nickname))
+    }
+
+    @GetMapping("/test2")
+    fun test2(): ResponseEntity<String> {
+        return ResponseEntity.ok().body(userService.hello())
     }
 
     @PostMapping("/register")
@@ -51,11 +58,13 @@ class UserController(
         return ResponseEntity.ok().body(userService.getRankHistory(id))
     }
     @GetMapping("/{id}/tasks")
-    fun getTask(@PathVariable("id") id: Long) : ResponseEntity<ArrayList<TaskResponseDto>>{
+    fun getTask(@PathVariable("id") id: Long) : ResponseEntity<Array<TaskResponseDto>>{
         return ResponseEntity.ok().body(userService.getTask(id))
     }
     @GetMapping("/{id}/challenges")
-    fun getChallenge(@PathVariable("id") id: Long) : ResponseEntity<ArrayList<ChallengeResponseDto>>{
+    fun getChallenge(@PathVariable("id") id: Long) : ResponseEntity<Array<ChallengeResponseDto>>{
         return ResponseEntity.ok().body(userService.getChallenge(id))
     }
 
+    
+}

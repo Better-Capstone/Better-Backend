@@ -1,6 +1,6 @@
-package com.better.betterbackend.domain.userRankHistory.dto.response
+package com.better.betterbackend.domain.userRankHistory.dto
 
-import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
+import com.better.betterbackend.domain.study.dto.SimpleStudyResponseDto
 import com.better.betterbackend.domain.userrank.dto.SimpleUserRankResponseDto
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 
@@ -18,7 +18,7 @@ class UserRankHistoryResponseDto (
 
     val description: String,
 
-    ){
+){
 
     constructor(uid: Long, userRankHistory: UserRankHistory): this(
         null,
