@@ -32,7 +32,7 @@ class Study (
 
     val checkDay: CheckDay,
 
-    val numOfMember: Int,
+    var numOfMember: Int,
 
     val kickCondition: Int,
 
