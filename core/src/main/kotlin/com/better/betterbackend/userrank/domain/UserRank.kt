@@ -14,7 +14,7 @@ class UserRank (
     val score: Int,
 
     @OneToMany(mappedBy = "userRank", cascade = [CascadeType.REMOVE])
-    val userRankHistoryList: List<UserRankHistory>,
+    val userRankHistoryList: List<UserRankHistory> = ArrayList(),
 
     ): BaseTimeEntity() {
 

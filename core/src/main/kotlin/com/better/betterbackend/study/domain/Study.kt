@@ -7,13 +7,7 @@ import com.better.betterbackend.user.domain.User
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import com.better.betterbackend.grouprank.domain.GroupRank
 import com.better.betterbackend.model.BaseTimeEntity
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 @Entity
 class Study (
@@ -22,10 +16,10 @@ class Study (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val owner: User,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val category: Category,
 
     val title: String,
@@ -47,16 +41,17 @@ class Study (
     val minRank: Int,
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val memberList: List<Member>,
+    val memberList: List<Member> = ArrayList(),
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val taskList: List<Task>,
+    val taskList: List<Task> = ArrayList(),
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val userRankHistoryList: List<UserRankHistory>,
+    val userRankHistoryList: List<UserRankHistory> = ArrayList(),
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val groupRankList: List<GroupRank>,
+    val groupRankList: List<GroupRank> = ArrayList(),
 
-    ): BaseTimeEntity() {
+): BaseTimeEntity() {
+
 }

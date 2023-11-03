@@ -19,10 +19,11 @@ class Challenge (
     val image: String,
 
     @ElementCollection
-    val approveMember: List<Long>,
+    val approveMember: List<Long> = ArrayList(),
 
     @ElementCollection
-    val rejectMember: List<Long>,
+    val rejectMember: List<Long> = ArrayList(),
 
-    ): BaseTimeEntity() {
+): BaseTimeEntity() {
+
 }
