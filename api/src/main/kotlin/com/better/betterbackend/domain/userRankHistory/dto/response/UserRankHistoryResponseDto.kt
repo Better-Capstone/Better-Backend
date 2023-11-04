@@ -6,7 +6,7 @@ import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 
 class UserRankHistoryResponseDto (
 
-    var id: Long? = null,
+    val id: Long,
 
     val uid: Long,
 
@@ -18,11 +18,11 @@ class UserRankHistoryResponseDto (
 
     val description: String,
 
-    ){
+){
 
-    constructor(uid: Long, userRankHistory: UserRankHistory): this(
-        null,
-        uid,
+    constructor(userRankHistory: UserRankHistory): this(
+        userRankHistory.id!!,
+        userRankHistory.uid,
         SimpleUserRankResponseDto(userRankHistory.userRank),
         SimpleStudyResponseDto(userRankHistory.study),
         userRankHistory.score,
