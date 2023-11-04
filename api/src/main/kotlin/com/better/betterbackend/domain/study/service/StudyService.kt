@@ -34,8 +34,6 @@ class StudyService(
 
     private val memberRepository: MemberRepository,
 
-    private val groupRankRepository: GroupRankRepository,
-
 ) {
 
     fun create(request: StudyCreateRequestDto): SimpleStudyResponseDto {
@@ -44,10 +42,11 @@ class StudyService(
 
         val category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
 
-        val groupRank = groupRankRepository.save(GroupRank(
+        val groupRank = GroupRank(
             numOfLastAttendees = 0,
             score = 0,
-        ))
+            study = null,
+        )
 
         val study = studyRepository.save(Study(
             owner = user,
@@ -57,20 +56,14 @@ class StudyService(
             status = StudyStatus.INPROGRESS,
             period = request.period,
             checkDay = request.checkDay,
-            numOfMember = 1,
+            numOfMember = 0,
             kickCondition = request.kickCondition,
             maximumCount = request.maximumCount,
             minRank = request.minRank,
             groupRank = groupRank,
         ))
 
-        memberRepository.save(Member(
-            study = study,
-            user = user,
-            kickCount = 0,
-            memberType = MemberType.OWNER,
-            notifyTime = LocalDateTime.now()
-        ))
+        joinStudy(study.id!!, MemberType.OWNER)
 
         return SimpleStudyResponseDto(study)
     }
@@ -95,22 +88,26 @@ class StudyService(
         return studyRepository.findStudiesByStatus(StudyStatus.INPROGRESS).map { StudyResponseDto(it) }
     }
 
-    fun joinStudy(studyId: Long) {
+    fun joinStudy(studyId: Long, type: MemberType) {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
+        // todo: 이미 가입된 유저 & 쫓겨난 유저 재가입 금지
+
         memberRepository.save(Member(
             study = study,
             user = user,
             kickCount = 0,
-            memberType = MemberType.MEMBER,
+            memberType = type,
             // todo: notifyTime은 어떻게 지정할 지 논의 필요
             notifyTime = LocalDateTime.now(),
         ))
 
         // todo: study 내 numOfMember 변수 업데이트 or 변수 삭제
+        study.numOfMember++
+        studyRepository.save(study)
     }
 
 }

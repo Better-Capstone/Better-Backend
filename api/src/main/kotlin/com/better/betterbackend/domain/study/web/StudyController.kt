@@ -4,6 +4,7 @@ import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.study.dto.response.StudyResponseDto
 import com.better.betterbackend.domain.study.service.StudyService
+import com.better.betterbackend.member.domain.MemberType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -40,14 +41,14 @@ class StudyController(
         return ResponseEntity.ok().body(studyService.readByUser(userId))
     }
 
-    @GetMapping("/")
+    @GetMapping
     fun readInProgressedStudies(): ResponseEntity<List<StudyResponseDto>> {
         return ResponseEntity.ok().body(studyService.readInProgressStudies())
     }
 
     @PostMapping("/join/{id}")
     fun joinStudy(@PathVariable("id") studyId: Long): ResponseEntity<Unit> {
-        return ResponseEntity.ok().body(studyService.joinStudy(studyId))
+        return ResponseEntity.ok().body(studyService.joinStudy(studyId, MemberType.MEMBER))
     }
 
 }

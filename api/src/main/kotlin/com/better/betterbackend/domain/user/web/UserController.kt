@@ -1,6 +1,7 @@
 package com.better.betterbackend.domain.user.web
+
 import com.better.betterbackend.domain.challenge.ChallengeResponseDto
-import com.better.betterbackend.domain.task.dto.TaskResponseDto
+import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
 import com.better.betterbackend.domain.user.service.UserService
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
@@ -19,9 +20,9 @@ class UserController(
 
 ) {
 
-    @GetMapping("/test/{nickname}")
-    fun test(@PathVariable("nickname") nickname: String): ResponseEntity<List<String>> {
-        return ResponseEntity.ok().body(userService.test(nickname))
+    @GetMapping("/test")
+    fun test(): ResponseEntity<List<String>> {
+        return ResponseEntity.ok().body(userService.test())
     }
 
     @PostMapping("/register")
@@ -60,5 +61,6 @@ class UserController(
     fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<List<ChallengeResponseDto>> {
         return ResponseEntity.ok().body(userService.getChallenge(id))
     }
+
 }
 
