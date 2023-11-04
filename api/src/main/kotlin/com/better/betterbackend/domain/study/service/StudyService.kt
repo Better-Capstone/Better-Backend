@@ -6,6 +6,8 @@ import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.study.dto.response.StudyResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
+import com.better.betterbackend.grouprank.dao.GroupRankRepository
+import com.better.betterbackend.grouprank.domain.GroupRank
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.member.domain.MemberType
@@ -32,6 +34,8 @@ class StudyService(
 
     private val memberRepository: MemberRepository,
 
+    private val groupRankRepository: GroupRankRepository,
+
 ) {
 
     fun create(request: StudyCreateRequestDto): SimpleStudyResponseDto {
@@ -39,6 +43,12 @@ class StudyService(
         val user = (principal as UserDetails) as User
 
         val category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
+
+        val groupRank = groupRankRepository.save(GroupRank(
+            numOfLastAttendees = 0,
+            score = 0,
+        ))
+
         val study = studyRepository.save(Study(
             owner = user,
             category = category,
@@ -51,6 +61,7 @@ class StudyService(
             kickCondition = request.kickCondition,
             maximumCount = request.maximumCount,
             minRank = request.minRank,
+            groupRank = groupRank,
         ))
 
         memberRepository.save(Member(

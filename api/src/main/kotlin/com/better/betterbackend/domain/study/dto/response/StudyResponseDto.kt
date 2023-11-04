@@ -43,7 +43,7 @@ class StudyResponseDto(
 
     val userRankHistoryList: List<SimpleUserRankHistoryResponseDto>,
 
-    val groupRankList: List<SimpleGroupRankResponseDto>,
+    val groupRank: SimpleGroupRankResponseDto
 
 ) {
 
@@ -63,7 +63,7 @@ class StudyResponseDto(
         study.memberList.map{ SimpleMemberResponseDto(it) },
         study.taskList.map{ SimpleTaskResponseDto(it) },
         study.userRankHistoryList.map { SimpleUserRankHistoryResponseDto(it) },
-        study.groupRankList.map { SimpleGroupRankResponseDto(it) }
+        SimpleGroupRankResponseDto(study.groupRank),
     )
 
 }
