@@ -26,13 +26,13 @@ class Study (
 
     val description: String,
 
-    var status: StudyStatus,
+    var status: StudyStatus = StudyStatus.INPROGRESS,
 
     val period: Period,
 
     val checkDay: CheckDay,
 
-    var numOfMember: Int,
+    var numOfMember: Int = 0,
 
     val kickCondition: Int,
 

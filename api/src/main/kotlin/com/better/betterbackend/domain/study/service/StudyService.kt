@@ -41,22 +41,15 @@ class StudyService(
         val user = (principal as UserDetails) as User
 
         val category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
-
-        val groupRank = GroupRank(
-            numOfLastAttendees = 0,
-            score = 0,
-            study = null,
-        )
+        val groupRank = GroupRank()
 
         val study = studyRepository.save(Study(
             owner = user,
             category = category,
             title = request.title,
             description = request.description,
-            status = StudyStatus.INPROGRESS,
             period = request.period,
             checkDay = request.checkDay,
-            numOfMember = 0,
             kickCondition = request.kickCondition,
             maximumCount = request.maximumCount,
             minRank = request.minRank,
@@ -99,13 +92,11 @@ class StudyService(
         memberRepository.save(Member(
             study = study,
             user = user,
-            kickCount = 0,
             memberType = type,
             // todo: notifyTime은 어떻게 지정할 지 논의 필요
             notifyTime = LocalDateTime.now(),
         ))
 
-        // todo: study 내 numOfMember 변수 업데이트 or 변수 삭제
         study.numOfMember++
         studyRepository.save(study)
     }

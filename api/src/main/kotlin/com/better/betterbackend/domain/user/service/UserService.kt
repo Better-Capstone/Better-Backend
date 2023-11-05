@@ -39,10 +39,7 @@ class UserService (
 
     // todo: 테스트 용도, 삭제 필요
     fun test(): List<String> {
-        val userRank1 = UserRank(
-            score = 4000,
-            user = null,
-        )
+        val userRank1 = UserRank()
         val user1 = User(
             id = 1,
             nickname = "test1",
@@ -52,10 +49,7 @@ class UserService (
         userRank1.user = user1
         userRepository.save(user1)
 
-        val userRank2 = UserRank(
-            score = 3000,
-            user = null,
-        )
+        val userRank2 = UserRank()
         val user2 = User(
             id = 2,
             nickname = "test1",
@@ -76,10 +70,7 @@ class UserService (
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
-        val userRank = UserRank(
-            score = 4000,
-            user = null,
-        )
+        val userRank = UserRank()
 
         val user = User(
             id = userInfo.id,

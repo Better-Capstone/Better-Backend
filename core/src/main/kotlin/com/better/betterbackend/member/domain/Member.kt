@@ -22,7 +22,7 @@ class Member (
     @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
     val taskList: List<Task> = ArrayList(),
 
-    val kickCount: Int,
+    var kickCount: Int = 0,
 
     val memberType: MemberType,
 

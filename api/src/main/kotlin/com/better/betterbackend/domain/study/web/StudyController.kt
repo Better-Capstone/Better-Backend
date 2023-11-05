@@ -21,6 +21,8 @@ class StudyController(
 
 ) {
 
+    // todo: validation 필요
+
     @PostMapping("/create")
     fun create(@RequestBody request: StudyCreateRequestDto): ResponseEntity<SimpleStudyResponseDto> {
         return ResponseEntity.ok().body(studyService.create(request))

@@ -12,10 +12,10 @@ class UserRank (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val score: Int,
+    var score: Int = 4000,
 
     @OneToOne
-    var user: User?,
+    var user: User? = null,
 
     @OneToMany(mappedBy = "userRank", cascade = [CascadeType.REMOVE])
     val userRankHistoryList: List<UserRankHistory> = ArrayList(),
