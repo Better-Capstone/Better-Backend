@@ -1,17 +1,13 @@
 package com.better.betterbackend.domain.challenge
 
-
 import com.better.betterbackend.challenge.domain.Challenge
 import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
-
 
 class ChallengeResponseDto (
 
     var id: Long,
 
-
     val task: SimpleTaskResponseDto,
-
 
     val description: String,
 
@@ -20,9 +16,9 @@ class ChallengeResponseDto (
     val approveMember: List<Long>,
 
     val rejectMember: List<Long>,
+
 ){
 
-    //SimpleUserResponseDto(study.owner),
     constructor(challenge: Challenge) :this (
         challenge.id!!,
         SimpleTaskResponseDto(challenge.task),
@@ -31,4 +27,5 @@ class ChallengeResponseDto (
         challenge.approveMember,
         challenge.rejectMember,
     )
+
 }

@@ -1,13 +1,9 @@
-package com.better.betterbackend.domain.task.dto
+package com.better.betterbackend.domain.task.dto.response
 
-import com.better.betterbackend.challenge.domain.Challenge
 import com.better.betterbackend.domain.challenge.SimpleChallengeResponseDto
-import com.better.betterbackend.domain.member.dto.SimpleMemberResponseDto
+import com.better.betterbackend.domain.member.dto.response.SimpleMemberResponseDto
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
-import com.better.betterbackend.member.domain.Member
-import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.task.domain.Task
-import jakarta.persistence.*
 import java.time.LocalDateTime
 
 class TaskResponseDto(
@@ -23,6 +19,7 @@ class TaskResponseDto(
     val deadline: LocalDateTime,
 
     val challenge: SimpleChallengeResponseDto,
+
 ){
     constructor(task: Task) : this(
         task.id!!,

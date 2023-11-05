@@ -4,11 +4,14 @@ import com.better.betterbackend.userrank.domain.UserRank
 
 class SimpleUserRankResponseDto (
 
-    var id: Long? = null,
+    val id: Long,
 
     val score: Int,
 
 ){
-    constructor(userRank: UserRank): this(userRank.id, userRank.score)
+    constructor(userRank: UserRank): this(
+        userRank.id!!,
+        userRank.score
+    )
 
 }

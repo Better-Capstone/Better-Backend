@@ -13,6 +13,10 @@ class SimpleTaskResponseDto(
 
 ) {
 
-    constructor(task: Task): this(task.id!!, task.title, task.deadline)
+    constructor(task: Task): this(
+        task.id!!,
+        task.title,
+        task.deadline
+    )
 
 }

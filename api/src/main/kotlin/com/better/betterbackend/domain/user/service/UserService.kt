@@ -1,10 +1,9 @@
 package com.better.betterbackend.domain.user.service
 
-
 import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.domain.challenge.ChallengeResponseDto
-import com.better.betterbackend.domain.task.dto.TaskResponseDto
+import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
 
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
@@ -20,7 +19,6 @@ import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.user.dao.UserRepository
 import com.better.betterbackend.user.domain.User
-import com.better.betterbackend.userrank.dao.UserRankRepository
 import com.better.betterbackend.userrank.domain.UserRank
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -31,8 +29,6 @@ class UserService (
     private val kakaoService: KakaoService,
 
     private val userRepository: UserRepository,
-
-    private val userRankRepository: UserRankRepository,
   
     private val tokenProvider: JwtTokenProvider,
 
@@ -42,22 +38,26 @@ class UserService (
 ) {
 
     // todo: 테스트 용도, 삭제 필요
-    fun test(nickname: String): List<String> {
-        val userRank1 = userRankRepository.save(UserRank(null, 4000, ArrayList()))
-        val user1 = userRepository.save(User(
+    fun test(): List<String> {
+        val userRank1 = UserRank()
+        val user1 = User(
             id = 1,
-            nickname = nickname,
+            nickname = "test1",
             name = "test1",
             userRank = userRank1,
-        ))
+        )
+        userRank1.user = user1
+        userRepository.save(user1)
 
-        val userRank2 = userRankRepository.save(UserRank(null, 4000, ArrayList()))
-        val user2 = userRepository.save(User(
+        val userRank2 = UserRank()
+        val user2 = User(
             id = 2,
-            nickname = nickname,
+            nickname = "test1",
             name = "test2",
             userRank = userRank2,
-        ))
+        )
+        userRank2.user = user2
+        userRepository.save(user2)
 
         categoryRepository.save(Category(1, "string", emptyList()))
 
@@ -70,17 +70,17 @@ class UserService (
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
-        // todo: userrank 저장 잘 되는지 확인 필요
-        val userRank = userRankRepository.save(UserRank(
-            score = 4000
-        ))
+        val userRank = UserRank()
 
-        val user = userRepository.save(User(
+        val user = User(
             id = userInfo.id,
             nickname = nickname,
             name = userInfo.kakaoAccount.profile.nickname,
             userRank = userRank,
-        ))
+        )
+
+        userRank.user = user
+        userRepository.save(user)
 
         return UserRegisterResponseDto(user)
     }
@@ -109,11 +109,9 @@ class UserService (
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         return user.userRank.userRankHistoryList.map {
-            UserRankHistoryResponseDto(user.id!!, it)
+            UserRankHistoryResponseDto(it)
         }
     }
-
-
 
     fun getTask(id: Long) : List<TaskResponseDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)

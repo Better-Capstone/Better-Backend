@@ -1,17 +1,25 @@
 package com.better.betterbackend.domain.userrank.dto
 
+import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
+import com.better.betterbackend.domain.userRankHistory.dto.response.SimpleUserRankHistoryResponseDto
 import com.better.betterbackend.userrank.domain.UserRank
-import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 
-class UserRankResponseDto (
+class UserRankResponseDto(
 
-    var id: Long? = null,
+    val id: Long,
 
     val score: Int,
 
-    val userRankHistoryList: List<UserRankHistory>,
+    val user: SimpleUserResponseDto,
+
+    val userRankHistoryList: List<SimpleUserRankHistoryResponseDto>,
 
 ) {
-    constructor(userRank: UserRank) : this(userRank.id, userRank.score, userRank.userRankHistoryList)
+    constructor(userRank: UserRank) : this(
+        userRank.id!!,
+        userRank.score,
+        SimpleUserResponseDto(userRank.user!!),
+        userRank.userRankHistoryList.map { SimpleUserRankHistoryResponseDto(it) },
+    )
 
 }
