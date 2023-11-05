@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.user.dto.response
 
-import com.better.betterbackend.domain.member.dto.SimpleMemberResponseDto
+import com.better.betterbackend.domain.member.dto.response.SimpleMemberResponseDto
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.userrank.dto.SimpleUserRankResponseDto
 import com.better.betterbackend.user.domain.User

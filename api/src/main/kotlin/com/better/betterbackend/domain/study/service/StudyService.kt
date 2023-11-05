@@ -6,7 +6,6 @@ import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.study.dto.response.StudyResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
-import com.better.betterbackend.grouprank.dao.GroupRankRepository
 import com.better.betterbackend.grouprank.domain.GroupRank
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
@@ -20,7 +19,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -43,7 +41,7 @@ class StudyService(
         val category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
         val groupRank = GroupRank()
 
-        val study = studyRepository.save(Study(
+        val study = Study(
             owner = user,
             category = category,
             title = request.title,
@@ -54,7 +52,10 @@ class StudyService(
             maximumCount = request.maximumCount,
             minRank = request.minRank,
             groupRank = groupRank,
-        ))
+        )
+
+        groupRank.study = study
+        studyRepository.save(study)
 
         joinStudy(study.id!!, MemberType.OWNER)
 

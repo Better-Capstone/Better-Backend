@@ -18,7 +18,7 @@ class User (
 
     val name: String,
 
-    @OneToOne(cascade = [CascadeType.PERSIST])
+    @OneToOne(cascade = [CascadeType.MERGE, CascadeType.REMOVE])
     val userRank: UserRank,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])

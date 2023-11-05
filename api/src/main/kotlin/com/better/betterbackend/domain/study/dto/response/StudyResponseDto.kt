@@ -2,7 +2,7 @@ package com.better.betterbackend.domain.study.dto.response
 
 import com.better.betterbackend.domain.category.dto.SimpleCategoryResponseDto
 import com.better.betterbackend.domain.grouprank.dto.response.SimpleGroupRankResponseDto
-import com.better.betterbackend.domain.member.dto.SimpleMemberResponseDto
+import com.better.betterbackend.domain.member.dto.response.SimpleMemberResponseDto
 import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.userRankHistory.dto.response.SimpleUserRankHistoryResponseDto
