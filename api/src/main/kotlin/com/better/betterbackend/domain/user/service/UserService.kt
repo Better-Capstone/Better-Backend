@@ -42,18 +42,26 @@ class UserService (
 ) {
 
     // todo: 테스트 용도, 삭제 필요
-    fun test(nickname: String): String {
-        val userRank = userRankRepository.save(UserRank(null, 4000, emptyList()))
-        val user = userRepository.save(User(
+    fun test(nickname: String): List<String> {
+        val userRank1 = userRankRepository.save(UserRank(null, 4000, ArrayList()))
+        val user1 = userRepository.save(User(
             id = 1,
             nickname = nickname,
-            name = "test",
-            userRank = userRank,
+            name = "test1",
+            userRank = userRank1,
+        ))
+
+        val userRank2 = userRankRepository.save(UserRank(null, 4000, ArrayList()))
+        val user2 = userRepository.save(User(
+            id = 2,
+            nickname = nickname,
+            name = "test2",
+            userRank = userRank2,
         ))
 
         categoryRepository.save(Category(1, "string", emptyList()))
 
-        return tokenProvider.createToken(user.id.toString())
+        return listOf(tokenProvider.createToken(user1.id.toString()), tokenProvider.createToken(user2.id.toString()))
     }
 
     fun register(request: UserRegisterRequestDto): UserRegisterResponseDto {

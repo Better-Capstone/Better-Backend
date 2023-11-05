@@ -20,7 +20,7 @@ class UserController(
 ) {
 
     @GetMapping("/test/{nickname}")
-    fun test(@PathVariable("nickname") nickname: String): ResponseEntity<String> {
+    fun test(@PathVariable("nickname") nickname: String): ResponseEntity<List<String>> {
         return ResponseEntity.ok().body(userService.test(nickname))
     }
 

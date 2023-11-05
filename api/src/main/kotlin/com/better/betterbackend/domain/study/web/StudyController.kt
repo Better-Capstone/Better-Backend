@@ -26,8 +26,28 @@ class StudyController(
     }
 
     @GetMapping("/{id}")
-    fun read(@PathVariable("id") id: Long): ResponseEntity<StudyResponseDto> {
-        return ResponseEntity.ok().body(studyService.read(id))
+    fun readById(@PathVariable("id") id: Long): ResponseEntity<StudyResponseDto> {
+        return ResponseEntity.ok().body(studyService.readById(id))
+    }
+
+    @GetMapping("/category/{id}")
+    fun readByCategory(@PathVariable("id") categoryId: Long): ResponseEntity<List<StudyResponseDto>> {
+        return ResponseEntity.ok().body(studyService.readByCategory(categoryId))
+    }
+
+    @GetMapping("/user/{id}")
+    fun readByUser(@PathVariable("id") userId: Long): ResponseEntity<List<StudyResponseDto>> {
+        return ResponseEntity.ok().body(studyService.readByUser(userId))
+    }
+
+    @GetMapping("/")
+    fun readInProgressedStudies(): ResponseEntity<List<StudyResponseDto>> {
+        return ResponseEntity.ok().body(studyService.readInProgressStudies())
+    }
+
+    @PostMapping("/join/{id}")
+    fun joinStudy(@PathVariable("id") studyId: Long): ResponseEntity<Unit> {
+        return ResponseEntity.ok().body(studyService.joinStudy(studyId))
     }
 
 }

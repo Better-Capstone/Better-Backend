@@ -32,7 +32,7 @@ class Study (
 
     val checkDay: CheckDay,
 
-    val numOfMember: Int,
+    var numOfMember: Int,
 
     val kickCondition: Int,
 
@@ -49,8 +49,8 @@ class Study (
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
     val userRankHistoryList: List<UserRankHistory> = ArrayList(),
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val groupRankList: List<GroupRank> = ArrayList(),
+    @OneToOne
+    val groupRank: GroupRank,
 
 ): BaseTimeEntity() {
 
