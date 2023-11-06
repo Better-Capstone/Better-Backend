@@ -5,6 +5,7 @@ import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.study.dto.response.StudyResponseDto
 import com.better.betterbackend.domain.study.service.StudyService
 import com.better.betterbackend.member.domain.MemberType
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,7 +25,7 @@ class StudyController(
     // todo: validation 필요
 
     @PostMapping("/create")
-    fun create(@RequestBody request: StudyCreateRequestDto): ResponseEntity<SimpleStudyResponseDto> {
+    fun create(@RequestBody @Valid request: StudyCreateRequestDto): ResponseEntity<SimpleStudyResponseDto> {
         return ResponseEntity.ok().body(studyService.create(request))
     }
 

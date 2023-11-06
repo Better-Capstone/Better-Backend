@@ -44,8 +44,8 @@ class StudyService(
         val study = Study(
             owner = user,
             category = category,
-            title = request.title,
-            description = request.description,
+            title = request.title!!,
+            description = request.description!!,
             period = request.period,
             checkDay = request.checkDay,
             kickCondition = request.kickCondition,
