@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebConfig: WebMvcConfigurer {
 
     override fun addFormatters(registry: FormatterRegistry) {
-        registry.addConverter(CheckDayConverter())
+        // registry.addConverter(CheckDayConverter())
         registry.addConverter(PeriodConverter())
     }
 

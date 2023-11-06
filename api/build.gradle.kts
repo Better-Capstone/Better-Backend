@@ -5,6 +5,7 @@ tasks.jar {
 dependencies {
     implementation(project(":core"))
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.0.4")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     implementation ("org.apache.httpcomponents.client5:httpclient5:5.1.4")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.4.1")
