@@ -65,8 +65,8 @@ class UserService (
     }
 
     fun register(request: UserRegisterRequestDto): UserRegisterResponseDto {
-        val accessToken = request.accessToken
-        val nickname = request.nickname
+        val accessToken = request.accessToken!!
+        val nickname = request.nickname!!
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
