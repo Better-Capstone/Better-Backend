@@ -2,7 +2,7 @@ package com.better.betterbackend.domain.user.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
-import com.better.betterbackend.domain.challenge.ChallengeResponseDto
+import com.better.betterbackend.domain.challenge.response.ChallengeResponseDto
 import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
 
 import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
@@ -11,7 +11,7 @@ import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
 import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
-import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
+import com.better.betterbackend.domain.userrank.dto.response.UserRankResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.global.security.JwtTokenProvider
@@ -99,7 +99,7 @@ class UserService (
         return UserResponseDto(user)
     }
 
-    fun getRank(id : Long) : UserRankResponseDto{
+    fun getRank(id : Long) : UserRankResponseDto {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         return UserRankResponseDto(user.userRank)

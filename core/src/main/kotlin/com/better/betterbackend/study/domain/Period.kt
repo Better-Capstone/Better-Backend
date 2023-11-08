@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.*
 
 enum class Period (
+
     val period: String,
+
 ) {
 
     EVERYDAY("Everyday"),

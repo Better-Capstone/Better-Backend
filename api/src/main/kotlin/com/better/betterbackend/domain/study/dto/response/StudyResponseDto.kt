@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.study.dto.response
 
-import com.better.betterbackend.domain.category.dto.SimpleCategoryResponseDto
+import com.better.betterbackend.domain.category.dto.response.SimpleCategoryResponseDto
 import com.better.betterbackend.domain.grouprank.dto.response.SimpleGroupRankResponseDto
 import com.better.betterbackend.domain.member.dto.response.SimpleMemberResponseDto
 import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto

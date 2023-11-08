@@ -11,8 +11,6 @@ import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
-import com.better.betterbackend.study.domain.CheckDay
-import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
 import com.better.betterbackend.user.dao.UserRepository

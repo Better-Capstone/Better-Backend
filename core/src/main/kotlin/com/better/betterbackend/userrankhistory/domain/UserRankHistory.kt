@@ -24,4 +24,5 @@ class UserRankHistory (
     val description: String,
 
 ) {
+
 }

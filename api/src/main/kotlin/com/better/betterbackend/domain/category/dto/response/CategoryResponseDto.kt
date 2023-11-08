@@ -1,4 +1,4 @@
-package com.better.betterbackend.domain.category.dto
+package com.better.betterbackend.domain.category.dto.response
 
 import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto

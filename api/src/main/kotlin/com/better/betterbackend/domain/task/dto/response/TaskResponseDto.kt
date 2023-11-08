@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.task.dto.response
 
-import com.better.betterbackend.domain.challenge.SimpleChallengeResponseDto
+import com.better.betterbackend.domain.challenge.response.SimpleChallengeResponseDto
 import com.better.betterbackend.domain.member.dto.response.SimpleMemberResponseDto
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.task.domain.Task
@@ -20,7 +20,7 @@ class TaskResponseDto(
 
     val challenge: SimpleChallengeResponseDto,
 
-){
+    ){
     constructor(task: Task) : this(
         task.id!!,
         SimpleStudyResponseDto(task.study),

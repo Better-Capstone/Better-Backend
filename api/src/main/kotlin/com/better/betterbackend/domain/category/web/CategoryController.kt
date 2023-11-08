@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.category.web
 
-import com.better.betterbackend.domain.category.dto.CategoryResponseDto
+import com.better.betterbackend.domain.category.dto.response.CategoryResponseDto
 import com.better.betterbackend.domain.category.service.CategoryService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
