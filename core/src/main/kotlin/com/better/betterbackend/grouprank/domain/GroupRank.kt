@@ -11,8 +11,6 @@ class GroupRank (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var numOfLastAttendees: Int = 0,
-
     var score: Int = 0,
 
     @OneToOne

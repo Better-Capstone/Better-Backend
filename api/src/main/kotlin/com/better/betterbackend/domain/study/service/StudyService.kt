@@ -1,11 +1,13 @@
 package com.better.betterbackend.domain.study.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
+import com.better.betterbackend.domain.grouprankhistory.dto.response.GroupRankHistoryResponseDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.study.dto.response.StudyResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
+import com.better.betterbackend.grouprank.dao.GroupRankRepository
 import com.better.betterbackend.grouprank.domain.GroupRank
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
@@ -31,6 +33,8 @@ class StudyService(
     private val categoryRepository: CategoryRepository,
 
     private val memberRepository: MemberRepository,
+
+    private val groupRankRepository: GroupRankRepository,
 
 ) {
 
@@ -113,6 +117,13 @@ class StudyService(
 
         study.numOfMember++
         studyRepository.save(study)
+    }
+
+    fun getGroupRankHistory(studyId: Long): List<GroupRankHistoryResponseDto> {
+        val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+        val groupRank = groupRankRepository.findByStudy(study) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+
+        return groupRank.groupRankHistoryList.map { GroupRankHistoryResponseDto(it) }
     }
 
 }
