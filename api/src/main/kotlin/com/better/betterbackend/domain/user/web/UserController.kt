@@ -9,7 +9,9 @@ import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
 import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
 import com.better.betterbackend.domain.userrank.dto.UserRankResponseDto
+import com.better.betterbackend.global.validation.ValidationSequence
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -26,7 +28,7 @@ class UserController(
     }
 
     @PostMapping("/register")
-    fun register(@RequestBody request: UserRegisterRequestDto): ResponseEntity<UserRegisterResponseDto> {
+    fun register(@RequestBody @Validated(value = [ValidationSequence::class]) request: UserRegisterRequestDto): ResponseEntity<UserRegisterResponseDto> {
         return ResponseEntity.ok().body(userService.register(request))
     }
 

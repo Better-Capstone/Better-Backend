@@ -11,7 +11,6 @@ class GroupRank (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    // todo: 삭제 논의 필요
     var numOfLastAttendees: Int = 0,
 
     var score: Int = 0,

@@ -16,6 +16,8 @@ enum class ErrorCode(
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다"),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다"),
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "스터디를 찾을 수 없습니다"),
+    ALREADY_PARTICIPATED(HttpStatus.FORBIDDEN, "이미 가입된 상태입니다"),
+    UNDER_MIN_RANK(HttpStatus.FORBIDDEN, "최저 점수를 충족하지 못했습니다"),
     ;
 
 }

@@ -1,11 +1,11 @@
 package com.better.betterbackend.study.domain
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonValue
+import org.springframework.cglib.core.Local
 import java.util.*
 
 enum class CheckDay (
-    @get:JsonValue val checkDay: String,
+    val checkDay: String,
 ) {
 
     EVERYDAY("Everyday"),
