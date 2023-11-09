@@ -1,4 +1,4 @@
-package com.better.betterbackend.domain.challenge
+package com.better.betterbackend.domain.challenge.response
 
 import com.better.betterbackend.challenge.domain.Challenge
 import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto

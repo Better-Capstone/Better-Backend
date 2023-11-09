@@ -1,4 +1,4 @@
-package com.better.betterbackend.domain.userrank.dto
+package com.better.betterbackend.domain.userrank.dto.response
 
 import com.better.betterbackend.userrank.domain.UserRank
 

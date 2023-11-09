@@ -2,7 +2,7 @@ package com.better.betterbackend.domain.category.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
-import com.better.betterbackend.domain.category.dto.CategoryResponseDto
+import com.better.betterbackend.domain.category.dto.response.CategoryResponseDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull

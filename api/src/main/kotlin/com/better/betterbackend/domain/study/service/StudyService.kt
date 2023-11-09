@@ -39,18 +39,21 @@ class StudyService(
         val user = (principal as UserDetails) as User
 
         val category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
+
+        // todo: user의 랭크 점수가 만들고자 하는 스터디의 최소 점수 제한을 충족하지 못할 때
+
         val groupRank = GroupRank()
 
         val study = Study(
             owner = user,
             category = category,
-            title = request.title,
-            description = request.description,
-            period = request.period,
-            checkDay = request.checkDay,
-            kickCondition = request.kickCondition,
-            maximumCount = request.maximumCount,
-            minRank = request.minRank,
+            title = request.title!!,
+            description = request.description!!,
+            period = request.period!!,
+            checkDay = request.checkDay!!,
+            kickCondition = request.kickCondition!!,
+            maximumCount = request.maximumCount!!,
+            minRank = request.minRank!!,
             groupRank = groupRank,
         )
 
@@ -88,13 +91,23 @@ class StudyService(
 
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
-        // todo: 이미 가입된 유저 & 쫓겨난 유저 재가입 금지
+        // 유저의 랭크 점수가 최저 점수 보다 낮은 경우
+        if (user.userRank.score < study.minRank) {
+            throw CustomException(ErrorCode.UNDER_MIN_RANK)
+        }
+
+        // 유저가 이미 가입된 상태일 경우
+        if (memberRepository.existsByUserAndStudy(user, study)) {
+            throw CustomException(ErrorCode.ALREADY_PARTICIPATED)
+        }
+
+        // todo: 쫓겨난 유저의 재가입 금지 여부 확인
 
         memberRepository.save(Member(
             study = study,
             user = user,
             memberType = type,
-            // todo: notifyTime은 어떻게 지정할 지 논의 필요
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
             notifyTime = LocalDateTime.now(),
         ))
 

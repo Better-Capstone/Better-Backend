@@ -26,7 +26,13 @@ class JwtAuthenticationEntryPoint: AuthenticationEntryPoint {
         response.status = error.status.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.characterEncoding = "utf-8"
-        response.writer.write(objectMapper.writeValueAsString(ExceptionResponseDto(error, request.requestURI)))
+        response.writer.write(objectMapper.writeValueAsString(
+            ExceptionResponseDto(
+                status = error.status,
+                requestURI = request.requestURI,
+                data = error.message,
+            )
+        ))
     }
 
 }
