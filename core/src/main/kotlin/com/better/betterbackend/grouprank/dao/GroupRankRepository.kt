@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository
 @Repository
 interface GroupRankRepository: JpaRepository<GroupRank, Long> {
 
-    fun findByStudy(study: Study): GroupRank?
-
 }

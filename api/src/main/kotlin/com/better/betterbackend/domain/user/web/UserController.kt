@@ -4,6 +4,7 @@ import com.better.betterbackend.domain.challenge.response.ChallengeResponseDto
 import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
 import com.better.betterbackend.domain.user.service.UserService
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
+import com.better.betterbackend.domain.user.dto.response.UserCheckResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
 import com.better.betterbackend.domain.user.dto.response.UserResponseDto
@@ -29,6 +30,12 @@ class UserController(
         return ResponseEntity.ok().body(userService.test())
     }
 
+    @Operation(summary = "유저 가입 여부 확인")
+    @GetMapping("/check")
+    fun check(@RequestParam id: Long): ResponseEntity<UserCheckResponseDto> {
+        return ResponseEntity.ok().body(userService.check(id))
+    }
+
     @Operation(summary = "유저 가입")
     @PostMapping("/register")
     fun register(@RequestBody @Validated(value = [ValidationSequence::class]) request: UserRegisterRequestDto): ResponseEntity<UserRegisterResponseDto> {
@@ -37,7 +44,7 @@ class UserController(
 
     @Operation(summary = "유저 로그인")
     @PostMapping("/login")
-    fun login(@RequestBody kakaoToken: String): ResponseEntity<UserLoginResponseDto> {
+    fun login(@RequestParam kakaoToken: String): ResponseEntity<UserLoginResponseDto> {
         return ResponseEntity.ok().body(userService.login(kakaoToken))
     }
 
