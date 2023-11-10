@@ -6,15 +6,12 @@ class SimpleGroupRankResponseDto(
 
     val id: Long,
 
-    val numOfLastAttendees: Int,
-
     val score: Int,
 
 ) {
 
     constructor(groupRank: GroupRank): this(
         groupRank.id!!,
-        groupRank.numOfLastAttendees,
         groupRank.score
     )
 

@@ -8,6 +8,7 @@ enum class MemberType (
 
     OWNER("Owner"),
     MEMBER("Member"),
+    WITHDRAW("Withdraw")
     ;
 
 }

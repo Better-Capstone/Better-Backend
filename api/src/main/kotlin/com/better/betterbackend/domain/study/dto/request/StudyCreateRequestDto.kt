@@ -19,7 +19,7 @@ class StudyCreateRequestDto(
     @field:NotBlank(message = "스터디 설명은 필수 값 입니다", groups = [NotNullGroup::class])
     val description: String?,
 
-    @field:NotNull(message = "태스크 검증 요일은 필수 값 입니다", groups = [NotNullGroup::class])
+    @field:NotNull(message = "유효하지 않은 태스크 검증 요일 입니다", groups = [NotNullGroup::class])
     val checkDay: CheckDay?,
 
     @field:NotNull(message = "퇴출 조건은 필수 값 입니다", groups = [NotNullGroup::class])
@@ -37,7 +37,7 @@ class StudyCreateRequestDto(
     @field:Max(value = 10000, message = "0 이상 10000 이하의 값 이어야 합니다", groups = [MinMaxGroup::class])
     val minRank: Int?,
 
-    @field:NotNull(message = "태스크 주기는 필수 값 입니다", groups = [NotNullGroup::class])
+    @field:NotNull(message = "유효하지 않은 태스크 주기 입니다", groups = [NotNullGroup::class])
     val period: Period?,
 
 ) {

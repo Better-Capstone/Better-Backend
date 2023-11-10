@@ -3,6 +3,7 @@ package com.better.betterbackend.domain.user.dto.response
 import com.better.betterbackend.domain.member.dto.response.SimpleMemberResponseDto
 import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
 import com.better.betterbackend.domain.userrank.dto.response.SimpleUserRankResponseDto
+import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.user.domain.User
 import java.time.LocalDateTime
 
@@ -33,7 +34,9 @@ class UserResponseDto (
         user.createdAt,
         user.updatedAt,
         SimpleUserRankResponseDto(user.userRank),
-        user.memberList.map {  SimpleMemberResponseDto(it) },
+        user.memberList
+            .filter { it.memberType != MemberType.WITHDRAW }
+            .map {  SimpleMemberResponseDto(it) },
         user.ownedStudyList.map { SimpleStudyResponseDto(it) }
     )
 

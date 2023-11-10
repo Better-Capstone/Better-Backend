@@ -4,12 +4,8 @@ import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.domain.challenge.response.ChallengeResponseDto
 import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
-
-import com.better.betterbackend.domain.user.dto.response.SimpleUserResponseDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
-import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
-import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
-import com.better.betterbackend.domain.user.dto.response.UserResponseDto
+import com.better.betterbackend.domain.user.dto.response.*
 import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
 import com.better.betterbackend.domain.userrank.dto.response.UserRankResponseDto
 import com.better.betterbackend.global.exception.CustomException
@@ -64,14 +60,24 @@ class UserService (
         return listOf(tokenProvider.createToken(user1.id.toString()), tokenProvider.createToken(user2.id.toString()))
     }
 
+    fun check(id: Long): UserCheckResponseDto {
+        userRepository.findByIdOrNull(id) ?: return UserCheckResponseDto(false)
+
+        return UserCheckResponseDto(true)
+    }
+
     fun register(request: UserRegisterRequestDto): UserRegisterResponseDto {
         val accessToken = request.accessToken!!
         val nickname = request.nickname!!
 
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
 
-        val userRank = UserRank()
+        // 이미 해당 id로 가입된 유저가 있는 경우
+        if (userRepository.findByIdOrNull(userInfo.id) != null) {
+            throw CustomException(ErrorCode.USER_ALREADY_EXIST)
+        }
 
+        val userRank = UserRank()
         val user = User(
             id = userInfo.id,
             nickname = nickname,
@@ -87,7 +93,6 @@ class UserService (
 
     fun login(accessToken: String): UserLoginResponseDto {
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
-
         val user = userRepository.findByIdOrNull(userInfo.id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         return UserLoginResponseDto(tokenProvider.createToken(user.id.toString()), SimpleUserResponseDto(user))
@@ -108,9 +113,7 @@ class UserService (
     fun getRankHistory(id: Long) : List<UserRankHistoryResponseDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return user.userRank.userRankHistoryList.map {
-            UserRankHistoryResponseDto(it)
-        }
+        return user.userRank.userRankHistoryList.map { UserRankHistoryResponseDto(it) }
     }
 
     fun getTask(id: Long) : List<TaskResponseDto>{
@@ -122,17 +125,20 @@ class UserService (
                 list.add(TaskResponseDto(task))
             }
         }
+
         return list
     }
 
     fun getChallenge(id: Long) : List<ChallengeResponseDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+
         val list = ArrayList<ChallengeResponseDto>()
         for (member : Member in user.memberList) {
             for (task: Task in member.taskList) {
                 list.add(ChallengeResponseDto(task.challenge))
             }
         }
+
         return list
     }
 
