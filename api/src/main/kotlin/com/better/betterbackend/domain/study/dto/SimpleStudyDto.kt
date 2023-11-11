@@ -1,19 +1,19 @@
-package com.better.betterbackend.domain.study.dto.response
+package com.better.betterbackend.domain.study.dto
 
 import com.better.betterbackend.study.domain.CheckDay
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
 
-class SimpleStudyResponseDto (
+data class SimpleStudyDto (
 
-    var id: Long? = null,
+    val id: Long,
 
     val title: String,
 
     val description: String,
 
-    var status: StudyStatus,
+    val status: StudyStatus,
 
     val period: Period,
 
@@ -29,12 +29,12 @@ class SimpleStudyResponseDto (
 
 ) {
     constructor(study: Study) :this(
-        study.id,
+        study.id!!,
         study.title,
         study.description,
         study.status,
-        study.period!!,
-        study.checkDay!!,
+        study.period,
+        study.checkDay,
         study.numOfMember,
         study.kickCondition,
         study.maximumCount,

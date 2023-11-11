@@ -1,9 +1,9 @@
-package com.better.betterbackend.domain.task.dto.response
+package com.better.betterbackend.domain.task.dto
 
 import com.better.betterbackend.task.domain.Task
 import java.time.LocalDateTime
 
-class SimpleTaskResponseDto(
+data class SimpleTaskDto(
 
     val id: Long,
 

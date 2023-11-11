@@ -1,9 +1,9 @@
-package com.better.betterbackend.domain.grouprankhistory.dto.response
+package com.better.betterbackend.domain.grouprankhistory.dto
 
-import com.better.betterbackend.domain.grouprank.dto.response.SimpleGroupRankResponseDto
+import com.better.betterbackend.domain.grouprank.dto.SimpleGroupRankDto
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 
-class GroupRankHistoryResponseDto (
+data class GroupRankHistoryDto (
 
     val id: Long,
 
@@ -13,7 +13,7 @@ class GroupRankHistoryResponseDto (
 
     val participantsNumber: Number,
 
-    val groupRank: SimpleGroupRankResponseDto
+    val groupRank: SimpleGroupRankDto
 
 ) {
 
@@ -22,7 +22,7 @@ class GroupRankHistoryResponseDto (
         groupRankHistory.score,
         groupRankHistory.totalNumber,
         groupRankHistory.participantsNumber,
-        SimpleGroupRankResponseDto(groupRankHistory.groupRank),
+        SimpleGroupRankDto(groupRankHistory.groupRank),
     )
 
 }

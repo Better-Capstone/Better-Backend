@@ -40,8 +40,8 @@ class Study (
 
     val minRank: Int,
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val memberList: List<Member> = ArrayList(),
+    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    var memberList: List<Member>,
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
     val taskList: List<Task> = ArrayList(),

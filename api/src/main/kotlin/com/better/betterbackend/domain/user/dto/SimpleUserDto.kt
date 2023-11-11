@@ -1,9 +1,9 @@
-package com.better.betterbackend.domain.user.dto.response
+package com.better.betterbackend.domain.user.dto
 
 import com.better.betterbackend.user.domain.User
 import java.time.LocalDateTime
 
-class SimpleUserResponseDto (
+data class SimpleUserDto (
 
     val id: Long,
 

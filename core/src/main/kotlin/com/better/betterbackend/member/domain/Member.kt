@@ -14,7 +14,7 @@ class Member (
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val study: Study,
+    var study: Study? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     val user: User,

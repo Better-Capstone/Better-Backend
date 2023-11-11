@@ -1,6 +1,6 @@
 package com.better.betterbackend.domain.category.web
 
-import com.better.betterbackend.domain.category.dto.response.CategoryResponseDto
+import com.better.betterbackend.domain.category.dto.CategoryDto
 import com.better.betterbackend.domain.category.service.CategoryService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -22,7 +22,7 @@ class CategoryController(
 
     @Operation(summary = "카테고리 아이디 조회(테스트 용)")
     @GetMapping("/read/{id}")
-    fun read(@PathVariable("id") id: Long): ResponseEntity<CategoryResponseDto> {
+    fun read(@PathVariable("id") id: Long): ResponseEntity<CategoryDto> {
         return ResponseEntity.ok().body(categoryService.read(id))
     }
 

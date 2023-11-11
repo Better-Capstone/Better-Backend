@@ -2,7 +2,7 @@ package com.better.betterbackend.domain.category.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
-import com.better.betterbackend.domain.category.dto.response.CategoryResponseDto
+import com.better.betterbackend.domain.category.dto.CategoryDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
@@ -23,10 +23,10 @@ class CategoryService (
         return categoryRepository.save(category).id!!
     }
 
-    fun read(id: Long): CategoryResponseDto {
+    fun read(id: Long): CategoryDto {
         val category = categoryRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
 
-        return CategoryResponseDto(category)
+        return CategoryDto(category)
     }
 
 }
