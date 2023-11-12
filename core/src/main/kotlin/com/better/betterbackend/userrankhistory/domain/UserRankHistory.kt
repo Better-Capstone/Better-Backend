@@ -2,11 +2,7 @@ package com.better.betterbackend.userrankhistory.domain
 
 import com.better.betterbackend.userrank.domain.UserRank
 import com.better.betterbackend.study.domain.Study
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 @Entity
 class UserRankHistory (
@@ -15,17 +11,18 @@ class UserRankHistory (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val uid: String,
+    val uid: Long,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val userRank: UserRank,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val study: Study,
 
     val score: Int,
 
     val description: String,
 
-    ) {
+) {
+
 }

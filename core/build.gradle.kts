@@ -8,4 +8,5 @@ jar.enabled = true
 
 dependencies {
     api("org.springframework.boot:spring-boot-starter-data-jpa")
+    api("org.springframework.boot:spring-boot-starter-security:3.0.4")
 }

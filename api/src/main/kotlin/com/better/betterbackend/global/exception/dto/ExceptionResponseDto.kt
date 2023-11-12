@@ -4,20 +4,16 @@ import com.better.betterbackend.global.exception.ErrorCode
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime
 
-data class ExceptionResponseDto(
+data class ExceptionResponseDto<T>(
 
-    val time: LocalDateTime,
+    val time: LocalDateTime = LocalDateTime.now(),
 
     val status: HttpStatus,
 
-    val message: String,
-
     val requestURI: String,
 
-) {
+    val data: T,
 
-    constructor(errorCode: ErrorCode, requestURI: String): this(
-        LocalDateTime.now(), errorCode.status, errorCode.message, requestURI
-    )
+) {
 
 }

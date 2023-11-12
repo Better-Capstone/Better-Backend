@@ -10,10 +10,15 @@ class GroupRankHistory (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val percent: Double,
+    val score: Int,
+
+    val totalNumber: Int,
+
+    val participantsNumber: Int,
 
     @ManyToOne
     val groupRank: GroupRank,
 
-    ) {
+) {
+
 }

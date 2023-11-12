@@ -3,13 +3,7 @@ package com.better.betterbackend.member.domain
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.user.domain.User
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
@@ -19,20 +13,21 @@ class Member (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @ManyToOne
-    val study: Study,
+    @ManyToOne(fetch = FetchType.LAZY)
+    var study: Study? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val user: User,
 
     @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
-    val taskList: List<Task>,
+    val taskList: List<Task> = ArrayList(),
 
-    val kickCount: Int,
+    var kickCount: Int = 0,
 
     val memberType: MemberType,
 
     val notifyTime: LocalDateTime,
 
-    ) {
+) {
+
 }
