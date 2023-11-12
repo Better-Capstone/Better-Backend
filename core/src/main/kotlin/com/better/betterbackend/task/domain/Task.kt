@@ -30,8 +30,13 @@ class Task (
     val deadline: LocalDateTime,
 
     @OneToOne
-    val challenge: Challenge,
+    var challenge: Challenge?,
 
 ): BaseTimeEntity() {
+//    constructor(
+//        study: Study,
+//        title: String,
+//        deadline: LocalDateTime,
+//        ): this(null, study, title, deadline,)
 
 }
