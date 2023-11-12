@@ -1,7 +1,7 @@
 package com.better.betterbackend.domain.task.service
 
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
-import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
+import com.better.betterbackend.domain.task.dto.response.TaskDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.member.dao.MemberRepository
@@ -21,7 +21,7 @@ class TaskService (
     private val studyRepository : StudyRepository,
     private val memberRepository: MemberRepository,
 ){
-    fun register(request : TaskRegisterRequestDto) : TaskResponseDto{
+    fun register(request : TaskRegisterRequestDto) : TaskDto{
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
@@ -42,11 +42,12 @@ class TaskService (
             challenge = null,
         )
         taskRepository.save(task)
-        return TaskResponseDto(task)
+        return TaskDto(task)
 
     }
 
-    fun getTask(studyId:Long) : List<TaskResponseDto>{
+
+    fun getTask(studyId:Long) : List<TaskDto>{
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
         val study = studyRepository.findByIdOrNull(studyId)?:throw CustomException(ErrorCode.STUDY_NOT_FOUND)
@@ -59,6 +60,8 @@ class TaskService (
 //        val task = taskRepository.findByMemberAndStudy(member,study)?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
         //todo member , study 로 일치하는 task가 두개가 되면 문제가 생김 status 추가 고려 -> studyid로 찾은 study의 tasklist 중 inprogress인 task를 반환
 
-        return inprogressTasks.map { TaskResponseDto(it) }
+        return inprogressTasks.map { TaskDto(it) }
+
+
     }
 }

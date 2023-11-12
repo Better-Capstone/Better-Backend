@@ -2,10 +2,13 @@ package com.better.betterbackend.domain.user.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
+
 import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.user.dto.SimpleUserDto
 import com.better.betterbackend.domain.user.dto.UserDto
+
+
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.*
 import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryDto
@@ -137,7 +140,9 @@ class UserService (
         val list = ArrayList<ChallengeDto>()
         for (member : Member in user.memberList) {
             for (task: Task in member.taskList) {
+
                 list.add(ChallengeDto(task.challenge))
+
             }
         }
 

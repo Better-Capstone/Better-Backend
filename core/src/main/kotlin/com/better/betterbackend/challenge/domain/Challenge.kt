@@ -14,9 +14,9 @@ class Challenge (
     @OneToOne
     val task: Task,
 
-    val description: String,
+    val description: String?,
 
-    val image: String,
+    val image: String?,
 
     @ElementCollection
     val approveMember: List<Long> = ArrayList(),
