@@ -14,6 +14,6 @@ data class ExceptionResponseDto<T>(
 
     val data: T,
 
-    ) {
+) {
 
 }

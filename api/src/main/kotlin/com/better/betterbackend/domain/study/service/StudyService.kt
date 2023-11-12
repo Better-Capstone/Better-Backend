@@ -1,11 +1,10 @@
 package com.better.betterbackend.domain.study.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
-import com.better.betterbackend.domain.grouprank.dto.response.GroupRankResponseDto
-import com.better.betterbackend.domain.grouprankhistory.dto.response.GroupRankHistoryResponseDto
+import com.better.betterbackend.domain.grouprank.dto.GroupRankDto
+import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
-import com.better.betterbackend.domain.study.dto.response.SimpleStudyResponseDto
-import com.better.betterbackend.domain.study.dto.response.StudyResponseDto
+import com.better.betterbackend.domain.study.dto.StudyDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.grouprank.domain.GroupRank
@@ -36,7 +35,7 @@ class StudyService(
 
 ) {
 
-    fun create(request: StudyCreateRequestDto): SimpleStudyResponseDto {
+    fun create(request: StudyCreateRequestDto): StudyDto {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
@@ -50,6 +49,14 @@ class StudyService(
             ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
 
         val groupRank = GroupRank()
+
+        val member = Member(
+            user = user,
+            memberType = MemberType.OWNER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        )
+
         val study = Study(
             owner = user,
             category = category,
@@ -60,47 +67,54 @@ class StudyService(
             kickCondition = request.kickCondition!!,
             maximumCount = request.maximumCount!!,
             minRank = request.minRank,
+            memberList = arrayListOf(member),
             groupRank = groupRank,
         )
 
         groupRank.study = study
+        member.study = study
+        study.numOfMember++
         studyRepository.save(study)
 
-        joinStudy(study.id!!, MemberType.OWNER)
-
-        return SimpleStudyResponseDto(study)
+        return StudyDto(study)
     }
 
-    fun getStudyById(id: Long): StudyResponseDto {
-        return StudyResponseDto(studyRepository.findByIdOrNull(id)
+    fun getStudyById(id: Long): StudyDto {
+        return StudyDto(studyRepository.findByIdOrNull(id)
             ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND))
     }
 
-    fun getStudyByCategory(categoryId: Long): List<StudyResponseDto> {
+    fun getStudyByCategory(categoryId: Long): List<StudyDto> {
         val category = categoryRepository.findByIdOrNull(categoryId)
             ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
 
-        return studyRepository.findStudiesByCategory(category).map { StudyResponseDto(it) }
+        return studyRepository.findStudiesByCategory(category).map { StudyDto(it) }
     }
 
-    fun getStudyByUser(userId: Long): List<StudyResponseDto> {
+    fun getStudyByUser(userId: Long): List<StudyDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         // 유저가 탈퇴한 스터디 필터링
         return user.memberList
             .filter { it.memberType != MemberType.WITHDRAW }
-            .map { StudyResponseDto(it.study) }
+            .map { StudyDto(it.study!!) }
     }
 
-    fun getInProgressStudies(): List<StudyResponseDto> {
-        return studyRepository.findStudiesByStatus(StudyStatus.INPROGRESS).map { StudyResponseDto(it) }
+    fun getInProgressStudies(): List<StudyDto> {
+        return studyRepository.findStudiesByStatus(StudyStatus.INPROGRESS).map { StudyDto(it) }
     }
 
-    fun joinStudy(studyId: Long, type: MemberType) {
+    fun joinStudy(studyId: Long) {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+
+        // 정원을 초과하는 경우
+        val memberList = study.memberList.filter { it.memberType != MemberType.WITHDRAW }
+        if (memberList.size == study.maximumCount) {
+            throw CustomException(ErrorCode.OVER_CAPACITY)
+        }
 
         // 유저의 랭크 점수가 최저 점수 보다 낮은 경우
         if (user.userRank.score < study.minRank) {
@@ -116,7 +130,7 @@ class StudyService(
         memberRepository.save(Member(
             study = study,
             user = user,
-            memberType = type,
+            memberType = MemberType.MEMBER,
             // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
             notifyTime = LocalDateTime.now(),
         ))
@@ -125,16 +139,16 @@ class StudyService(
         studyRepository.save(study)
     }
 
-    fun getGroupRank(studyId: Long): GroupRankResponseDto {
+    fun getGroupRank(studyId: Long): GroupRankDto {
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
-        return GroupRankResponseDto(study.groupRank)
+        return GroupRankDto(study.groupRank)
     }
 
-    fun getGroupRankHistory(studyId: Long): List<GroupRankHistoryResponseDto> {
+    fun getGroupRankHistory(studyId: Long): List<GroupRankHistoryDto> {
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
-        return study.groupRank.groupRankHistoryList.map { GroupRankHistoryResponseDto(it) }
+        return study.groupRank.groupRankHistoryList.map { GroupRankHistoryDto(it) }
     }
 
 }

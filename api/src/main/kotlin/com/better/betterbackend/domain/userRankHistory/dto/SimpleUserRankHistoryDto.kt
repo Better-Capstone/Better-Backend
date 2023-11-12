@@ -1,8 +1,8 @@
-package com.better.betterbackend.domain.userRankHistory.dto.response
+package com.better.betterbackend.domain.userRankHistory.dto
 
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 
-class SimpleUserRankHistoryResponseDto(
+data class SimpleUserRankHistoryDto(
 
     val id: Long,
 

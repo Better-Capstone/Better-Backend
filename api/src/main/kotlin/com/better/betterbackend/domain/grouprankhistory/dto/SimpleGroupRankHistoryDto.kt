@@ -1,8 +1,8 @@
-package com.better.betterbackend.domain.grouprankhistory.dto.response
+package com.better.betterbackend.domain.grouprankhistory.dto
 
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 
-class SimpleGroupRankHistoryResponseDto(
+data class SimpleGroupRankHistoryDto(
 
     val id: Long,
 

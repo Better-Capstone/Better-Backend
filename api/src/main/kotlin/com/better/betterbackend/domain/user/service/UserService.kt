@@ -2,12 +2,14 @@ package com.better.betterbackend.domain.user.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
 import com.better.betterbackend.category.domain.Category
-import com.better.betterbackend.domain.challenge.response.ChallengeResponseDto
-import com.better.betterbackend.domain.task.dto.response.TaskResponseDto
+import com.better.betterbackend.domain.challenge.dto.ChallengeDto
+import com.better.betterbackend.domain.task.dto.TaskDto
+import com.better.betterbackend.domain.user.dto.SimpleUserDto
+import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.*
-import com.better.betterbackend.domain.userRankHistory.dto.response.UserRankHistoryResponseDto
-import com.better.betterbackend.domain.userrank.dto.response.UserRankResponseDto
+import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryDto
+import com.better.betterbackend.domain.userrank.dto.UserRankDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.global.security.JwtTokenProvider
@@ -95,47 +97,47 @@ class UserService (
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
         val user = userRepository.findByIdOrNull(userInfo.id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return UserLoginResponseDto(tokenProvider.createToken(user.id.toString()), SimpleUserResponseDto(user))
+        return UserLoginResponseDto(tokenProvider.createToken(user.id.toString()), SimpleUserDto(user))
     }
 
-    fun getUser(id : Long): UserResponseDto {
+    fun getUser(id : Long): UserDto {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return UserResponseDto(user)
+        return UserDto(user)
     }
 
-    fun getRank(id : Long) : UserRankResponseDto {
+    fun getRank(id : Long) : UserRankDto {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return UserRankResponseDto(user.userRank)
+        return UserRankDto(user.userRank)
     }
 
-    fun getRankHistory(id: Long) : List<UserRankHistoryResponseDto> {
+    fun getRankHistory(id: Long) : List<UserRankHistoryDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return user.userRank.userRankHistoryList.map { UserRankHistoryResponseDto(it) }
+        return user.userRank.userRankHistoryList.map { UserRankHistoryDto(it) }
     }
 
-    fun getTask(id: Long) : List<TaskResponseDto>{
+    fun getTask(id: Long) : List<TaskDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        val list = ArrayList<TaskResponseDto>()
+        val list = ArrayList<TaskDto>()
         for (member:Member in user.memberList){
             for (task:Task in member.taskList){
-                list.add(TaskResponseDto(task))
+                list.add(TaskDto(task))
             }
         }
 
         return list
     }
 
-    fun getChallenge(id: Long) : List<ChallengeResponseDto>{
+    fun getChallenge(id: Long) : List<ChallengeDto>{
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        val list = ArrayList<ChallengeResponseDto>()
+        val list = ArrayList<ChallengeDto>()
         for (member : Member in user.memberList) {
             for (task: Task in member.taskList) {
-                list.add(ChallengeResponseDto(task.challenge))
+                list.add(ChallengeDto(task.challenge))
             }
         }
 

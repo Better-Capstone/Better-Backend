@@ -1,9 +1,8 @@
-package com.better.betterbackend.domain.challenge.response
+package com.better.betterbackend.domain.challenge.dto
 
 import com.better.betterbackend.challenge.domain.Challenge
-import com.better.betterbackend.domain.task.dto.response.SimpleTaskResponseDto
 
-class SimpleChallengeResponseDto (
+data class SimpleChallengeDto (
 
     var id: Long,
 

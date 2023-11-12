@@ -1,8 +1,8 @@
-package com.better.betterbackend.domain.category.dto.response
+package com.better.betterbackend.domain.category.dto
 
 import com.better.betterbackend.category.domain.Category
 
-class SimpleCategoryResponseDto(
+data class SimpleCategoryDto(
 
     val id: Long,
 

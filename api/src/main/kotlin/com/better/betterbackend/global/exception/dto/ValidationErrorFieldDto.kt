@@ -1,11 +1,11 @@
 package com.better.betterbackend.global.exception.dto
 
-class ValidationErrorFieldDto (
+data class ValidationErrorFieldDto (
 
     val field: String,
 
     val message: String,
 
-    ) {
+) {
 
 }

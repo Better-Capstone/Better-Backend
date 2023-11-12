@@ -1,12 +1,11 @@
-package com.better.betterbackend.domain.member.dto.response
+package com.better.betterbackend.domain.member.dto
 
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.member.domain.MemberType
-import com.better.betterbackend.study.domain.Study
 
 import java.time.LocalDateTime
 
-class SimpleMemberResponseDto (
+data class SimpleMemberDto (
 
     val id: Long,
 
