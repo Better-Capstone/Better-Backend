@@ -24,5 +24,6 @@ class ChallengeController(
     fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<ChallengeResponseDto>{
         return ResponseEntity.ok().body(challengeService.getChallenge(id))
     }
+    //@GetMapping("/comment/:{id}")
 
 }

@@ -18,7 +18,7 @@ class TaskDto(
 
     val deadline: LocalDateTime,
 
-    val challenge: SimpleChallengeResponseDto,
+    val challenge: SimpleChallengeResponseDto?,
 
     ){
     constructor(task: Task) : this(
@@ -27,6 +27,6 @@ class TaskDto(
         SimpleMemberResponseDto(task.member),
         task.title,
         task.deadline,
-        SimpleChallengeResponseDto(task.challenge!!),
+        if (task.challenge != null) SimpleChallengeResponseDto(task.challenge!!) else null,
     )
 }

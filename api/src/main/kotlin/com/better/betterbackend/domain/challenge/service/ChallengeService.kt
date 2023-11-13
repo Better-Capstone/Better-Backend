@@ -41,6 +41,7 @@ class ChallengeService(
            approveMember = emptyList(),
            rejectMember = emptyList(),
        )
+       //todo challenge를 만들었는데 task.challenge 의 null값이 변경되지않음
        challengeRepository.save(challenge)
        return ChallengeResponseDto(challenge)
 

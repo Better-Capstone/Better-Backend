@@ -50,6 +50,7 @@ class TaskService (
     fun getTask(studyId:Long) : List<TaskDto>{
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
+
         val study = studyRepository.findByIdOrNull(studyId)?:throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 //        val inprogressTask= study.taskList.find { it.status == TaskStatus.INPROGRESS } ?: throw CustomException(ErrorCode.TASK_NOT_FOUND)
 
@@ -61,6 +62,7 @@ class TaskService (
         //todo member , study 로 일치하는 task가 두개가 되면 문제가 생김 status 추가 고려 -> studyid로 찾은 study의 tasklist 중 inprogress인 task를 반환
 
         return inprogressTasks.map { TaskDto(it) }
+
 
 
     }
