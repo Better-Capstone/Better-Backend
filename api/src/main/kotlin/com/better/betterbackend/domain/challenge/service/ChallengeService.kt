@@ -2,9 +2,10 @@ package com.better.betterbackend.domain.challenge.service
 
 import com.better.betterbackend.challenge.dao.ChallengeRepository
 import com.better.betterbackend.challenge.domain.Challenge
+import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.challenge.dto.request.ChallengeApproveRequestDto
 import com.better.betterbackend.domain.challenge.dto.request.ChallengeRegisterRequestDto
-import com.better.betterbackend.domain.challenge.dto.response.ChallengeResponseDto
+
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.member.dao.MemberRepository
@@ -24,7 +25,7 @@ class ChallengeService(
     private val taskRepository: TaskRepository,
 
 ) {
-   fun register(request : ChallengeRegisterRequestDto,taskId :Long) : ChallengeResponseDto{
+   fun register(request : ChallengeRegisterRequestDto,taskId :Long) : ChallengeDto{
        val principal = SecurityContextHolder.getContext().authentication.principal
        val user = (principal as UserDetails) as User
 
@@ -50,12 +51,12 @@ class ChallengeService(
        taskRepository.save(task)
        //todo challenge를 만들었는데 task.challenge 의 null값이 변경되지않음 -> task에 챌린지를 넣어서 save해주면 알아서 challenge도 세이브가 된다
 //       challengeRepository.save(challenge)
-       return ChallengeResponseDto(challenge)
+       return ChallengeDto(challenge)
 
    }
-    fun getChallenge(id : Long) : ChallengeResponseDto{
+    fun getChallenge(id : Long) : ChallengeDto{
         val challenge = challengeRepository.findByIdOrNull(id) ?:throw CustomException(ErrorCode.CHALLENGE_NOT_FOUND)
-        return ChallengeResponseDto(challenge)
+        return ChallengeDto(challenge)
     }
     fun approve(id : Long,request: ChallengeApproveRequestDto) {
         val principal = SecurityContextHolder.getContext().authentication.principal

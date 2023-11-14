@@ -8,9 +8,9 @@ data class SimpleChallengeDto (
 
     var id: Long,
 
-    val description: String?,//todo image description nullable 확인 필요
+    val description: String,
 
-    val image: String?,
+    val image: String,
 
     val approveMember: List<Long>,
 

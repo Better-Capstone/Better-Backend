@@ -17,7 +17,7 @@ enum class ErrorCode(
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다"),
     USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 가입된 유저입니다"),
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버를 찾을수 없습니다")
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버를 찾을수 없습니다"),
 
     TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 태스크를 찾을수 없습니다"),
     CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 챌린지를 찾을수 없습니다"),

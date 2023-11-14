@@ -1,10 +1,11 @@
 package com.better.betterbackend.domain.task.web
 
+import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.challenge.dto.request.ChallengeRegisterRequestDto
-import com.better.betterbackend.domain.challenge.dto.response.ChallengeResponseDto
+
 import com.better.betterbackend.domain.challenge.service.ChallengeService
+import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
-import com.better.betterbackend.domain.task.dto.response.TaskDto
 import com.better.betterbackend.domain.task.service.TaskService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,13 +28,13 @@ class TaskController (
         return ResponseEntity.ok().body(taskService.register(request))
     }
     @PostMapping("/{id}/challenge/register")
-    fun challengeRegister(@RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId:Long): ResponseEntity<ChallengeResponseDto>{
+    fun challengeRegister(@RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId:Long): ResponseEntity<ChallengeDto>{
         return ResponseEntity.ok().body(challengeService.register(request, taskId))
     }
 
     @GetMapping("/{id}")
 
-    fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<TaskDto>{
+    fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<List<TaskDto>>{
 
         return ResponseEntity.ok().body(taskService.getTask(studyId))
     }

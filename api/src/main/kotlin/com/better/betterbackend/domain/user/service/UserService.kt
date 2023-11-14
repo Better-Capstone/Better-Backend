@@ -141,7 +141,7 @@ class UserService (
         for (member : Member in user.memberList) {
             for (task: Task in member.taskList) {
 
-                list.add(ChallengeDto(task.challenge))
+                list.add(ChallengeDto(task.challenge!!))
 
             }
         }

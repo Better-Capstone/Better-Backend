@@ -1,14 +1,15 @@
 package com.better.betterbackend.domain.challenge.web
 
+import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.challenge.dto.request.ChallengeApproveRequestDto
-import com.better.betterbackend.domain.challenge.dto.request.ChallengeRegisterRequestDto
-import com.better.betterbackend.domain.challenge.dto.response.ChallengeResponseDto
+
+
 import com.better.betterbackend.domain.challenge.service.ChallengeService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -19,7 +20,7 @@ class ChallengeController(
 ) {
 
     @GetMapping("/{id}")
-    fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<ChallengeResponseDto>{
+    fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<ChallengeDto>{
         return ResponseEntity.ok().body(challengeService.getChallenge(id))
     }
     @PostMapping("/comment/:{id}")

@@ -1,7 +1,7 @@
 package com.better.betterbackend.domain.task.service
 
+import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
-import com.better.betterbackend.domain.task.dto.response.TaskDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.member.dao.MemberRepository
@@ -29,7 +29,7 @@ class TaskService (
         val title = request.title
         val deadline = request.deadline
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
-        val member = memberRepository.findByUserAndStudy(user, study) ?:throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        val member = memberRepository.findMemberByUserAndStudy(user, study) ?:throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
         // 유저도 있고 스터디도 있는데 유저가 그 스터디에 가입 안했으면 멤버가 없겠지 -> 그러면 null이 나올거 -> 에러코드 추가해서 throw CustomException
         // 챌린지 생성은 따로 태스크 만들고 그 태스크 수행해서 나 다했다고 인증 올릴때 그게 챌린지
 
