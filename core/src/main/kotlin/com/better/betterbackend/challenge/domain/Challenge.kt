@@ -14,15 +14,15 @@ class Challenge (
     @OneToOne
     val task: Task,
 
-    val description: String?,
+    val description: String,
 
-    val image: String?,
-
-    @ElementCollection
-    val approveMember: List<Long> = ArrayList(),
+    val image: String,
 
     @ElementCollection
-    val rejectMember: List<Long> = ArrayList(),
+    var approveMember: List<Long> = ArrayList(),
+
+    @ElementCollection
+    var rejectMember: List<Long> = ArrayList(),
 
 ): BaseTimeEntity() {
 

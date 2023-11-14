@@ -10,9 +10,9 @@ data class ChallengeDto (
 
     val task: SimpleTaskDto,
 
-    val description: String?,
+    val description: String,
 
-    val image: String?,
+    val image: String,
 
     val approveMember: List<Long>,
 
@@ -20,7 +20,7 @@ data class ChallengeDto (
 
 ){
 
-    constructor(challenge: Challenge) :this (//todo 나중에 description image 어떻게 할지 확인후에 nullable 여부 변경
+    constructor(challenge: Challenge) :this (
         challenge.id!!,
         SimpleTaskDto(challenge.task),
         challenge.description,

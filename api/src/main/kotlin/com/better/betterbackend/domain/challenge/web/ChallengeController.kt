@@ -17,16 +17,13 @@ import org.springframework.web.bind.annotation.RestController
 class ChallengeController(
     private val challengeService: ChallengeService,
 ) {
-    @PostMapping("/register")
-    fun register(@RequestBody request: ChallengeRegisterRequestDto): ResponseEntity<ChallengeResponseDto> {
-        return ResponseEntity.ok().body(challengeService.register(request))
-    }
+
     @GetMapping("/{id}")
     fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<ChallengeResponseDto>{
         return ResponseEntity.ok().body(challengeService.getChallenge(id))
     }
     @PostMapping("/comment/:{id}")
-    fun approve(@PathVariable("id") id: Long,request: ChallengeApproveRequestDto): ResponseEntity<Any>{
+    fun approve(@PathVariable("id") id: Long,request: ChallengeApproveRequestDto) :ResponseEntity<Unit>{
         return ResponseEntity.ok().body(challengeService.approve(id,request))
     }
 
