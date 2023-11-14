@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TaskRepository: JpaRepository<Task, Long> {
     fun findByMemberAndStudy(member: Member, study: Study): Task?
-    fun findtaskByStatus(status: TaskStatus): Task
+
 
 }

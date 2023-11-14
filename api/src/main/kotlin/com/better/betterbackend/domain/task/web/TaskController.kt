@@ -31,13 +31,10 @@ class TaskController (
         return ResponseEntity.ok().body(challengeService.register(request, taskId))
     }
 
-
-//    @PostMapping("/register")
-//    fun register(@RequestBody request: ChallengeRegisterRequestDto): ResponseEntity<ChallengeResponseDto> {
-//        return ResponseEntity.ok().body(challengeService.register(request))
-//    }
     @GetMapping("/{id}")
+
     fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<TaskDto>{
+
         return ResponseEntity.ok().body(taskService.getTask(studyId))
     }
 

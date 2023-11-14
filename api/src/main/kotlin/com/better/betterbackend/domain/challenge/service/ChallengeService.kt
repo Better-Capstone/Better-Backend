@@ -63,13 +63,15 @@ class ChallengeService(
 
         val challenge = challengeRepository.findByIdOrNull(id)?: throw CustomException(ErrorCode.CHALLENGE_NOT_FOUND)
 
-        if (request.approved == true){
+        if (request.approved==true){
             val newList = challenge.approveMember.plusElement(user.id!!)//리스트에항목 추가
             challenge.approveMember = newList
+            challengeRepository.save(challenge)
         }
         else{
             val newList = challenge.rejectMember.plusElement(user.id!!)
             challenge.rejectMember = newList
+            challengeRepository.save(challenge)
         }
     }
 }
