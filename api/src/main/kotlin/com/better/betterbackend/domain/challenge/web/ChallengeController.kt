@@ -1,5 +1,6 @@
 package com.better.betterbackend.domain.challenge.web
 
+import com.better.betterbackend.domain.challenge.dto.request.ChallengeApproveRequestDto
 import com.better.betterbackend.domain.challenge.dto.request.ChallengeRegisterRequestDto
 import com.better.betterbackend.domain.challenge.dto.response.ChallengeResponseDto
 import com.better.betterbackend.domain.challenge.service.ChallengeService
@@ -24,6 +25,9 @@ class ChallengeController(
     fun getChallenge(@PathVariable("id") id: Long): ResponseEntity<ChallengeResponseDto>{
         return ResponseEntity.ok().body(challengeService.getChallenge(id))
     }
-    //@GetMapping("/comment/:{id}")
+    @PostMapping("/comment/:{id}")
+    fun approve(@PathVariable("id") id: Long,request: ChallengeApproveRequestDto): ResponseEntity<Any>{
+        return ResponseEntity.ok().body(challengeService.approve(id,request))
+    }
 
 }

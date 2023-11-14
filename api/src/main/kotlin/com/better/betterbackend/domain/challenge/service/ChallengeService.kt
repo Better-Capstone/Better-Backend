@@ -2,6 +2,7 @@ package com.better.betterbackend.domain.challenge.service
 
 import com.better.betterbackend.challenge.dao.ChallengeRepository
 import com.better.betterbackend.challenge.domain.Challenge
+import com.better.betterbackend.domain.challenge.dto.request.ChallengeApproveRequestDto
 import com.better.betterbackend.domain.challenge.dto.request.ChallengeRegisterRequestDto
 import com.better.betterbackend.domain.challenge.dto.response.ChallengeResponseDto
 import com.better.betterbackend.global.exception.CustomException
@@ -49,6 +50,15 @@ class ChallengeService(
     fun getChallenge(id : Long) : ChallengeResponseDto{
         val challenge = challengeRepository.findByIdOrNull(id) ?:throw CustomException(ErrorCode.CHALLENGE_NOT_FOUND)
         return ChallengeResponseDto(challenge)
+    }
+    fun approve(id : Long,request: ChallengeApproveRequestDto) {
+
+        if (request.approved == true){
+
+        }
+        else{
+
+        }
     }
 }
 
