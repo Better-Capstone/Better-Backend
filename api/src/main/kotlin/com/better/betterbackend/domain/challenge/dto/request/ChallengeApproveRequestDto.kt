@@ -1,6 +1,9 @@
 package com.better.betterbackend.domain.challenge.dto.request
 
-class ChallengeApproveRequestDto (
+data class ChallengeApproveRequestDto (
+
     val approved : Boolean
+
 ){
+
 }

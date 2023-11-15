@@ -5,6 +5,7 @@ import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
 import com.better.betterbackend.domain.study.service.StudyService
+import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
@@ -72,6 +73,12 @@ class StudyController(
     @GetMapping("/{id}/report/history")
     fun getGroupRankHistory(@PathVariable("id") studyId: Long): ResponseEntity<List<GroupRankHistoryDto>> {
         return ResponseEntity.ok().body(studyService.getGroupRankHistory(studyId))
+    }
+
+    @Operation(summary = "스터디에서 현재 진행중인 테스크 목록 조회")
+    @GetMapping("/{id}/tasks")
+    fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<List<TaskDto>>{
+        return ResponseEntity.ok().body(studyService.getTask(studyId))
     }
 
 }

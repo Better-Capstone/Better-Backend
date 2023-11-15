@@ -5,6 +5,7 @@ import com.better.betterbackend.domain.grouprank.dto.GroupRankDto
 import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
+import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.grouprank.domain.GroupRank
@@ -14,6 +15,7 @@ import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
+import com.better.betterbackend.task.domain.TaskStatus
 import com.better.betterbackend.user.dao.UserRepository
 import com.better.betterbackend.user.domain.User
 import org.springframework.data.repository.findByIdOrNull
@@ -149,6 +151,20 @@ class StudyService(
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
         return study.groupRank.groupRankHistoryList.map { GroupRankHistoryDto(it) }
+    }
+
+    fun getTask(studyId: Long): List<TaskDto> {
+        val principal = SecurityContextHolder.getContext().authentication.principal
+        val user = (principal as UserDetails) as User
+
+        val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+
+        // 로그인한 유저가 해당 스터디에 참여하지 않은 유저일 경우
+        study.taskList.find { it.member.user == user } ?: throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
+
+        return study.taskList
+            .filter { it.status == TaskStatus.INPROGRESS }
+            .map { TaskDto(it) }
     }
 
 }

@@ -21,22 +21,21 @@ import org.springframework.web.bind.annotation.RestController
 class TaskController (
 
     private val taskService : TaskService,
+
     private val challengeService : ChallengeService,
+
 ){
+
     @PostMapping("/register")
     fun register(@RequestBody request: TaskRegisterRequestDto): ResponseEntity<TaskDto> {
         return ResponseEntity.ok().body(taskService.register(request))
     }
+
     @PostMapping("/{id}/challenge/register")
-    fun challengeRegister(@RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId:Long): ResponseEntity<ChallengeDto>{
+    fun challengeRegister(
+        @RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId:Long
+    ): ResponseEntity<ChallengeDto>{
         return ResponseEntity.ok().body(challengeService.register(request, taskId))
-    }
-
-    @GetMapping("/{id}")
-
-    fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<List<TaskDto>>{
-
-        return ResponseEntity.ok().body(taskService.getTask(studyId))
     }
 
 }

@@ -30,11 +30,6 @@ class Task (
 
     var status: TaskStatus = TaskStatus.INPROGRESS,
 
-    ): BaseTimeEntity() {
-//    constructor(
-//        study: Study,
-//        title: String,
-//        deadline: LocalDateTime,
-//        ): this(null, study, title, deadline,)
+): BaseTimeEntity() {
 
 }

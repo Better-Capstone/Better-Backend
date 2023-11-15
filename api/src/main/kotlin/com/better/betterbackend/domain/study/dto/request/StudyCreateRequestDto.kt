@@ -6,7 +6,7 @@ import com.better.betterbackend.study.domain.Period
 import jakarta.validation.constraints.*
 
 
-class StudyCreateRequestDto(
+data class StudyCreateRequestDto(
 
     @field:NotNull(message = "카테고리는 필수 값 입니다", groups = [NotNullGroup::class])
     @field:Min(value = 0, message = "0 이상의 값 이어야 합니다", groups = [MinMaxGroup::class])
