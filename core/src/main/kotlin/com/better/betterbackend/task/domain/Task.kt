@@ -4,12 +4,8 @@ import com.better.betterbackend.challenge.domain.Challenge
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.model.BaseTimeEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToOne
+import com.better.betterbackend.study.domain.StudyStatus
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
@@ -29,9 +25,16 @@ class Task (
 
     val deadline: LocalDateTime,
 
-    @OneToOne
-    val challenge: Challenge,
+    @OneToOne(cascade = [CascadeType.PERSIST])
+    var challenge: Challenge?,
 
-): BaseTimeEntity() {
+    var status: TaskStatus = TaskStatus.INPROGRESS,
+
+    ): BaseTimeEntity() {
+//    constructor(
+//        study: Study,
+//        title: String,
+//        deadline: LocalDateTime,
+//        ): this(null, study, title, deadline,)
 
 }

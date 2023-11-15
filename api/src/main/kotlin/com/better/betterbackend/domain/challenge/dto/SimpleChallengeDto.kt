@@ -1,4 +1,6 @@
+
 package com.better.betterbackend.domain.challenge.dto
+
 
 import com.better.betterbackend.challenge.domain.Challenge
 

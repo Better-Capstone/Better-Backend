@@ -17,13 +17,22 @@ enum class ErrorCode(
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다"),
     USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 가입된 유저입니다"),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버를 찾을수 없습니다"),
 
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 태스크를 찾을수 없습니다"),
+    CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 챌린지를 찾을수 없습니다"),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다"),
 
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "스터디를 찾을 수 없습니다"),
+
+
     OVER_CAPACITY(HttpStatus.BAD_REQUEST, "정원을 초과하였습니다"),
     ALREADY_PARTICIPATED(HttpStatus.BAD_REQUEST, "이미 가입된 상태입니다"),
     UNDER_MIN_RANK(HttpStatus.BAD_REQUEST, "최저 점수를 충족하지 못했습니다"),
-    ;
+    
+
+    
+
+
 
 }
