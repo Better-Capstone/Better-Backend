@@ -121,7 +121,7 @@ class UserService (
         return user.userRank.userRankHistoryList.map { UserRankHistoryDto(it) }
     }
 
-    fun getTask(id: Long) : List<TaskDto>{
+    fun getTask(id: Long) : List<TaskDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         val list = ArrayList<TaskDto>()
@@ -134,15 +134,13 @@ class UserService (
         return list
     }
 
-    fun getChallenge(id: Long) : List<ChallengeDto>{
+    fun getChallenge(id: Long) : List<ChallengeDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
         val list = ArrayList<ChallengeDto>()
         for (member : Member in user.memberList) {
             for (task: Task in member.taskList) {
-
                 list.add(ChallengeDto(task.challenge!!))
-
             }
         }
 
