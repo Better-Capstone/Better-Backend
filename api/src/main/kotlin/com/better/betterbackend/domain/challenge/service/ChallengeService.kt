@@ -23,7 +23,7 @@ class ChallengeService (
 
 ) {
 
-    fun register(request : ChallengeRegisterRequestDto, taskId :Long) : ChallengeDto{
+    fun register(request: ChallengeRegisterRequestDto, taskId: Long) : ChallengeDto{
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
@@ -32,8 +32,14 @@ class ChallengeService (
         val task = taskRepository.findByIdOrNull(taskId) ?: throw CustomException(ErrorCode.TASK_NOT_FOUND)
 
         // 로그인한 유저가 해당 태스크의 주인이 아닌 경우
-        if (task.member.user != user) {
+        if (task.member.user.id!! != user.id!!) {
             throw CustomException(ErrorCode.NOT_YOUR_TASK)
+        }
+
+        // todo: 챌린지 재등록 가능 여부
+        // 이미 챌린지가 등록되어 있는 태스크의 경우
+        if (task.challenge != null) {
+            throw CustomException(ErrorCode.CHALLENGE_ALREADY_REGISTERED)
         }
 
         val challenge = Challenge(
@@ -63,7 +69,7 @@ class ChallengeService (
         val challenge = challengeRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CHALLENGE_NOT_FOUND)
 
         // challenge에 스스로 approve를 하려 할 경우
-        if (challenge.task.member.user == user) {
+        if (challenge.task.member.user.id!! == user.id!!) {
             throw CustomException(ErrorCode.SELF_APPROVE_NOT_POSSIBLE)
         }
 

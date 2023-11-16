@@ -31,7 +31,7 @@ class TaskService (
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
         // 해당 스터디에 참여하지 않은 유저인 경우
-        val member = study.memberList.find { it.user == user } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
+        val member = study.memberList.find { it.user.id!! == user.id!! } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
 
         val taskGroup = study.taskGroupList.find { it.status == TaskGroupStatus.INPROGRESS }!!
 

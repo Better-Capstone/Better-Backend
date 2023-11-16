@@ -70,7 +70,7 @@ class StudyService(
             }
             var day: Int = request.checkDay!!.ordinal
             val currentDay = LocalDate.now().dayOfWeek.value
-            if (day < currentDay) {
+            if (day <= currentDay) {
                 day += 7
             }
             endDate = endDate.plusDays((day - currentDay).toLong() - 1)
@@ -95,8 +95,9 @@ class StudyService(
             groupRank = groupRank,
         )
 
-        groupRank.study = study
         member.study = study
+        taskGroup.study = study
+        groupRank.study = study
         study.numOfMember++
         studyRepository.save(study)
 
@@ -146,7 +147,7 @@ class StudyService(
         }
 
         // 유저가 이미 가입된 상태일 경우
-        val member = memberRepository.findMemberByUserAndStudy(user, study)
+        val member = study.memberList.find { it.user.id!! == user.id!! }
         if (member != null && member.memberType != MemberType.WITHDRAW) {
             throw CustomException(ErrorCode.ALREADY_PARTICIPATED)
         }
