@@ -1,5 +1,6 @@
 package com.better.betterbackend.member.domain
 
+import com.better.betterbackend.model.BaseTimeEntity
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.user.domain.User
@@ -28,6 +29,6 @@ class Member (
 
     val notifyTime: LocalDateTime,
 
-) {
+): BaseTimeEntity() {
 
 }

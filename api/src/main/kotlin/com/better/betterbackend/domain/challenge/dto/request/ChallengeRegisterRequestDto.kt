@@ -1,7 +1,5 @@
 package com.better.betterbackend.domain.challenge.dto.request
 
-import java.time.LocalDateTime
-
 data class ChallengeRegisterRequestDto (
 
     val title : String,
@@ -9,8 +7,6 @@ data class ChallengeRegisterRequestDto (
     val image : String,
 
     val description : String,
-
-    val deadline: LocalDateTime,
 
 ){
 

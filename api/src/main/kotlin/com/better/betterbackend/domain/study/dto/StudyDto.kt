@@ -4,12 +4,14 @@ import com.better.betterbackend.domain.category.dto.SimpleCategoryDto
 import com.better.betterbackend.domain.grouprank.dto.SimpleGroupRankDto
 import com.better.betterbackend.domain.member.dto.SimpleMemberDto
 import com.better.betterbackend.domain.task.dto.SimpleTaskDto
+import com.better.betterbackend.domain.taskgroup.dto.SimpleTaskGroupDto
 import com.better.betterbackend.domain.user.dto.SimpleUserDto
 import com.better.betterbackend.domain.userRankHistory.dto.SimpleUserRankHistoryDto
 import com.better.betterbackend.study.domain.CheckDay
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
+import java.time.LocalDateTime
 
 data class StudyDto(
 
@@ -39,11 +41,15 @@ data class StudyDto(
 
     val memberList: List<SimpleMemberDto>,
 
-    val taskList: List<SimpleTaskDto>,
+    val taskGroupList: List<SimpleTaskGroupDto>,
 
     val userRankHistoryList: List<SimpleUserRankHistoryDto>,
 
-    val groupRank: SimpleGroupRankDto
+    val groupRank: SimpleGroupRankDto,
+
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime,
 
 ) {
 
@@ -61,9 +67,11 @@ data class StudyDto(
         study.maximumCount,
         study.minRank,
         study.memberList.map{ SimpleMemberDto(it) },
-        study.taskList.map{ SimpleTaskDto(it) },
+        study.taskGroupList.map{ SimpleTaskGroupDto(it) },
         study.userRankHistoryList.map { SimpleUserRankHistoryDto(it) },
         SimpleGroupRankDto(study.groupRank),
+        study.createdAt,
+        study.updatedAt,
     )
 
 }

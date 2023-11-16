@@ -4,11 +4,10 @@ import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
-import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.task.dao.TaskRepository
 import com.better.betterbackend.task.domain.Task
-import com.better.betterbackend.task.domain.TaskStatus
+import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
 import com.better.betterbackend.user.domain.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
@@ -32,14 +31,14 @@ class TaskService (
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
         // 해당 스터디에 참여하지 않은 유저인 경우
-        val member = study.memberList.find { it.user == user } ?: throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        // val member = memberRepository.findMemberByUserAndStudy(user, study) ?: throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        val member = study.memberList.find { it.user == user } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
+
+        val taskGroup = study.taskGroupList.find { it.status == TaskGroupStatus.INPROGRESS }!!
 
         val task = Task(
-            study = study,
+            taskGroup = taskGroup,
             member = member,
             title = request.title,
-            deadline = request.deadline,
             challenge = null,
         )
         taskRepository.save(task)

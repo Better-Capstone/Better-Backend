@@ -1,6 +1,6 @@
-package com.better.betterbackend.task.domain
+package com.better.betterbackend.taskgroup.domain
 
-enum class TaskStatus (
+enum class TaskGroupStatus (
 
     val status: String,
 
