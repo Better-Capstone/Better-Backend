@@ -5,6 +5,7 @@ import com.better.betterbackend.domain.grouprank.dto.GroupRankDto
 import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
+import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.grouprank.domain.GroupRank
@@ -137,6 +138,25 @@ class StudyService(
 
         study.numOfMember++
         studyRepository.save(study)
+    }
+
+    fun getUsersInStudy(studyId: Long): List<UserDto> {
+        val study = userRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+
+        return study.memberList
+            .filter { it.memberType != MemberType.WITHDRAW }
+            .map { UserDto(it.user) }
+    }
+
+    fun getStudyByKeywordAndCategory(categoryId: Long?, keyword: String?): List<StudyDto> {
+        val category = if (categoryId == null) {
+            null
+        } else {
+            categoryRepository.findByIdOrNull(categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
+        }
+
+        return studyRepository.findStudiesByCategoryAndTitleContaining(category, keyword)
+            .map { StudyDto(it) }
     }
 
     fun getGroupRank(studyId: Long): GroupRankDto {
