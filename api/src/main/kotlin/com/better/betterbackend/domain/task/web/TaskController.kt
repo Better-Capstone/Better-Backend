@@ -7,6 +7,7 @@ import com.better.betterbackend.domain.challenge.service.ChallengeService
 import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
 import com.better.betterbackend.domain.task.service.TaskService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,15 +27,17 @@ class TaskController (
 
 ){
 
+    @Operation(summary = "태스크 등록")
     @PostMapping("/register")
     fun register(@RequestBody request: TaskRegisterRequestDto): ResponseEntity<TaskDto> {
         return ResponseEntity.ok().body(taskService.register(request))
     }
 
+    @Operation(summary = "태스크에 대한 챌린지 등록")
     @PostMapping("/{id}/challenge/register")
     fun challengeRegister(
-        @RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId:Long
-    ): ResponseEntity<ChallengeDto>{
+        @RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId: Long
+    ): ResponseEntity<ChallengeDto> {
         return ResponseEntity.ok().body(challengeService.register(request, taskId))
     }
 
