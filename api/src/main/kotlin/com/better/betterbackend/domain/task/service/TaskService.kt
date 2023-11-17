@@ -23,7 +23,7 @@ class TaskService (
 
 ){
 
-    fun register(request : TaskRegisterRequestDto): TaskDto {
+    fun register(request: TaskRegisterRequestDto): TaskDto {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 

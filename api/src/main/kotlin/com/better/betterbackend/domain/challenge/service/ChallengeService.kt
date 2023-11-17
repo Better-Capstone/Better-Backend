@@ -23,7 +23,7 @@ class ChallengeService (
 
 ) {
 
-    fun register(request: ChallengeRegisterRequestDto, taskId: Long) : ChallengeDto{
+    fun register(request: ChallengeRegisterRequestDto, taskId: Long): ChallengeDto {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
@@ -36,7 +36,6 @@ class ChallengeService (
             throw CustomException(ErrorCode.NOT_YOUR_TASK)
         }
 
-        // todo: 챌린지 재등록 가능 여부
         // 이미 챌린지가 등록되어 있는 태스크의 경우
         if (task.challenge != null) {
             throw CustomException(ErrorCode.CHALLENGE_ALREADY_REGISTERED)
@@ -46,8 +45,8 @@ class ChallengeService (
            task = task,
            description = description,
            image = image,
-           approveMember = emptyList(),
-           rejectMember = emptyList(),
+           approveMember = ArrayList(),
+           rejectMember = ArrayList(),
         )
 
         task.challenge = challenge
@@ -56,13 +55,13 @@ class ChallengeService (
         return ChallengeDto(challenge)
     }
 
-    fun getChallenge(id : Long): ChallengeDto{
+    fun getChallenge(id: Long): ChallengeDto {
         val challenge = challengeRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CHALLENGE_NOT_FOUND)
 
         return ChallengeDto(challenge)
     }
 
-    fun approve(id : Long, request: ChallengeApproveRequestDto) {
+    fun approve(id: Long, request: ChallengeApproveRequestDto) {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
@@ -81,7 +80,7 @@ class ChallengeService (
 
         if (request.approved) {
             challenge.approveMember += user.id!!
-        }  else{
+        } else {
             challenge.rejectMember += user.id!!
         }
 
