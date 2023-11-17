@@ -34,7 +34,7 @@ class UserController(
     }
 
     @Operation(summary = "유저 가입 여부 확인")
-    @GetMapping("/{id}/check")
+    @GetMapping("/check/{id}")
     fun check(@PathVariable id: Long): ResponseEntity<UserCheckResponseDto> {
         return ResponseEntity.ok().body(userService.check(id))
     }
