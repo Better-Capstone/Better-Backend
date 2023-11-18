@@ -5,11 +5,7 @@ import com.better.betterbackend.domain.challenge.dto.request.ChallengeApproveReq
 import com.better.betterbackend.domain.challenge.service.ChallengeService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/challenge")
@@ -27,7 +23,7 @@ class ChallengeController(
 
     @Operation(summary = "챌린지 인증")
     @PostMapping("/comment/:{id}")
-    fun approve(@PathVariable("id") id: Long,request: ChallengeApproveRequestDto): ResponseEntity<Unit> {
+    fun approve(@PathVariable("id") id: Long, @RequestBody request: ChallengeApproveRequestDto): ResponseEntity<Unit> {
         return ResponseEntity.ok().body(challengeService.approve(id,request))
     }
 
