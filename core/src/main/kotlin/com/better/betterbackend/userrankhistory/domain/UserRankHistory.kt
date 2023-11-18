@@ -1,5 +1,6 @@
 package com.better.betterbackend.userrankhistory.domain
 
+import com.better.betterbackend.model.BaseTimeEntity
 import com.better.betterbackend.userrank.domain.UserRank
 import com.better.betterbackend.study.domain.Study
 import jakarta.persistence.*
@@ -23,6 +24,6 @@ class UserRankHistory (
 
     val description: String,
 
-) {
+): BaseTimeEntity() {
 
 }

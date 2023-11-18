@@ -2,11 +2,11 @@ package com.better.betterbackend.study.domain
 
 import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.member.domain.Member
-import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.user.domain.User
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import com.better.betterbackend.grouprank.domain.GroupRank
 import com.better.betterbackend.model.BaseTimeEntity
+import com.better.betterbackend.taskgroup.domain.TaskGroup
 import jakarta.persistence.*
 
 @Entity
@@ -43,8 +43,8 @@ class Study (
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
     var memberList: List<Member>,
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val taskList: List<Task> = ArrayList(),
+    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    var taskGroupList: List<TaskGroup>,
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
     val userRankHistoryList: List<UserRankHistory> = ArrayList(),

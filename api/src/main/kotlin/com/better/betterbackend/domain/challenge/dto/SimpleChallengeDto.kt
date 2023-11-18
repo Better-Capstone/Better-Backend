@@ -3,6 +3,7 @@ package com.better.betterbackend.domain.challenge.dto
 
 
 import com.better.betterbackend.challenge.domain.Challenge
+import java.time.LocalDateTime
 
 data class SimpleChallengeDto (
 
@@ -16,6 +17,10 @@ data class SimpleChallengeDto (
 
     val rejectMember: List<Long>,
 
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime,
+
 ){
 
     constructor(challenge: Challenge) : this (
@@ -24,6 +29,8 @@ data class SimpleChallengeDto (
         challenge.image,
         challenge.approveMember,
         challenge.rejectMember,
+        challenge.createdAt,
+        challenge.updatedAt,
     )
 
 }

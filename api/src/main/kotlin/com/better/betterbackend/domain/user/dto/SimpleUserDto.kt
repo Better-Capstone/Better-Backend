@@ -22,7 +22,7 @@ data class SimpleUserDto (
         user.nickname,
         user.name,
         user.createdAt,
-        user.updatedAt
+        user.updatedAt,
     )
 
 }

@@ -15,15 +15,15 @@ data class UserDto (
 
     val name: String,
 
-    val createdAt: LocalDateTime,
-
-    val updatedAt: LocalDateTime,
-
     val userRank: SimpleUserRankDto,
 
     val memberList: List<SimpleMemberDto>,
 
-    val ownerStudyList: List<SimpleStudyDto>
+    val ownerStudyList: List<SimpleStudyDto>,
+
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime
 
 ){
 
@@ -31,13 +31,13 @@ data class UserDto (
         user.id!!,
         user.nickname,
         user.name,
-        user.createdAt,
-        user.updatedAt,
         SimpleUserRankDto(user.userRank),
         user.memberList
             .filter { it.memberType != MemberType.WITHDRAW }
             .map {  SimpleMemberDto(it) },
-        user.ownedStudyList.map { SimpleStudyDto(it) }
+        user.ownedStudyList.map { SimpleStudyDto(it) },
+        user.createdAt,
+        user.updatedAt,
     )
 
 }
