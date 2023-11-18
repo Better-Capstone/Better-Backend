@@ -11,6 +11,8 @@ interface MemberRepository: JpaRepository<Member, Long> {
 
     fun findMembersByUser(user: User): List<Member>
 
+
     fun findMemberByUserAndStudy(user: User, study: Study): Member?
+
 
 }

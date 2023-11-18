@@ -4,12 +4,16 @@ import com.better.betterbackend.domain.user.service.UserDetailService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
+import java.security.Key
+import java.security.KeyPair
+import java.security.KeyStore.PrivateKeyEntry
 import java.util.*
 
 @Service
@@ -38,7 +42,7 @@ class JwtTokenProvider (
             .setClaims(claims)
             .setIssuedAt(now)
             .setExpiration(Date(now.time + tokenValidTime))
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(Keys.hmacShaKeyFor(secretKey.toByteArray(Charsets.UTF_8)), SignatureAlgorithm.HS256)
             .compact()
     }
 
@@ -48,7 +52,7 @@ class JwtTokenProvider (
     }
 
     fun getUserPk(token: String): String {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).body.subject
+        return Jwts.parserBuilder().setSigningKey(secretKey.toByteArray(Charsets.UTF_8)).build().parseClaimsJws(token).body.subject
     }
 
     fun resolveToken(request: HttpServletRequest): String? {
@@ -57,7 +61,7 @@ class JwtTokenProvider (
 
     fun validateToken(jwtToken: String): Boolean {
         return try {
-            val claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwtToken)
+            val claims = Jwts.parserBuilder().setSigningKey(secretKey.toByteArray(Charsets.UTF_8)).build().parseClaimsJws(jwtToken)
             !claims.body.expiration.before(Date())
         } catch (e: Exception) {
             false

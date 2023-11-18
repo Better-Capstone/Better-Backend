@@ -15,12 +15,19 @@ data class SimpleMemberDto (
 
     val notifyTime: LocalDateTime,
 
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime,
+
 ){
+
     constructor(member: Member): this(
         member.id!!,
         member.kickCount,
         member.memberType,
-        member.notifyTime
+        member.notifyTime,
+        member.createdAt,
+        member.updatedAt,
     )
 
 }

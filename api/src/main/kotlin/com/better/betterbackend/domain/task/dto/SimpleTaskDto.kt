@@ -9,14 +9,17 @@ data class SimpleTaskDto(
 
     val title: String,
 
-    val deadline: LocalDateTime,
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime,
 
 ) {
 
     constructor(task: Task): this(
         task.id!!,
         task.title,
-        task.deadline
+        task.createdAt,
+        task.updatedAt,
     )
 
 }

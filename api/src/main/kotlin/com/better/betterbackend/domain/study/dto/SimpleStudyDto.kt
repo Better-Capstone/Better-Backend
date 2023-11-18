@@ -4,6 +4,7 @@ import com.better.betterbackend.study.domain.CheckDay
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
+import java.time.LocalDateTime
 
 data class SimpleStudyDto (
 
@@ -27,7 +28,12 @@ data class SimpleStudyDto (
 
     val minRank: Int,
 
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime,
+
 ) {
+
     constructor(study: Study) :this(
         study.id!!,
         study.title,
@@ -38,7 +44,9 @@ data class SimpleStudyDto (
         study.numOfMember,
         study.kickCondition,
         study.maximumCount,
-        study.minRank
+        study.minRank,
+        study.createdAt,
+        study.updatedAt,
     )
 
 }

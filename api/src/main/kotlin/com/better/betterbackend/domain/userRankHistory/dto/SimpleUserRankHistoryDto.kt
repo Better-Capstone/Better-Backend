@@ -1,6 +1,7 @@
 package com.better.betterbackend.domain.userRankHistory.dto
 
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
+import java.time.LocalDateTime
 
 data class SimpleUserRankHistoryDto(
 
@@ -12,6 +13,10 @@ data class SimpleUserRankHistoryDto(
 
     val description: String,
 
+    val createdAt: LocalDateTime,
+
+    val updatedAt: LocalDateTime,
+
 ) {
 
     constructor(userRankHistory: UserRankHistory): this(
@@ -19,6 +24,8 @@ data class SimpleUserRankHistoryDto(
         userRankHistory.uid,
         userRankHistory.score,
         userRankHistory.description,
+        userRankHistory.createdAt,
+        userRankHistory.updatedAt,
     )
 
 }

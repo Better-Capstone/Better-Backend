@@ -5,6 +5,8 @@ import com.better.betterbackend.domain.grouprank.dto.GroupRankDto
 import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
+import com.better.betterbackend.domain.task.dto.TaskDto
+import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.grouprank.domain.GroupRank
@@ -12,14 +14,18 @@ import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
+import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
+import com.better.betterbackend.taskgroup.domain.TaskGroup
+import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
 import com.better.betterbackend.user.dao.UserRepository
 import com.better.betterbackend.user.domain.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Service
@@ -57,22 +63,42 @@ class StudyService(
             notifyTime = LocalDateTime.now(),
         )
 
+        // 새로 생성된 Study의 첫 TaskGroup 종료 시각 결정
+        var endDate = LocalDate.now()
+        if (request.period!! != Period.EVERYDAY) {
+            if (request.period == Period.BIWEEKLY) {
+                endDate = endDate.plusWeeks(1)
+            }
+            var day: Int = request.checkDay!!.ordinal
+            val currentDay = LocalDate.now().dayOfWeek.value
+            if (day <= currentDay) {
+                day += 7
+            }
+            endDate = endDate.plusDays((day - currentDay).toLong() - 1)
+        }
+
+        val taskGroup = TaskGroup(
+            endDate = endDate
+        )
+
         val study = Study(
             owner = user,
             category = category,
             title = request.title!!,
             description = request.description!!,
-            period = request.period!!,
+            period = request.period,
             checkDay = request.checkDay!!,
             kickCondition = request.kickCondition!!,
             maximumCount = request.maximumCount!!,
             minRank = request.minRank,
             memberList = arrayListOf(member),
+            taskGroupList = arrayListOf(taskGroup),
             groupRank = groupRank,
         )
 
-        groupRank.study = study
         member.study = study
+        taskGroup.study = study
+        groupRank.study = study
         study.numOfMember++
         studyRepository.save(study)
 
@@ -122,7 +148,7 @@ class StudyService(
         }
 
         // 유저가 이미 가입된 상태일 경우
-        val member = memberRepository.findMemberByUserAndStudy(user, study)
+        val member = study.memberList.find { it.user.id!! == user.id!! }
         if (member != null && member.memberType != MemberType.WITHDRAW) {
             throw CustomException(ErrorCode.ALREADY_PARTICIPATED)
         }
@@ -139,6 +165,25 @@ class StudyService(
         studyRepository.save(study)
     }
 
+    fun getUsersInStudy(studyId: Long): List<UserDto> {
+        val study = userRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+
+        return study.memberList
+            .filter { it.memberType != MemberType.WITHDRAW }
+            .map { UserDto(it.user) }
+    }
+
+    fun getStudyByKeywordAndCategory(categoryId: Long?, keyword: String?): List<StudyDto> {
+        val category = if (categoryId == null) {
+            null
+        } else {
+            categoryRepository.findByIdOrNull(categoryId) ?: throw CustomException(ErrorCode.CATEGORY_NOT_FOUND)
+        }
+
+        return studyRepository.findStudiesByCategoryAndTitleContaining(category, keyword)
+            .map { StudyDto(it) }
+    }
+
     fun getGroupRank(studyId: Long): GroupRankDto {
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
@@ -149,6 +194,21 @@ class StudyService(
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
         return study.groupRank.groupRankHistoryList.map { GroupRankHistoryDto(it) }
+    }
+
+    fun getTask(studyId: Long): List<TaskDto> {
+        val principal = SecurityContextHolder.getContext().authentication.principal
+        val user = (principal as UserDetails) as User
+
+        val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+
+        // 로그인한 유저가 해당 스터디에 참여하지 않은 유저일 경우
+        study.memberList.find { it.user == user } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
+
+        val taskGroupList = study.taskGroupList
+            .find { it.status == TaskGroupStatus.INPROGRESS }!!
+
+        return taskGroupList.taskList.map { TaskDto(it) }
     }
 
 }
