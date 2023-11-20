@@ -8,6 +8,8 @@ import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
 import com.better.betterbackend.domain.task.service.TaskService
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.batch.core.Job
+import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -40,5 +42,6 @@ class TaskController (
     ): ResponseEntity<ChallengeDto> {
         return ResponseEntity.ok().body(challengeService.register(request, taskId))
     }
+
 
 }
