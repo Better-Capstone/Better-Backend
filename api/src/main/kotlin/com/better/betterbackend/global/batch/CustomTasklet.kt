@@ -8,6 +8,7 @@ import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
 import com.better.betterbackend.userrank.dao.UserRankRepository
+import com.better.betterbackend.userrankhistory.dao.UserRankHistoryRepository
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import org.springframework.batch.core.StepContribution
 import org.springframework.batch.core.scope.context.ChunkContext
@@ -21,6 +22,7 @@ class CustomTasklet(
     private val taskGroupRepository: TaskGroupRepository,
     private val userRankRepository: UserRankRepository,
     private val studyRepository: StudyRepository,
+    private val userRankHistoryRepository: UserRankHistoryRepository,
 ) : Tasklet {
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
         val date = LocalDate.now()
@@ -37,8 +39,11 @@ class CustomTasklet(
                 var success = false
                 val task =
                     taskList.find { it.member.id == member.id }// task, challenge가 null이 아니고 approve가 일정 퍼센트를 넘었을 경우
+                println(task)
+
+
                 if (task?.challenge != null) {
-                    if (0.5 < task.challenge!!.approveMember.size / numOfMember) {//승인멤버가 과반수넘었을때?
+                    if (0.5 < task.challenge!!.approveMember.size.toDouble() / numOfMember.toDouble()) {//승인멤버가 과반수넘었을때?
                         success = true
                         successCount++
                     }
@@ -52,6 +57,7 @@ class CustomTasklet(
                         score = 20,
                         description = "태스크 인증 완료"
                     )
+                    userRankHistoryRepository.save(userRankHistory)
                     member.user.userRank.userRankHistoryList += userRankHistory
                     userRankRepository.save(member.user.userRank)
 
@@ -59,18 +65,37 @@ class CustomTasklet(
                 } else {
                     member.kickCount += 1
                     if (member.kickCount == study.kickCondition) {//퇴출조건 만족시 퇴출 + 점수깎기
+                        val userRankHistory = UserRankHistory(
+                            uid = member.user.id!!,
+                            userRank = member.user.userRank,
+                            study = study,
+                            score = -(300+study.kickCondition*200),
+                            description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출"
+                        )
+                        userRankHistoryRepository.save(userRankHistory)
                         member.memberType = MemberType.WITHDRAW
                         member.user.userRank.score -= (300+study.kickCondition*200)
+
                     }
                 }
             }
             if (successCount == numOfMember) {//전원 태스크 완료시 인원수*5만큼 점수상승
                 for (member in study.memberList) {
+
+                    val userRankHistory = UserRankHistory(
+                        uid = member.user.id!!,
+                        userRank = member.user.userRank,
+                        study = study,
+                        score = (5 * numOfMember),
+                        description = "스터디 전원 태스크완료 보너스 점수"
+                    )
+                    userRankHistoryRepository.save(userRankHistory)
                     member.user.userRank.score += (5 * numOfMember)
                 }
             }
 
-            val period = ChronoUnit.DAYS.between(study.createdAt, date) //그룹랭크 점수 변경
+
+            val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), date) //그룹랭크 점수 변경
             var totalReward = 0.0
             if (period in 1..182) {
                 totalReward = 25 * 0.3 + (successCount / numOfMember) * 70
@@ -92,7 +117,7 @@ class CustomTasklet(
 
             taskGroup.status = TaskGroupStatus.END
             // 다음 주기의 새로운 TaskGroup 생성
-            var endDate = date// 오늘
+            var endDate = LocalDate.now()// 오늘
             if (study.period == Period.EVERYDAY) {
                 endDate = endDate.plusDays(1)
             } else if (study.period == Period.WEEKLY) {
@@ -107,6 +132,7 @@ class CustomTasklet(
             study.taskGroupList += newTaskGroup
 
 
+            taskGroupRepository.save(newTaskGroup)//endDate가 안들어가서 다시넣어줌
             studyRepository.save(study)
 
         }

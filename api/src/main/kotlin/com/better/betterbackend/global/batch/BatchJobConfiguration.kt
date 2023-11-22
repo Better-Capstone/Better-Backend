@@ -6,6 +6,7 @@ import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 
 import com.better.betterbackend.userrank.dao.UserRankRepository
+import com.better.betterbackend.userrankhistory.dao.UserRankHistoryRepository
 
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -27,6 +28,7 @@ class BatchJobConfiguration(
     private val taskGroupRepository: TaskGroupRepository,
     private val userRankRepository: UserRankRepository,
     private val studyRepository: StudyRepository,
+    private val userRankHistoryRepository: UserRankHistoryRepository,
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager
 ) {
@@ -39,7 +41,7 @@ class BatchJobConfiguration(
 
     fun singleStep(): Step {
         return StepBuilder("singleStep", jobRepository)
-            .tasklet(CustomTasklet(taskGroupRepository, userRankRepository, studyRepository), transactionManager)
+            .tasklet(CustomTasklet(taskGroupRepository, userRankRepository, studyRepository,userRankHistoryRepository), transactionManager)
             .build()
     }
 }
