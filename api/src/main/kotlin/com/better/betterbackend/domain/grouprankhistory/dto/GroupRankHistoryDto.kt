@@ -1,6 +1,7 @@
 package com.better.betterbackend.domain.grouprankhistory.dto
 
 import com.better.betterbackend.domain.grouprank.dto.SimpleGroupRankDto
+import com.better.betterbackend.domain.taskgroup.dto.SimpleTaskGroupDto
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import java.time.LocalDateTime
 
@@ -16,6 +17,8 @@ data class GroupRankHistoryDto (
 
     val groupRank: SimpleGroupRankDto,
 
+    val taskGroup: SimpleTaskGroupDto,
+
     val createdAt: LocalDateTime,
 
     val updatedAt: LocalDateTime,
@@ -28,6 +31,7 @@ data class GroupRankHistoryDto (
         groupRankHistory.totalNumber,
         groupRankHistory.participantsNumber,
         SimpleGroupRankDto(groupRankHistory.groupRank),
+        SimpleTaskGroupDto(groupRankHistory.taskGroup),
         groupRankHistory.createdAt,
         groupRankHistory.updatedAt,
     )

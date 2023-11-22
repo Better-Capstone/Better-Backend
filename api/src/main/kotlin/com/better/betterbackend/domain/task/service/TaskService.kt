@@ -36,10 +36,9 @@ class TaskService (
         val taskGroup = study.taskGroupList.find { it.status == TaskGroupStatus.INPROGRESS }!!
 
         val task = Task(
-            taskGroup = taskGroup,
-            member = member,
             title = request.title,
-            challenge = null,
+            member = member,
+            taskGroup = taskGroup,
         )
         taskRepository.save(task)
 
