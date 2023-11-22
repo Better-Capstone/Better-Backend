@@ -27,8 +27,8 @@ class Task (
     @OneToOne(cascade = [CascadeType.PERSIST])
     var challenge: Challenge? = null,
 
-    @OneToOne
-    var userRankHistory: UserRankHistory? = null,
+    @OneToMany(mappedBy = "task", cascade = [CascadeType.REMOVE])
+    var userRankHistoryList: List<UserRankHistory> = ArrayList()
 
 ): BaseTimeEntity() {
 

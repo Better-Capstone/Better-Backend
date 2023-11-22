@@ -22,7 +22,7 @@ data class TaskDto(
 
     val challenge: SimpleChallengeDto?,
 
-    val userRankHistory: SimpleUserRankHistoryDto?,
+    val userRankHistory: List<SimpleUserRankHistoryDto>,
 
     val createdAt: LocalDateTime,
 
@@ -36,7 +36,7 @@ data class TaskDto(
         SimpleMemberDto(task.member),
         SimpleTaskGroupDto(task.taskGroup),
         if (task.challenge != null) SimpleChallengeDto(task.challenge!!) else null,
-        if (task.userRankHistory != null) SimpleUserRankHistoryDto(task.userRankHistory!!) else null,
+        task.userRankHistoryList.map { SimpleUserRankHistoryDto(it) },
         task.createdAt,
         task.updatedAt,
     )

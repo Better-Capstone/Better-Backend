@@ -22,7 +22,7 @@ class BatchScheduler (
 )
 {
 //usertest -> studycreate x2 ->  studytest -> tasktest ->
-    @Scheduled(cron = "0 47 18 * * ?") // 매일 자정에 실행 (0 0 0 * * ?)
+    @Scheduled(cron = "0 18 21 * * ?") // 매일 자정에 실행 (0 0 0 * * ?)
     fun runJob() {
         //val jobParameters = JobParameters()
         val jobParameters = JobParametersBuilder()

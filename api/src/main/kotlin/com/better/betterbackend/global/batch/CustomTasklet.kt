@@ -51,11 +51,10 @@ class CustomTasklet(
                 if (success) {//todo userrankhistory에는 변화량만 넣어야하는지 아니면 점수를 넣어야하는지 확인 필요 // userrank에 어떻게 값을 넣어야할지모르겟음
                     member.user.userRank.score += 20 //성공했을때 올라가는 점수
                     val userRankHistory = UserRankHistory(
-                        uid = member.user.id!!,
-                        userRank = member.user.userRank,
-                        study = study,
                         score = 20,
-                        description = "태스크 인증 완료"
+                        description = "태스크 인증 완료",
+                        userRank = member.user.userRank,
+                        task = task!!,
                     )
                     userRankHistoryRepository.save(userRankHistory)
                     member.user.userRank.userRankHistoryList += userRankHistory
@@ -66,11 +65,10 @@ class CustomTasklet(
                     member.kickCount += 1
                     if (member.kickCount == study.kickCondition) {//퇴출조건 만족시 퇴출 + 점수깎기
                         val userRankHistory = UserRankHistory(
-                            uid = member.user.id!!,
-                            userRank = member.user.userRank,
-                            study = study,
                             score = -(300+study.kickCondition*200),
-                            description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출"
+                            description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출",
+                            userRank = member.user.userRank,
+                            task = task!!,
                         )
                         userRankHistoryRepository.save(userRankHistory)
                         member.memberType = MemberType.WITHDRAW
@@ -81,16 +79,21 @@ class CustomTasklet(
             }
             if (successCount == numOfMember) {//전원 태스크 완료시 인원수*5만큼 점수상승
                 for (member in study.memberList) {
-
+                    val task =
+                        taskList.find { it.member.id == member.id }
+                    println(task)
                     val userRankHistory = UserRankHistory(
-                        uid = member.user.id!!,
-                        userRank = member.user.userRank,
-                        study = study,
                         score = (5 * numOfMember),
-                        description = "스터디 전원 태스크완료 보너스 점수"
+                        description = "스터디 전원 태스크완료 보너스 점수",
+                        userRank = member.user.userRank,
+                        task = task!!,
                     )
-                    userRankHistoryRepository.save(userRankHistory)
+                    println(userRankHistory)
+                    member.user.userRank.userRankHistoryList += userRankHistory
                     member.user.userRank.score += (5 * numOfMember)
+                    userRankHistoryRepository.save(userRankHistory)
+
+
                 }
             }
 
@@ -109,9 +112,11 @@ class CustomTasklet(
             }
             val groupRankHistory = GroupRankHistory(
                 score = totalReward.roundToInt(),
+                description = "그룹리워드 정산",
                 totalNumber = numOfMember,
                 participantsNumber = successCount,
-                groupRank = study.groupRank
+                groupRank = study.groupRank,
+                taskGroup = taskGroup,
             )
             study.groupRank.groupRankHistoryList += groupRankHistory
 
