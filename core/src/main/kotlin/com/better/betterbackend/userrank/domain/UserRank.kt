@@ -17,8 +17,8 @@ class UserRank (
     @OneToOne
     var user: User? = null,
 
-    @OneToMany(mappedBy = "userRank", cascade = [CascadeType.REMOVE])
-    val userRankHistoryList: List<UserRankHistory> = ArrayList(),
+    @OneToMany(mappedBy = "userRank", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    var userRankHistoryList: List<UserRankHistory> = ArrayList(),
 
     ): BaseTimeEntity() {
 

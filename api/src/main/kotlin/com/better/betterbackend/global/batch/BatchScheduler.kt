@@ -22,7 +22,7 @@ class BatchScheduler (
 )
 {
 
-    @Scheduled(cron = "0 * * * * ?") // 매일 자정에 실행 (0 0 0 * * ?)
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행 (0 0 0 * * ?)
     fun runJob() {
         //val jobParameters = JobParameters()
         val jobParameters = JobParametersBuilder()

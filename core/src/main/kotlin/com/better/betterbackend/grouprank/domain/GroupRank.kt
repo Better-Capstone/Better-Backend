@@ -17,8 +17,8 @@ class GroupRank (
     @OneToOne
     var study: Study? = null,
 
-    @OneToMany(mappedBy = "groupRank", cascade = [CascadeType.REMOVE])
-    val groupRankHistoryList: List<GroupRankHistory> = ArrayList(),
+    @OneToMany(mappedBy = "groupRank", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    var groupRankHistoryList: List<GroupRankHistory> = ArrayList(),
 
 ): BaseTimeEntity() {
 

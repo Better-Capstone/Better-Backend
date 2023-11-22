@@ -25,7 +25,7 @@ class Member (
 
     var kickCount: Int = 0,
 
-    val memberType: MemberType,
+    var memberType: MemberType,
 
     val notifyTime: LocalDateTime,
 
