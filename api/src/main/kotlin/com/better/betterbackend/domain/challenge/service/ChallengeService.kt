@@ -67,10 +67,14 @@ class ChallengeService (
 
         val challenge = challengeRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.CHALLENGE_NOT_FOUND)
 
-        // challenge에 스스로 approve를 하려 할 경우
+        // 챌린지에 스스로 승인/거절을 하려 할 경우
         if (challenge.task.member.user.id!! == user.id!!) {
             throw CustomException(ErrorCode.SELF_APPROVE_NOT_POSSIBLE)
         }
+
+        // 스터디에 참여하지 않은 유저가 승인/거절하려 하는 경우
+        val memberList = challenge.task.taskGroup.study!!.memberList
+        memberList.find { it.user.id!! == user.id!! } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
 
         // 이미 승인/거절을 한 멤버일 경우
         if (challenge.approveMember.find { it == user.id!! } != null

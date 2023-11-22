@@ -1,5 +1,6 @@
 package com.better.betterbackend.taskgroup.domain
 
+import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.model.BaseTimeEntity
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.task.domain.Task
@@ -15,15 +16,18 @@ class TaskGroup(
 
     var status: TaskGroupStatus = TaskGroupStatus.INPROGRESS,
 
-    @ManyToOne
-    var study: Study? = null,
-
     val startDate: LocalDate = LocalDate.now(),
 
     val endDate: LocalDate,
 
+    @ManyToOne
+    var study: Study? = null,
+
     @OneToMany(mappedBy = "taskGroup", cascade = [CascadeType.REMOVE])
     val taskList: List<Task> = ArrayList(),
+
+    @OneToOne
+    val groupRankHistory: GroupRankHistory? = null,
 
 ): BaseTimeEntity() {
 

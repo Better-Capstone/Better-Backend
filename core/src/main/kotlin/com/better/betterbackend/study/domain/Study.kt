@@ -46,9 +46,6 @@ class Study (
     @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
     var taskGroupList: List<TaskGroup>,
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE])
-    val userRankHistoryList: List<UserRankHistory> = ArrayList(),
-
     @OneToOne(cascade = [CascadeType.PERSIST])
     val groupRank: GroupRank,
 
