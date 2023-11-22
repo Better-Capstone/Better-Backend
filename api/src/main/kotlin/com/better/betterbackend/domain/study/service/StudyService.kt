@@ -166,7 +166,7 @@ class StudyService(
     }
 
     fun getUsersInStudy(studyId: Long): List<UserDto> {
-        val study = userRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+        val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
         return study.memberList
             .filter { it.memberType != MemberType.WITHDRAW }
@@ -203,7 +203,7 @@ class StudyService(
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
 
         // 로그인한 유저가 해당 스터디에 참여하지 않은 유저일 경우
-        study.memberList.find { it.user == user } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
+        study.memberList.find { it.user.id!! == user.id!! } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
 
         val taskGroupList = study.taskGroupList
             .find { it.status == TaskGroupStatus.INPROGRESS }!!

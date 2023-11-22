@@ -7,8 +7,6 @@ data class SimpleUserRankHistoryDto(
 
     val id: Long,
 
-    val uid: Long,
-
     val score: Int,
 
     val description: String,
@@ -21,7 +19,6 @@ data class SimpleUserRankHistoryDto(
 
     constructor(userRankHistory: UserRankHistory): this(
         userRankHistory.id!!,
-        userRankHistory.uid,
         userRankHistory.score,
         userRankHistory.description,
         userRankHistory.createdAt,
