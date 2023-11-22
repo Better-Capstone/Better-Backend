@@ -36,7 +36,7 @@ class Study (
 
     val kickCondition: Int,
 
-    val maximumCount: Int,
+    val maximumCount: Int,//인원수
 
     val minRank: Int,
 

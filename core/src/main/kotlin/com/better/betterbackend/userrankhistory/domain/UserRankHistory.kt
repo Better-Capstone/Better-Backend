@@ -19,7 +19,7 @@ class UserRankHistory (
     @ManyToOne(fetch = FetchType.LAZY)
     val userRank: UserRank,
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val task: Task,
 
 ): BaseTimeEntity() {

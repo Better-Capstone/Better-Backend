@@ -5,7 +5,7 @@ import com.better.betterbackend.model.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
-class Challenge (
+class Challenge(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,6 @@ class Challenge (
     @ElementCollection
     var rejectMember: List<Long> = ArrayList(),
 
-): BaseTimeEntity() {
+    ): BaseTimeEntity() {
 
 }

@@ -97,5 +97,9 @@ class StudyController(
     fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<List<TaskDto>>{
         return ResponseEntity.ok().body(studyService.getTask(studyId))
     }
-
+    @Operation(summary = "스터디 가입test")
+    @PostMapping("/test")
+    fun test(): ResponseEntity<Unit> {
+        return ResponseEntity.ok().body(studyService.test())
+    }
 }
