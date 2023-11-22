@@ -14,6 +14,8 @@ class GroupRankHistory (
 
     val score: Int,
 
+    val description: String,
+
     val totalNumber: Int,
 
     val participantsNumber: Int,

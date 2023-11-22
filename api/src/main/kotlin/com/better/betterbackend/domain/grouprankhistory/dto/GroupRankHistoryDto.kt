@@ -11,6 +11,8 @@ data class GroupRankHistoryDto (
 
     val score: Int,
 
+    val description: String,
+
     val totalNumber: Int,
 
     val participantsNumber: Number,
@@ -28,6 +30,7 @@ data class GroupRankHistoryDto (
     constructor(groupRankHistory: GroupRankHistory): this(
         groupRankHistory.id!!,
         groupRankHistory.score,
+        groupRankHistory.description,
         groupRankHistory.totalNumber,
         groupRankHistory.participantsNumber,
         SimpleGroupRankDto(groupRankHistory.groupRank),
