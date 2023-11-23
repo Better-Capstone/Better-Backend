@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager
 
 
 @Configuration
-class BatchJobConfiguration(
+class BatchJobConfig(
 
     private val taskGroupRepository: TaskGroupRepository,
 
