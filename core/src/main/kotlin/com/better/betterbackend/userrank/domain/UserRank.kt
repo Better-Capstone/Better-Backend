@@ -6,6 +6,7 @@ import com.better.betterbackend.user.domain.User
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "user_rank")
 class UserRank (
 
     @Id

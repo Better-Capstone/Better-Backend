@@ -6,6 +6,7 @@ import com.better.betterbackend.taskgroup.domain.TaskGroup
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "group_rank_history")
 class GroupRankHistory (
 
     @Id

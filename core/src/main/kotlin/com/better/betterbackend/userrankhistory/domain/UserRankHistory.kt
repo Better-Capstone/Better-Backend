@@ -6,6 +6,7 @@ import com.better.betterbackend.task.domain.Task
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "user_rank_history")
 class UserRankHistory (
 
     @Id

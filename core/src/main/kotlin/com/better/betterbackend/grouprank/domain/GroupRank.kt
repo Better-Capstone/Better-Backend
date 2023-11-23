@@ -6,6 +6,7 @@ import com.better.betterbackend.study.domain.Study
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "group_rank")
 class GroupRank (
 
     @Id

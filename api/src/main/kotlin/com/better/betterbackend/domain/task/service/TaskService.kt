@@ -143,8 +143,8 @@ class TaskService (
             task = task1,
             description = "description1",
             image = "image1",
-            approveMember = a1,
-            rejectMember = ArrayList(),
+            approve = a1,
+            reject = ArrayList(),
         )
         task1.challenge = challenge1
         challengeRepository.save(challenge1)
@@ -158,8 +158,8 @@ class TaskService (
             task = task2,
             description = "description2",
             image = "image2",
-            approveMember = a2,
-            rejectMember = ArrayList(),
+            approve = a2,
+            reject = ArrayList(),
         )
         task2.challenge = challenge2
         challengeRepository.save(challenge2)
@@ -172,8 +172,8 @@ class TaskService (
             task = task3,
             description = "description3",
             image = "image3",
-            approveMember = a3,
-            rejectMember = ArrayList(),
+            approve = a3,
+            reject = ArrayList(),
         )
         task3.challenge = challenge3
         challengeRepository.save(challenge3)
@@ -186,8 +186,8 @@ class TaskService (
             task = task4,
             description = "description4",
             image = "image4",
-            approveMember = a4,
-            rejectMember = ArrayList(),
+            approve = a4,
+            reject = ArrayList(),
         )
         task4.challenge = challenge4
         challengeRepository.save(challenge4)
@@ -197,8 +197,8 @@ class TaskService (
             task = task5,
             description = "description5",
             image = "image5",
-            approveMember = a5,
-            rejectMember = ArrayList(),
+            approve = a5,
+            reject = ArrayList(),
         )
         task5.challenge = challenge5
         challengeRepository.save(challenge5)
@@ -211,8 +211,8 @@ class TaskService (
             task = task6,
             description = "description6",
             image = "image6",
-            approveMember = a6,
-            rejectMember = ArrayList(),
+            approve = a6,
+            reject = ArrayList(),
         )
         task6.challenge = challenge6
         challengeRepository.save(challenge6)
@@ -225,8 +225,8 @@ class TaskService (
             task = task7,
             description = "description7",
             image = "image7",
-            approveMember = a7,
-            rejectMember = ArrayList(),
+            approve = a7,
+            reject = ArrayList(),
         )
         task7.challenge = challenge7
         challengeRepository.save(challenge7)
@@ -239,8 +239,8 @@ class TaskService (
             task = task8,
             description = "description8",
             image = "image8",
-            approveMember = a8,
-            rejectMember = ArrayList(),
+            approve = a8,
+            reject = ArrayList(),
         )
         task8.challenge = challenge8
         challengeRepository.save(challenge8)
@@ -253,8 +253,8 @@ class TaskService (
             task = task9,
             description = "description9",
             image = "image9",
-            approveMember = a9,
-            rejectMember = ArrayList(),
+            approve = a9,
+            reject = ArrayList(),
         )
         task9.challenge = challenge9
         challengeRepository.save(challenge9)
@@ -267,8 +267,8 @@ class TaskService (
             task = task10,
             description = "description10",
             image = "image10",
-            approveMember = a10,
-            rejectMember = ArrayList(),
+            approve = a10,
+            reject = ArrayList(),
         )
         task10.challenge = challenge10
         challengeRepository.save(challenge10)
