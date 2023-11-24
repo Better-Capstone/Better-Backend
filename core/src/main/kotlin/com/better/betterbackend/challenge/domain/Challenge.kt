@@ -5,25 +5,31 @@ import com.better.betterbackend.model.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
-class Challenge (
+class Challenge(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null,
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id")
     val task: Task,
 
+    @Column(name = "description")
     val description: String,
 
+    @Column(name = "image")
     val image: String,
 
-    @ElementCollection
-    var approveMember: List<Long> = ArrayList(),
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "approve")
+    var approve: List<Long> = ArrayList(),
 
-    @ElementCollection
-    var rejectMember: List<Long> = ArrayList(),
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "reject")
+    var reject: List<Long> = ArrayList(),
 
-): BaseTimeEntity() {
+    ): BaseTimeEntity() {
 
 }

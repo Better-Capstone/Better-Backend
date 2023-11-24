@@ -25,13 +25,19 @@ jobs:
           mkdir -p ./api/src/main/resources
           echo "${{ secrets.DATABASE }}" | base64 --decode > ./api/src/main/resources/application.yml
           echo "${{ secrets.JWT }}" | base64 --decode > ./api/src/main/resources/jwt.yml
+          
+          mkdir -p ./batch/src/main/resources
+          echo "${{ secrets.BATCH_DATABASE }}" | base64 --decode > ./batch/src/main/resources/application.yml
         shell: bash
 
       - name: Web Docker Build and Push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} -f api.Dockerfile . 
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BATCH_REPO }} -f batch.Dockerfile . 
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BATCH_REPO }}
 
       - name: Executing Remote ssh Commands Using Password
         uses: appleboy/ssh-action@master
@@ -42,4 +48,8 @@ jobs:
           script: |
             sudo docker-compose stop ${{ secrets.SERVER_CONTAINER_NAME }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+            
+            sudo docker-compose stop ${{ secrets.BATCH_CONTAINER_NAME }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BATCH_REPO }}:latest
+            
             sudo docker-compose up -d

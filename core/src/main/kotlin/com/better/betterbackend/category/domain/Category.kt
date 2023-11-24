@@ -9,8 +9,10 @@ class Category (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null,
 
+    @Column(name = "name")
     val name: String,
 
     @OneToMany(mappedBy = "category", cascade = [CascadeType.REMOVE])

@@ -43,8 +43,6 @@ data class StudyDto(
 
     val taskGroupList: List<SimpleTaskGroupDto>,
 
-    val userRankHistoryList: List<SimpleUserRankHistoryDto>,
-
     val groupRank: SimpleGroupRankDto,
 
     val createdAt: LocalDateTime,
@@ -68,7 +66,6 @@ data class StudyDto(
         study.minRank,
         study.memberList.map{ SimpleMemberDto(it) },
         study.taskGroupList.map{ SimpleTaskGroupDto(it) },
-        study.userRankHistoryList.map { SimpleUserRankHistoryDto(it) },
         SimpleGroupRankDto(study.groupRank),
         study.createdAt,
         study.updatedAt,
