@@ -34,10 +34,10 @@ jobs:
       - name: Web Docker Build and Push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker -f api.Dockerfile build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} -f /api.Dockerfile . 
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
           
-          docker -f batch.Dockerfile build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BATCH_REPO }} . 
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BATCH_REPO }} -f batch.Dockerfile . 
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_BATCH_REPO }}
 
       - name: Executing Remote ssh Commands Using Password
