@@ -1,6 +1,9 @@
 name: CI
 
 on:
+  push:
+    branches:
+      - 'feature/rangjin/batch-module'
   pull_request:
     branches: 
       - 'develop'
@@ -26,6 +29,9 @@ jobs:
           mkdir -p ./api/src/main/resources
           echo "${{ secrets.DATABASE }}" | base64 --decode > ./api/src/main/resources/application.yml
           echo "${{ secrets.JWT }}" | base64 --decode > ./api/src/main/resources/jwt.yml
+          
+          mkdir -p ./batch/src/main/resources
+          echo "${{ secrets.BATCH_DATABASE }}" | base64 --decode > ./batch/src/main/resources/application.yml
         shell: bash
 
       - name: Grant Execute Permission for Gradlew
