@@ -1,9 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - 'feature/rangjin/batch-module'
   pull_request:
     branches: 
       - 'develop'

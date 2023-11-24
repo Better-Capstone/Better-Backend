@@ -27,3 +27,15 @@ USER app-api
 
 CMD ["java", "-jar", "api.jar"]
 CMD ["java", "-jar", "batch.jar"]
+
+FROM openjdk:17.0.1-jdk-slim AS run
+WORKDIR /app
+
+RUN adduser --system --group app-batch
+
+COPY --from=build --chown=app-batch:app-batch /build/batch/build/libs/*.jar ./batch.jar
+
+EXPOSE 8081
+USER app-batch
+
+CMD ["java", "-jar", "batch.jar"]
