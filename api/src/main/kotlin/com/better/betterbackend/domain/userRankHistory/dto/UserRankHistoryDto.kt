@@ -1,5 +1,6 @@
 package com.better.betterbackend.domain.userRankHistory.dto
 
+import com.better.betterbackend.domain.challenge.dto.SimpleChallengeDto
 import com.better.betterbackend.domain.study.dto.SimpleStudyDto
 import com.better.betterbackend.domain.task.dto.SimpleTaskDto
 import com.better.betterbackend.domain.userrank.dto.SimpleUserRankDto
@@ -16,7 +17,7 @@ data class UserRankHistoryDto (
 
     val userRank: SimpleUserRankDto,
 
-    val task: SimpleTaskDto,
+    val task: SimpleTaskDto?,
 
     val createdAt: LocalDateTime,
 
@@ -29,7 +30,7 @@ data class UserRankHistoryDto (
         userRankHistory.score,
         userRankHistory.description,
         SimpleUserRankDto(userRankHistory.userRank),
-        SimpleTaskDto(userRankHistory.task),
+        if (userRankHistory.task != null) SimpleTaskDto(userRankHistory.task!!) else null,
         userRankHistory.createdAt,
         userRankHistory.updatedAt,
     )

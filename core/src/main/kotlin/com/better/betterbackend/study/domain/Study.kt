@@ -14,39 +14,63 @@ class Study (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     val owner: User,
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     val category: Category,
 
+    @Column(name = "title")
     val title: String,
 
+    @Column(name = "description")
     val description: String,
 
+    @Column(name = "status")
     var status: StudyStatus = StudyStatus.INPROGRESS,
 
+    @Column(name = "period")
     val period: Period,
 
+    @Column(name = "check_day")
     val checkDay: CheckDay,
 
+    @Column(name = "num_of_member")
     var numOfMember: Int = 0,
 
+    @Column(name = "kick_condition")
     val kickCondition: Int,
 
+    @Column(name = "maximum_count")
     val maximumCount: Int,//인원수
 
+    @Column(name = "min_rank")
     val minRank: Int,
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "study",
+        cascade = [CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE]
+    )
     var memberList: List<Member>,
 
-    @OneToMany(mappedBy = "study", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "study",
+        cascade = [CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE]
+    )
     var taskGroupList: List<TaskGroup>,
 
-    @OneToOne(cascade = [CascadeType.PERSIST])
+    @OneToOne(
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE]
+    )
+    @JoinColumn(name = "group_rank_id")
     val groupRank: GroupRank,
 
 ): BaseTimeEntity() {

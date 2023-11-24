@@ -27,8 +27,8 @@ data class SimpleChallengeDto (
         challenge.id!!,
         challenge.description,
         challenge.image,
-        challenge.approveMember,
-        challenge.rejectMember,
+        challenge.approve,
+        challenge.reject,
         challenge.createdAt,
         challenge.updatedAt,
     )

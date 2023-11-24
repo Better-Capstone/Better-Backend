@@ -29,8 +29,8 @@ data class ChallengeDto (
         SimpleTaskDto(challenge.task),
         challenge.description,
         challenge.image,
-        challenge.approveMember,
-        challenge.rejectMember,
+        challenge.approve,
+        challenge.reject,
         challenge.createdAt,
         challenge.updatedAt,
     )
