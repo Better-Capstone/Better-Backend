@@ -26,7 +26,6 @@ EXPOSE 8080
 USER app-api
 
 CMD ["java", "-jar", "api.jar"]
-CMD ["java", "-jar", "batch.jar"]
 
 FROM openjdk:17.0.1-jdk-slim AS run
 WORKDIR /app
