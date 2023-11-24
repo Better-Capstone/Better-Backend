@@ -21,7 +21,7 @@ class BatchScheduler(
 
 ) {
 
-    @Scheduled(cron = "0 35 2 * * *", zone = "Asia/Seoul") // 매일 자정에 실행 (0 0 0 * * ?)
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 자정에 실행 (0 0 0 * * ?)
     fun runJob() {
         val jobParameters = JobParametersBuilder()
             .addLocalDateTime("LocalDateTime", LocalDateTime.now())
