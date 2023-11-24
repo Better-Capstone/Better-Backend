@@ -1,6 +1,9 @@
 package com.better.betterbackend.config
 
 import com.better.betterbackend.batch.CustomTasklet
+import com.better.betterbackend.grouprank.dao.GroupRankRepository
+import com.better.betterbackend.grouprankhistory.dao.GroupRankHistoryRepository
+import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.userrank.dao.UserRankRepository
@@ -27,24 +30,31 @@ class BatchJobConfig(
 
     private val userRankHistoryRepository: UserRankHistoryRepository,
 
+    private val groupRankRepository: GroupRankRepository,
+
+    private val memberRepository: MemberRepository,
+
+    private val groupRankHistoryRepository: GroupRankHistoryRepository,
+
     private val jobRepository: JobRepository,
 
     @Qualifier("batchTransactionManager")
-    private val transactionManager: PlatformTransactionManager
+    private val transactionManager: PlatformTransactionManager,
 
 ) {
 
     @Bean
-    fun singleStepJob(): Job {
-        return JobBuilder("singleStepJob", jobRepository)
+    fun batchJob(): Job {
+        return JobBuilder("batchJob", jobRepository)
             .start(singleStep())
             .build()
     }
 
+    @Bean
     fun singleStep(): Step {
         return StepBuilder("singleStep", jobRepository)
             .tasklet(
-                CustomTasklet(taskGroupRepository, userRankRepository, studyRepository, userRankHistoryRepository),
+                CustomTasklet(taskGroupRepository, userRankRepository, studyRepository, memberRepository),
                 transactionManager
             )
             .build()

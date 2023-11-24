@@ -11,14 +11,21 @@ class UserRank (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null,
 
+    @Column(name = "score")
     var score: Int = 4000,
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     var user: User? = null,
 
-    @OneToMany(mappedBy = "userRank", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "userRank",
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE]
+    )
     var userRankHistoryList: List<UserRankHistory> = ArrayList(),
 
     ): BaseTimeEntity() {

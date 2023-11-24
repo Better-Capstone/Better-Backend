@@ -14,6 +14,7 @@ import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
+import com.better.betterbackend.study.domain.CheckDay
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
@@ -212,7 +213,67 @@ class StudyService(
     }
 
     fun test() {
-        val user1 = userRepository.findByIdOrNull(1)
+        val user1 = userRepository.findByIdOrNull(1)!!
+        val groupRank1 = GroupRank()
+        val member1 = Member(
+            user = user1,
+            memberType = MemberType.OWNER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        )
+        val taskGroup1 = TaskGroup(
+            endDate = LocalDate.now()
+        )
+        val study1 = studyRepository.save(Study(
+            owner = user1,
+            category = categoryRepository.findByIdOrNull(1)!!,
+            title = "study1",
+            description = "study1",
+            period = Period.EVERYDAY,
+            checkDay = CheckDay.EVERYDAY,
+            kickCondition = 1,
+            maximumCount = 50,
+            minRank = 100,
+            groupRank = groupRank1,
+            memberList = arrayListOf(member1),
+            taskGroupList = arrayListOf(taskGroup1)
+        ))
+        member1.study = study1
+        taskGroup1.study = study1
+        groupRank1.study = study1
+        study1.numOfMember++
+        studyRepository.save(study1)
+
+        val groupRank2 = GroupRank()
+        val member2 = Member(
+            user = user1,
+            memberType = MemberType.OWNER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        )
+        val taskGroup2 = TaskGroup(
+            endDate = LocalDate.now()
+        )
+        val study2 = studyRepository.save(Study(
+            owner = user1,
+            category = categoryRepository.findByIdOrNull(1)!!,
+            title = "study1",
+            description = "study1",
+            period = Period.EVERYDAY,
+            checkDay = CheckDay.EVERYDAY,
+            kickCondition = 1,
+            maximumCount = 50,
+            minRank = 100,
+            groupRank = groupRank2,
+            memberList = arrayListOf(member2),
+            taskGroupList = arrayListOf(taskGroup2)
+        ))
+        member2.study = study2
+        taskGroup2.study = study2
+        groupRank2.study = study2
+        study2.numOfMember++
+        studyRepository.save(study2)
+
         val user2 = userRepository.findByIdOrNull(2)
         val user3 = userRepository.findByIdOrNull(3)
         val user4 = userRepository.findByIdOrNull(4)
@@ -222,93 +283,75 @@ class StudyService(
         val user8 = userRepository.findByIdOrNull(8)
         val user9 = userRepository.findByIdOrNull(9)
         val user10 = userRepository.findByIdOrNull(10)
-        val study1 = studyRepository.findByIdOrNull(1)
-        val study2 = studyRepository.findByIdOrNull(2)
-        memberRepository.save(
-            Member(
-                study = study1,
-                user = user2!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study1!!.numOfMember++
-        memberRepository.save(
-            Member(
-                study = study1,
-                user = user3!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study1!!.numOfMember++
-        memberRepository.save(
-            Member(
-                study = study1,
-                user = user4!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study1!!.numOfMember++
-        memberRepository.save(
-            Member(
-                study = study1,
-                user = user5!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study1!!.numOfMember++
-        studyRepository.save(study1)
+        study1!!.memberList += memberRepository.save(Member(
+            study = study1,
+            user = user2!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study1!!.memberList += memberRepository.save(Member(
+            study = study1,
+            user = user3!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study1!!.memberList += memberRepository.save(Member(
+            study = study1,
+            user = user4!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study1!!.memberList += memberRepository.save(Member(
+            study = study1,
+            user = user5!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+
+        study1!!.numOfMember += 4
+        studyRepository.save(study1!!)
 
 
-        memberRepository.save(
-            Member(
-                study = study2,
-                user = user6!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study2!!.numOfMember++
-        memberRepository.save(
-            Member(
-                study = study2,
-                user = user7!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study2!!.numOfMember++
-        memberRepository.save(
-            Member(
-                study = study2,
-                user = user8!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study2!!.numOfMember++
-        memberRepository.save(
-            Member(
-                study = study2,
-                user = user9!!,
-                memberType = MemberType.MEMBER,
-                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-                notifyTime = LocalDateTime.now(),
-            )
-        )
-        study2!!.numOfMember++
-        studyRepository.save(study2)
-
-
+        study2!!.memberList += memberRepository.save(Member(
+            study = study2,
+            user = user6!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study2!!.memberList += memberRepository.save(Member(
+            study = study2,
+            user = user7!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study2!!.memberList += memberRepository.save(Member(
+            study = study2,
+            user = user8!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study2!!.memberList += memberRepository.save(Member(
+            study = study2,
+            user = user9!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study2!!.memberList += memberRepository.save(Member(
+            study = study2,
+            user = user10!!,
+            memberType = MemberType.MEMBER,
+            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+            notifyTime = LocalDateTime.now(),
+        ))
+        study2!!.numOfMember += 5
+        studyRepository.save(study2!!)
     }
 }

@@ -13,22 +13,32 @@ class TaskGroup(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null,
 
+    @Column(name = "status")
     var status: TaskGroupStatus = TaskGroupStatus.INPROGRESS,
 
+    @Column(name = "start_date")
     val startDate: LocalDate = LocalDate.now(),
 
+    @Column(name = "end_date")
     val endDate: LocalDate,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
     var study: Study? = null,
 
-    @OneToMany(mappedBy = "taskGroup", cascade = [CascadeType.REMOVE])
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "taskGroup",
+        cascade = [CascadeType.REMOVE]
+    )
     val taskList: List<Task> = ArrayList(),
 
-    @OneToOne
-    val groupRankHistory: GroupRankHistory? = null,
+    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn(name = "group_rank_history")
+    var groupRankHistory: GroupRankHistory? = null,
 
 ): BaseTimeEntity() {
 

@@ -11,14 +11,17 @@ class GroupRank (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Long? = null,
 
+    @Column(name = "score")
     var score: Int = 0,
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
     var study: Study? = null,
 
-    @OneToMany(mappedBy = "groupRank", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    @OneToMany(mappedBy = "groupRank", cascade = [CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE])
     var groupRankHistoryList: List<GroupRankHistory> = ArrayList(),
 
 ): BaseTimeEntity() {

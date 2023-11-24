@@ -12,19 +12,23 @@ import org.springframework.security.core.userdetails.UserDetails
 class User (
 
     @Id
+    @Column(name = "id")
     var id: Long? = null,
 
+    @Column(name = "nickname")
     val nickname: String,
 
+    @Column(name = "name")
     val name: String,
 
-    @OneToOne(cascade = [CascadeType.MERGE, CascadeType.REMOVE])
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE, CascadeType.REMOVE])
+    @JoinColumn(name = "user_rank_id")
     val userRank: UserRank,
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.REMOVE])
     val memberList: List<Member> = ArrayList(),
 
-    @OneToMany(mappedBy = "owner", cascade = [CascadeType.REMOVE])
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.REMOVE])
     val ownedStudyList: List<Study> = ArrayList(),
 
 ): BaseTimeEntity(), UserDetails {

@@ -1,6 +1,7 @@
 package com.better.betterbackend.batch
 
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
+import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.study.domain.Period
@@ -8,7 +9,7 @@ import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
 import com.better.betterbackend.userrank.dao.UserRankRepository
-import com.better.betterbackend.userrankhistory.dao.UserRankHistoryRepository
+import com.better.betterbackend.userrank.domain.UserRank
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import org.springframework.batch.core.StepContribution
 import org.springframework.batch.core.scope.context.ChunkContext
@@ -26,7 +27,7 @@ class CustomTasklet(
 
     private val studyRepository: StudyRepository,
 
-    private val userRankHistoryRepository: UserRankHistoryRepository
+    private val memberRepository: MemberRepository,
 
 ) : Tasklet {
 
@@ -35,72 +36,76 @@ class CustomTasklet(
         val taskGroupList = taskGroupRepository.findAllByStatus(TaskGroupStatus.INPROGRESS)
             .filter { it.endDate == date }
 
-        for (taskGroup in taskGroupList) {//어차피 지금 이 태스크 그룹은 같은 스터디니까?
+        for (taskGroup in taskGroupList) {
             val study = taskGroup.study!!
             val taskList = taskGroup.taskList
             val numOfMember = taskGroup.study!!.numOfMember
             var successCount = 0
+
+            var userRankUpdateList = ArrayList<UserRank>()
+
             for (member in study.memberList) {
                 var success = false
-                // task, challenge가 null이 아니고 approve가 일정 퍼센트를 넘었을 경우
                 val task = taskList.find { it.member.id == member.id }
-                println(task)
+                val userRank = member.user.userRank
 
                 if (task?.challenge != null) {
-                    // 승인멤버가 과반수를 넘은 경우
-                    if (0.5 < task.challenge!!.approve.size.toDouble() / numOfMember.toDouble()) {
+                    // 승인 멤버가 절반을 넘은 경우
+                    if (task.challenge!!.approve.size.toDouble() / (numOfMember - 1).toDouble() >= 0.5) {
                         success = true
                         successCount++
                     }
                 }
+
                 if (success) {
-                    member.user.userRank.score += 20 // 성공했을 때 올라가는 점수
+                    userRank.score += 20 // 성공했을 때 올라가는 점수
                     val userRankHistory = UserRankHistory(
                         score = 20,
                         description = "태스크 인증 완료",
-                        userRank = member.user.userRank,
+                        userRank = userRank,
                         task = task!!,
                     )
-
-                    userRankHistoryRepository.save(userRankHistory)
-                    member.user.userRank.userRankHistoryList += userRankHistory
-                    userRankRepository.save(member.user.userRank)
+                    userRank.userRankHistoryList += userRankHistory
+                    userRankUpdateList.add(userRank)
                 } else {
                     member.kickCount += 1
-                    if (member.kickCount == study.kickCondition) {//퇴출조건 만족시 퇴출 + 점수깎기
+                    memberRepository.save(member)
+                    if (member.kickCount == study.kickCondition) { // 퇴출 조건 만족시 퇴출 + 점수 깎기
+                        userRank.score -= (300 + study.kickCondition * 200)
                         val userRankHistory = UserRankHistory(
                             score = -(300 + study.kickCondition * 200),
                             description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출",
                             userRank = member.user.userRank,
-                            task = task!!,
+                            task = task,
                         )
-
-                        userRankHistoryRepository.save(userRankHistory)
-
-                        member.memberType = MemberType.WITHDRAW
-                        member.user.userRank.score -= (300 + study.kickCondition * 200)
+                        userRank.userRankHistoryList += userRankHistory
+                        userRankUpdateList.add(userRank)
                     }
                 }
             }
 
-            if (successCount == numOfMember) {//전원 태스크 완료시 인원수*5만큼 점수상승
+            userRankRepository.saveAll(userRankUpdateList)
+
+            // 전원 태스크 완료시 인원수*5만큼 점수 상승
+            if (successCount == numOfMember) {
+                userRankUpdateList = ArrayList()
                 for (member in study.memberList) {
                     val task = taskList.find { it.member.id == member.id }
-                    println(task)
+                    val userRank = member.user.userRank
                     val userRankHistory = UserRankHistory(
                         score = (5 * numOfMember),
-                        description = "스터디 전원 태스크완료 보너스 점수",
+                        description = "스터디 전원 태스크 완료 보너스 점수",
                         userRank = member.user.userRank,
                         task = task!!,
                     )
-                    println(userRankHistory)
-                    member.user.userRank.userRankHistoryList += userRankHistory
-                    member.user.userRank.score += (5 * numOfMember)
-                    userRankHistoryRepository.save(userRankHistory)
+                    userRank.userRankHistoryList += userRankHistory
+                    userRank.score += (5 * numOfMember)
+                    userRankUpdateList.add(userRank)
                 }
+                userRankRepository.saveAll(userRankUpdateList)
             }
 
-            val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), date) //그룹랭크 점수 변경
+            val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now()) // 그룹 랭크 점수 변경
             val totalReward = when (period) {
                 in 1..182 -> {
                     25 * 0.3 + (successCount / numOfMember) * 70
@@ -115,19 +120,22 @@ class CustomTasklet(
                 }
             }
 
-            study.groupRank.score += totalReward.roundToInt()
+            val groupRank = study.groupRank
+            groupRank.score += totalReward.roundToInt()
 
             val groupRankHistory = GroupRankHistory(
                 score = totalReward.roundToInt(),
-                description = "그룹리워드 정산",
+                description = "그룹 리워드 정산",
                 totalNumber = numOfMember,
                 participantsNumber = successCount,
-                groupRank = study.groupRank,
+                groupRank = groupRank,
                 taskGroup = taskGroup,
             )
-            study.groupRank.groupRankHistoryList += groupRankHistory
+
+            groupRank.groupRankHistoryList += groupRankHistory
 
             // 해당 태스크 그룹 종료
+            taskGroup.groupRankHistory = groupRankHistory
             taskGroup.status = TaskGroupStatus.END
 
             // 다음 주기의 새로운 TaskGroup 생성
@@ -145,16 +153,26 @@ class CustomTasklet(
                     endDate.plusWeeks(2)
                 }
             }
+
             val newTaskGroup = TaskGroup(
                 endDate = endDate,
                 study = study
             )
             study.taskGroupList += newTaskGroup
-
-            taskGroupRepository.save(newTaskGroup)
             studyRepository.save(study)
-
         }
+
+        val kickedMember = memberRepository.findAll().filter {
+            it.memberType != MemberType.WITHDRAW && (it.kickCount == it.study!!.kickCondition || it.user.userRank.score < it.study!!.minRank)
+        }
+        for (member in kickedMember) {
+            member.kickCount = 0
+            member.memberType = MemberType.WITHDRAW
+            member.study!!.numOfMember--
+            memberRepository.save(member)
+            studyRepository.save(member.study!!)
+        }
+
 
         println("tasklet 1 complete")
         return RepeatStatus.FINISHED

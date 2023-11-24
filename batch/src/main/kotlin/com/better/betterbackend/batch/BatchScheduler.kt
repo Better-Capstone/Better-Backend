@@ -16,7 +16,7 @@ class BatchScheduler(
 
     private val jobLauncher: JobLauncher,
 
-    @Qualifier("singleStepJob")
+    @Qualifier(value = "batchJob")
     private val job: Job
 
 ) {
