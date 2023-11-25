@@ -22,7 +22,7 @@ class SecurityConfig (
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }
         .authorizeHttpRequests {
-            it.requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**", "/user/check/**", "/user/login", "/user/register", "/user/test", "/study/test", "/task/test").permitAll()
+            it.requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**", "/user/check/**", "/user/login", "/user/register", "/user/test", "/study/test", "/task/test", "/user/token/**").permitAll()
                 .anyRequest().authenticated()
         }
         .addFilterBefore(JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter::class.java)
