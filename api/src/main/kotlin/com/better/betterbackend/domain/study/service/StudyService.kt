@@ -6,6 +6,7 @@ import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
 import com.better.betterbackend.domain.task.dto.TaskDto
+import com.better.betterbackend.domain.task.dto.response.TaskWithStudyResponseDto
 import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
@@ -209,7 +210,7 @@ class StudyService(
         val taskGroupList = study.taskGroupList
             .find { it.status == TaskGroupStatus.INPROGRESS }!!
 
-        return taskGroupList.taskList.map { TaskDto(it) }
+        return taskGroupList.taskList.map { TaskWithStudyResponseDto(it, study) }
     }
 
     fun test() {

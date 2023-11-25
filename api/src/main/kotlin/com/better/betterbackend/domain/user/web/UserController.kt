@@ -33,6 +33,12 @@ class UserController(
         return ResponseEntity.ok().body(userService.test())
     }
 
+    @Operation(summary = "유저 토큰 생성(테스트 용)")
+    @GetMapping("/token/{id}")
+    fun getToken(@PathVariable("id") id: Long): ResponseEntity<String> {
+        return ResponseEntity.ok().body(userService.getToken(id))
+    }
+
     @Operation(summary = "유저 가입 여부 확인")
     @GetMapping("/check/{id}")
     fun check(@PathVariable id: Long): ResponseEntity<UserCheckResponseDto> {

@@ -5,6 +5,7 @@ import com.better.betterbackend.category.domain.Category
 
 import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.task.dto.TaskDto
+import com.better.betterbackend.domain.task.dto.response.TaskWithStudyResponseDto
 import com.better.betterbackend.domain.user.dto.SimpleUserDto
 import com.better.betterbackend.domain.user.dto.UserDto
 
@@ -146,6 +147,10 @@ class UserService (
         return listOf(tokenProvider.createToken(user1.id.toString()), tokenProvider.createToken(user2.id.toString()))
     }
 
+    fun getToken(id: Long): String {
+        return tokenProvider.createToken(id.toString())
+    }
+
     fun check(id: Long): UserCheckResponseDto {
         userRepository.findByIdOrNull(id) ?: return UserCheckResponseDto(false)
 
@@ -205,10 +210,10 @@ class UserService (
     fun getTask(id: Long) : List<TaskDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        val list = ArrayList<TaskDto>()
+        val list = ArrayList<TaskWithStudyResponseDto>()
         for (member:Member in user.memberList){
             for (task:Task in member.taskList){
-                list.add(TaskDto(task))
+                list.add(TaskWithStudyResponseDto(task, task.taskGroup.study!!))
             }
         }
 
