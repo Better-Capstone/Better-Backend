@@ -174,7 +174,7 @@ class UserService (
         userRank.user = user
         userRepository.save(user)
 
-        return UserRegisterResponseDto(user)
+        return UserRegisterResponseDto(user, tokenProvider.createToken(user.id.toString()))
     }
 
     fun login(accessToken: String): UserLoginResponseDto {

@@ -8,8 +8,14 @@ class UserRegisterResponseDto (
 
     val nickname: String,
 
+    val accessToken: String,
+
 ) {
 
-    constructor(user: User) : this(user.id!!, user.nickname)
+    constructor(user: User, accessToken: String) : this(
+        user.id!!,
+        user.nickname,
+        accessToken
+    )
 
 }
