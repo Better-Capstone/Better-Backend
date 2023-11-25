@@ -6,8 +6,7 @@ import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.user.service.UserService
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.UserCheckResponseDto
-import com.better.betterbackend.domain.user.dto.response.UserLoginResponseDto
-import com.better.betterbackend.domain.user.dto.response.UserRegisterResponseDto
+import com.better.betterbackend.domain.user.dto.response.UserRegisterAndLoginResponseDto
 import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryDto
 import com.better.betterbackend.domain.userrank.dto.UserRankDto
@@ -41,13 +40,13 @@ class UserController(
     @PostMapping("/register")
     fun register(
         @RequestBody @Validated(value = [ValidationSequence::class]) request: UserRegisterRequestDto
-    ): ResponseEntity<UserRegisterResponseDto> {
+    ): ResponseEntity<UserRegisterAndLoginResponseDto> {
         return ResponseEntity.ok().body(userService.register(request))
     }
 
     @Operation(summary = "유저 로그인")
     @PostMapping("/login")
-    fun login(@RequestParam("kakaoToken") kakaoToken: String): ResponseEntity<UserLoginResponseDto> {
+    fun login(@RequestParam("kakaoToken") kakaoToken: String): ResponseEntity<UserRegisterAndLoginResponseDto> {
         return ResponseEntity.ok().body(userService.login(kakaoToken))
     }
 

@@ -1,8 +1,5 @@
 package com.better.betterbackend.domain.user.service
 
-import com.better.betterbackend.category.dao.CategoryRepository
-import com.better.betterbackend.category.domain.Category
-
 import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.response.TaskWithStudyResponseDto
@@ -46,7 +43,7 @@ class UserService (
         return UserCheckResponseDto(true)
     }
 
-    fun register(request: UserRegisterRequestDto): UserRegisterResponseDto {
+    fun register(request: UserRegisterRequestDto): UserRegisterAndLoginResponseDto {
         val accessToken = request.accessToken!!
         val nickname = request.nickname!!
 
@@ -68,14 +65,14 @@ class UserService (
         userRank.user = user
         userRepository.save(user)
 
-        return UserRegisterResponseDto(user, tokenProvider.createToken(user.id.toString()))
+        return UserRegisterAndLoginResponseDto(tokenProvider.createToken(user.id.toString()), UserDto(user))
     }
 
-    fun login(accessToken: String): UserLoginResponseDto {
+    fun login(accessToken: String): UserRegisterAndLoginResponseDto {
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
         val user = userRepository.findByIdOrNull(userInfo.id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return UserLoginResponseDto(tokenProvider.createToken(user.id.toString()), SimpleUserDto(user))
+        return UserRegisterAndLoginResponseDto(tokenProvider.createToken(user.id.toString()), UserDto(user))
     }
 
     fun getUser(id : Long): UserDto {
