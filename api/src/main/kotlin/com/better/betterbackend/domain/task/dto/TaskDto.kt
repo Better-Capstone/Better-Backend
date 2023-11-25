@@ -10,7 +10,7 @@ import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import java.time.LocalDateTime
 
-data class TaskDto(
+open class TaskDto(
 
     var id: Long,
 

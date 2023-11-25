@@ -1,10 +1,8 @@
 package com.better.betterbackend.domain.user.service
 
-import com.better.betterbackend.category.dao.CategoryRepository
-import com.better.betterbackend.category.domain.Category
-
 import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.task.dto.TaskDto
+import com.better.betterbackend.domain.task.dto.response.TaskWithStudyResponseDto
 import com.better.betterbackend.domain.user.dto.SimpleUserDto
 import com.better.betterbackend.domain.user.dto.UserDto
 
@@ -32,118 +30,11 @@ class UserService (
     private val userRepository: UserRepository,
   
     private val tokenProvider: JwtTokenProvider,
-
-    // todo: 테스트 용도, 삭제 필요
-    private val categoryRepository: CategoryRepository,
   
 ) {
 
-    // todo: 테스트 용도, 삭제 필요
-    fun test(): List<String> {
-        val userRank1 = UserRank()
-        val user1 = User(
-            id = 1,
-            nickname = "test1",
-            name = "test1",
-            userRank = userRank1,
-        )
-        userRank1.user = user1
-        userRepository.save(user1)
-
-        val userRank2 = UserRank()
-        val user2 = User(
-            id = 2,
-            nickname = "test2",
-            name = "test2",
-            userRank = userRank2,
-        )
-        userRank2.user = user2
-        userRepository.save(user2)
-
-        val userRank3 = UserRank()
-        val user3 = User(
-            id = 3,
-            nickname = "test3",
-            name = "test3",
-            userRank = userRank3,
-        )
-        userRank3.user = user3
-        userRepository.save(user3)
-
-        val userRank4 = UserRank()
-        val user4 = User(
-            id = 4,
-            nickname = "test4",
-            name = "test4",
-            userRank = userRank4,
-        )
-        userRank4.user = user4
-        userRepository.save(user4)
-
-        val userRank5 = UserRank()
-        val user5 = User(
-            id = 5,
-            nickname = "test5",
-            name = "test5",
-            userRank = userRank5,
-        )
-        userRank5.user = user5
-        userRepository.save(user5)
-
-        val userRank6 = UserRank()
-        val user6 = User(
-            id = 6,
-            nickname = "test6",
-            name = "test6",
-            userRank = userRank6,
-        )
-        userRank6.user = user6
-        userRepository.save(user6)
-
-        val userRank7 = UserRank()
-        val user7 = User(
-            id = 7,
-            nickname = "test7",
-            name = "test7",
-            userRank = userRank7,
-        )
-        userRank7.user = user7
-        userRepository.save(user7)
-
-        val userRank8 = UserRank()
-        val user8 = User(
-            id = 8,
-            nickname = "test8",
-            name = "test8",
-            userRank = userRank8,
-        )
-        userRank8.user = user8
-        userRepository.save(user8)
-
-        val userRank9 = UserRank()
-        val user9 = User(
-            id = 9,
-            nickname = "test9",
-            name = "test9",
-            userRank = userRank9,
-        )
-        userRank9.user = user9
-        userRepository.save(user9)
-
-        val userRank10 = UserRank()
-        val user10 = User(
-            id = 10,
-            nickname = "test10",
-            name = "test10",
-            userRank = userRank10,
-        )
-        userRank10.user = user10
-        userRepository.save(user10)
-
-
-        categoryRepository.save(Category(1, "string", emptyList()))
-
-        return listOf(tokenProvider.createToken(user1.id.toString()), tokenProvider.createToken(user2.id.toString()))
+    fun getToken(id: Long): String {
+        return tokenProvider.createToken(id.toString())
     }
 
     fun check(id: Long): UserCheckResponseDto {
@@ -152,7 +43,7 @@ class UserService (
         return UserCheckResponseDto(true)
     }
 
-    fun register(request: UserRegisterRequestDto): UserRegisterResponseDto {
+    fun register(request: UserRegisterRequestDto): UserRegisterAndLoginResponseDto {
         val accessToken = request.accessToken!!
         val nickname = request.nickname!!
 
@@ -174,14 +65,14 @@ class UserService (
         userRank.user = user
         userRepository.save(user)
 
-        return UserRegisterResponseDto(user)
+        return UserRegisterAndLoginResponseDto(tokenProvider.createToken(user.id.toString()), UserDto(user))
     }
 
-    fun login(accessToken: String): UserLoginResponseDto {
+    fun login(accessToken: String): UserRegisterAndLoginResponseDto {
         val userInfo = kakaoService.getKakaoUserInfo(accessToken)
         val user = userRepository.findByIdOrNull(userInfo.id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return UserLoginResponseDto(tokenProvider.createToken(user.id.toString()), SimpleUserDto(user))
+        return UserRegisterAndLoginResponseDto(tokenProvider.createToken(user.id.toString()), UserDto(user))
     }
 
     fun getUser(id : Long): UserDto {
@@ -205,10 +96,10 @@ class UserService (
     fun getTask(id: Long) : List<TaskDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        val list = ArrayList<TaskDto>()
+        val list = ArrayList<TaskWithStudyResponseDto>()
         for (member:Member in user.memberList){
             for (task:Task in member.taskList){
-                list.add(TaskDto(task))
+                list.add(TaskWithStudyResponseDto(task, task.taskGroup.study!!))
             }
         }
 

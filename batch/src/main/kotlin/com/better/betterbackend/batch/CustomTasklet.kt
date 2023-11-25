@@ -34,7 +34,7 @@ class CustomTasklet(
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
         val date = LocalDate.now()
         val taskGroupList = taskGroupRepository.findAllByStatus(TaskGroupStatus.INPROGRESS)
-            .filter { it.endDate == date }
+            .filter { it.endDate == date.minusDays(1) }
 
         for (taskGroup in taskGroupList) {
             val study = taskGroup.study!!
@@ -139,19 +139,11 @@ class CustomTasklet(
             taskGroup.status = TaskGroupStatus.END
 
             // 다음 주기의 새로운 TaskGroup 생성
-            val endDate = LocalDate.now()// 오늘
-            when (study.period) {
-                Period.EVERYDAY -> {
-                    endDate.plusDays(1)
-                }
-
-                Period.WEEKLY -> {
-                    endDate.plusWeeks(1)
-                }
-
-                Period.BIWEEKLY -> {
-                    endDate.plusWeeks(2)
-                }
+            var endDate = LocalDate.now()// 오늘
+            if (study.period == Period.WEEKLY) {
+                endDate = endDate.plusWeeks(1).minusDays(1)
+            } else if (study.period == Period.BIWEEKLY) {
+                endDate = endDate.plusWeeks(2).minusDays(1)
             }
 
             val newTaskGroup = TaskGroup(
@@ -173,8 +165,6 @@ class CustomTasklet(
             studyRepository.save(member.study!!)
         }
 
-
-        println("tasklet 1 complete")
         return RepeatStatus.FINISHED
     }
 
