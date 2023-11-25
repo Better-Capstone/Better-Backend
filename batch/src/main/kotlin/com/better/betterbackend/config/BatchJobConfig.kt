@@ -1,13 +1,10 @@
 package com.better.betterbackend.config
 
 import com.better.betterbackend.batch.CustomTasklet
-import com.better.betterbackend.grouprank.dao.GroupRankRepository
-import com.better.betterbackend.grouprankhistory.dao.GroupRankHistoryRepository
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.userrank.dao.UserRankRepository
-import com.better.betterbackend.userrankhistory.dao.UserRankHistoryRepository
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.job.builder.JobBuilder
@@ -28,13 +25,7 @@ class BatchJobConfig(
 
     private val studyRepository: StudyRepository,
 
-    private val userRankHistoryRepository: UserRankHistoryRepository,
-
-    private val groupRankRepository: GroupRankRepository,
-
     private val memberRepository: MemberRepository,
-
-    private val groupRankHistoryRepository: GroupRankHistoryRepository,
 
     private val jobRepository: JobRepository,
 

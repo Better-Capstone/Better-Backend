@@ -75,7 +75,7 @@ class StudyService(
             if (day <= currentDay) {
                 day += 7
             }
-            endDate = endDate.plusDays((day - currentDay).toLong() - 1)
+            endDate = endDate.plusDays((day - currentDay).toLong())
         }
 
         val taskGroup = TaskGroup(
