@@ -13,6 +13,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class ChallengeService (
@@ -21,13 +22,14 @@ class ChallengeService (
 
     private val taskRepository: TaskRepository,
 
+    private val s3UploadService: S3UploadService,
+
 ) {
 
-    fun register(request: ChallengeRegisterRequestDto, taskId: Long): ChallengeDto {
+    fun register(taskId: Long, request: ChallengeRegisterRequestDto, imageFile: MultipartFile): ChallengeDto {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
-        val image = request.image
         val description = request.description
         val task = taskRepository.findByIdOrNull(taskId) ?: throw CustomException(ErrorCode.TASK_NOT_FOUND)
 
@@ -40,6 +42,8 @@ class ChallengeService (
         if (task.challenge != null) {
             throw CustomException(ErrorCode.CHALLENGE_ALREADY_REGISTERED)
         }
+
+        val image = s3UploadService.saveFile(imageFile)
 
         val challenge = Challenge(
            task = task,
