@@ -21,6 +21,7 @@ enum class ErrorCode(
 
     JSON_FORMAT_ERROR(HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다"),
     USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 가입된 유저입니다"),
+    CHALLENGE_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 챌린지가 존재합니다"),
     OVER_CAPACITY(HttpStatus.BAD_REQUEST, "해당 스터디의 정원을 초과하였습니다"),
     ALREADY_PARTICIPATED(HttpStatus.BAD_REQUEST, "해당 스터디에 이미 가입된 상태입니다"),
     NOT_PARTICIPATED(HttpStatus.BAD_REQUEST, "가입하지 않은 스터디입니다"),

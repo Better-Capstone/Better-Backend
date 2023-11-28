@@ -35,7 +35,9 @@ class TaskService (
         val member = study.memberList.find { it.user.id!! == user.id!! } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
 
         val taskGroup = study.taskGroupList.find { it.status == TaskGroupStatus.INPROGRESS }!!
-
+        if (taskGroup.taskList.find { it.member == member } != null){
+            throw CustomException(ErrorCode.CHALLENGE_ALREADY_EXIST)
+        }
         val task = Task(
             title = request.title,
             member = member,
