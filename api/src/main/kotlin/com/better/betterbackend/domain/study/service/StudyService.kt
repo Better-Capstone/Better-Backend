@@ -1,12 +1,13 @@
 package com.better.betterbackend.domain.study.service
 
 import com.better.betterbackend.category.dao.CategoryRepository
+import com.better.betterbackend.domain.challenge.dto.ChallengeUserDto
 import com.better.betterbackend.domain.grouprank.dto.GroupRankDto
 import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
+import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryUserDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
-import com.better.betterbackend.domain.task.dto.TaskDto
-import com.better.betterbackend.domain.task.dto.response.TaskWithStudyResponseDto
+import com.better.betterbackend.domain.task.dto.response.TaskStudyUserDto
 import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
@@ -28,6 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.reflect.jvm.internal.impl.resolve.scopes.MemberScope.Empty
 
 @Service
 class StudyService(
@@ -40,7 +42,7 @@ class StudyService(
 
     private val memberRepository: MemberRepository,
 
-) {
+    ) {
 
     fun create(request: StudyCreateRequestDto): StudyDto {
         val principal = SecurityContextHolder.getContext().authentication.principal
@@ -107,8 +109,10 @@ class StudyService(
     }
 
     fun getStudyById(id: Long): StudyDto {
-        return StudyDto(studyRepository.findByIdOrNull(id)
-            ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND))
+        return StudyDto(
+            studyRepository.findByIdOrNull(id)
+                ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
+        )
     }
 
     fun getStudyByCategory(categoryId: Long): List<StudyDto> {
@@ -154,13 +158,15 @@ class StudyService(
             throw CustomException(ErrorCode.ALREADY_PARTICIPATED)
         }
 
-        memberRepository.save(Member(
-            study = study,
-            user = user,
-            memberType = MemberType.MEMBER,
-            // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
-            notifyTime = LocalDateTime.now(),
-        ))
+        memberRepository.save(
+            Member(
+                study = study,
+                user = user,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
 
         study.numOfMember++
         studyRepository.save(study)
@@ -191,13 +197,16 @@ class StudyService(
         return GroupRankDto(study.groupRank)
     }
 
-    fun getGroupRankHistory(studyId: Long): List<GroupRankHistoryDto> {
+    fun getGroupRankHistory(studyId: Long): List<GroupRankHistoryUserDto> {
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
-
-        return study.groupRank.groupRankHistoryList.map { GroupRankHistoryDto(it) }
+        val groupRankHistoryList = ArrayList<GroupRankHistoryUserDto>()
+        for (groupRankHistory in study.groupRank.groupRankHistoryList) {
+            groupRankHistoryList+=groupRankHistory.taskGroup.taskList.map { GroupRankHistoryUserDto(groupRankHistory,it.challenge!!, it.member.user) }
+        }
+        return groupRankHistoryList
     }
 
-    fun getTask(studyId: Long): List<TaskDto> {
+    fun getTask(studyId: Long): List<TaskStudyUserDto> {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val user = (principal as UserDetails) as User
 
@@ -209,7 +218,7 @@ class StudyService(
         val taskGroupList = study.taskGroupList
             .find { it.status == TaskGroupStatus.INPROGRESS }!!
 
-        return taskGroupList.taskList.map { TaskWithStudyResponseDto(it, study) }
+        return taskGroupList.taskList.map { TaskStudyUserDto(it, study, it.member.user) }
     }
 
 }

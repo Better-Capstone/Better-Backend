@@ -5,7 +5,7 @@ import com.better.betterbackend.domain.taskgroup.dto.SimpleTaskGroupDto
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import java.time.LocalDateTime
 
-data class GroupRankHistoryDto (
+open class GroupRankHistoryDto (
 
     val id: Long,
 
