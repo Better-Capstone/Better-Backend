@@ -7,13 +7,11 @@ import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
 import com.better.betterbackend.domain.task.service.TaskService
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/task")
@@ -38,11 +36,13 @@ class TaskController (
     }
 
     @Operation(summary = "태스크에 대한 챌린지 등록")
-    @PostMapping("/{id}/challenge/register")
+    @PostMapping("/{id}/challenge/register", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun challengeRegister(
-        @RequestBody request: ChallengeRegisterRequestDto, @PathVariable("id") taskId: Long
+        @PathVariable("id") taskId: Long,
+        @RequestPart(value="image") image: MultipartFile,
+        @RequestPart(value="request") request: ChallengeRegisterRequestDto,
     ): ResponseEntity<ChallengeDto> {
-        return ResponseEntity.ok().body(challengeService.register(request, taskId))
+        return ResponseEntity.ok().body(challengeService.register(taskId, request, image))
     }
 
 }
