@@ -1,7 +1,10 @@
 package com.better.betterbackend.domain.grouprankhistory.dto
 
+import com.better.betterbackend.domain.challenge.dto.ChallengeDto
+import com.better.betterbackend.domain.challenge.dto.ChallengeUserDto
 import com.better.betterbackend.domain.grouprank.dto.SimpleGroupRankDto
 import com.better.betterbackend.domain.taskgroup.dto.SimpleTaskGroupDto
+import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import java.time.LocalDateTime
 
@@ -25,7 +28,8 @@ open class GroupRankHistoryDto (
 
     val updatedAt: LocalDateTime,
 
-) {
+
+    ) {
 
     constructor(groupRankHistory: GroupRankHistory): this(
         groupRankHistory.id!!,
@@ -37,6 +41,9 @@ open class GroupRankHistoryDto (
         SimpleTaskGroupDto(groupRankHistory.taskGroup),
         groupRankHistory.createdAt,
         groupRankHistory.updatedAt,
+
+
+
     )
 
 }

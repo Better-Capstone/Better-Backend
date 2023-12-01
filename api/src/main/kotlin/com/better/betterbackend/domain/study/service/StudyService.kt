@@ -12,6 +12,7 @@ import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
 import com.better.betterbackend.grouprank.domain.GroupRank
+import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.member.domain.MemberType
@@ -19,16 +20,23 @@ import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.study.domain.Study
 import com.better.betterbackend.study.domain.StudyStatus
+import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
 import com.better.betterbackend.user.dao.UserRepository
 import com.better.betterbackend.user.domain.User
+import com.better.betterbackend.userrank.dao.UserRankRepository
+import com.better.betterbackend.userrank.domain.UserRank
+import com.better.betterbackend.userrankhistory.domain.UserRankHistory
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.roundToInt
 import kotlin.reflect.jvm.internal.impl.resolve.scopes.MemberScope.Empty
 
 @Service
@@ -41,8 +49,9 @@ class StudyService(
     private val categoryRepository: CategoryRepository,
 
     private val memberRepository: MemberRepository,
-
-    ) {
+    private val taskGroupRepository: TaskGroupRepository,//todo 테스트용 삭제
+    private val userRankRepository: UserRankRepository,//todo 테스트용 삭제
+) {
 
     fun create(request: StudyCreateRequestDto): StudyDto {
         val principal = SecurityContextHolder.getContext().authentication.principal
@@ -197,14 +206,21 @@ class StudyService(
         return GroupRankDto(study.groupRank)
     }
 
-    fun getGroupRankHistory(studyId: Long): List<GroupRankHistoryUserDto> {
+    fun getGroupRankHistory(studyId: Long): ArrayList<GroupRankHistoryUserDto> {
         val study = studyRepository.findByIdOrNull(studyId) ?: throw CustomException(ErrorCode.STUDY_NOT_FOUND)
-        val groupRankHistoryList = ArrayList<GroupRankHistoryUserDto>()
+        val groupRankHistoryList1 = ArrayList<GroupRankHistoryUserDto>()
+
         for (groupRankHistory in study.groupRank.groupRankHistoryList) {
-            groupRankHistoryList+=groupRankHistory.taskGroup.taskList.map { GroupRankHistoryUserDto(groupRankHistory,it.challenge!!, it.member.user) }
+            if(study.groupRank.groupRankHistoryList==null){
+                throw CustomException(ErrorCode.GROUPRANKHISTORY_NOT_FOUND)
+            }
+//            groupRankHistoryList1 += GroupRankHistoryDto(groupRankHistory)
+            groupRankHistoryList1 += GroupRankHistoryUserDto(groupRankHistory)
+
         }
-        return groupRankHistoryList
+        return groupRankHistoryList1
     }
+
 
     fun getTask(studyId: Long): List<TaskStudyUserDto> {
         val principal = SecurityContextHolder.getContext().authentication.principal
@@ -221,4 +237,241 @@ class StudyService(
         return taskGroupList.taskList.map { TaskStudyUserDto(it, study, it.member.user) }
     }
 
+    fun batch() {
+        val date = LocalDate.now()
+        val taskGroupList = taskGroupRepository.findAllByStatus(TaskGroupStatus.INPROGRESS)
+//            .filter { it.endDate == date.minusDays(0) }//todo 1로바꿔야함
+
+        for (taskGroup in taskGroupList) {
+            val study = taskGroup.study!!
+            val taskList = taskGroup.taskList
+            val numOfMember = taskGroup.study!!.numOfMember
+            var successCount = 0
+
+            var userRankUpdateList = ArrayList<UserRank>()
+
+            for (member in study.memberList) {
+                var success = false
+                val task = taskList.find { it.member.id == member.id }
+                val userRank = member.user.userRank
+
+                if (task?.challenge != null) {
+                    // 승인 멤버가 절반을 넘은 경우
+                    if (task.challenge!!.approve.size.toDouble() / (numOfMember - 1).toDouble() >= 0.5) {
+                        success = true
+                        successCount++
+                    }
+                }
+
+                if (success) {
+                    userRank.score += 20 // 성공했을 때 올라가는 점수
+                    val userRankHistory = UserRankHistory(
+                        score = 20,
+                        description = "태스크 인증 완료",
+                        userRank = userRank,
+                        task = task!!,
+                    )
+                    userRank.userRankHistoryList += userRankHistory
+                    userRankUpdateList.add(userRank)
+                } else {
+                    member.kickCount += 1
+                    memberRepository.save(member)
+                    if (member.kickCount == study.kickCondition) { // 퇴출 조건 만족시 퇴출 + 점수 깎기
+                        userRank.score -= (300 + study.kickCondition * 200)
+                        val userRankHistory = UserRankHistory(
+                            score = -(300 + study.kickCondition * 200),
+                            description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출",
+                            userRank = member.user.userRank,
+                            task = task,
+                        )
+                        userRank.userRankHistoryList += userRankHistory
+                        userRankUpdateList.add(userRank)
+                    }
+                }
+            }
+
+            userRankRepository.saveAll(userRankUpdateList)
+
+            // 전원 태스크 완료시 인원수*5만큼 점수 상승
+            if (successCount == numOfMember) {
+                userRankUpdateList = ArrayList()
+                for (member in study.memberList) {
+                    val task = taskList.find { it.member.id == member.id }
+                    val userRank = member.user.userRank
+                    val userRankHistory = UserRankHistory(
+                        score = (5 * numOfMember),
+                        description = "스터디 전원 태스크 완료 보너스 점수",
+                        userRank = member.user.userRank,
+                        task = task!!,
+                    )
+                    userRank.userRankHistoryList += userRankHistory
+                    userRank.score += (5 * numOfMember)
+                    userRankUpdateList.add(userRank)
+                }
+                userRankRepository.saveAll(userRankUpdateList)
+            }
+
+            val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now()) // 그룹 랭크 점수 변경
+            val totalReward = when (period) {
+                in 1..182 -> {
+                    25 * 0.3 + (successCount / numOfMember) * 70
+                }
+
+                in 183..364 -> {
+                    50 * 0.3 + (successCount / numOfMember) * 70
+                }
+
+                else -> {//1년이상
+                    100 * 0.3 + (successCount / numOfMember) * 70
+                }
+            }
+
+            val groupRank = study.groupRank
+            groupRank.score += totalReward.roundToInt()
+
+            val groupRankHistory = GroupRankHistory(
+                score = totalReward.roundToInt(),
+                description = "그룹 리워드 정산",
+                totalNumber = numOfMember,
+                participantsNumber = successCount,
+                groupRank = groupRank,
+                taskGroup = taskGroup,
+            )
+
+            groupRank.groupRankHistoryList += groupRankHistory
+
+            // 해당 태스크 그룹 종료
+            taskGroup.groupRankHistory = groupRankHistory
+            taskGroup.status = TaskGroupStatus.END
+
+            // 다음 주기의 새로운 TaskGroup 생성
+            var endDate = LocalDate.now()// 오늘
+            if (study.period == Period.WEEKLY) {
+                endDate = endDate.plusWeeks(1).minusDays(1)
+            } else if (study.period == Period.BIWEEKLY) {
+                endDate = endDate.plusWeeks(2).minusDays(1)
+            }
+
+            val newTaskGroup = TaskGroup(
+                endDate = endDate,
+                study = study
+            )
+            study.taskGroupList += newTaskGroup
+            studyRepository.save(study)
+        }
+
+        val kickedMember = memberRepository.findAll().filter {
+            it.memberType != MemberType.WITHDRAW && (it.kickCount == it.study!!.kickCondition || it.user.userRank.score < it.study!!.minRank)
+        }
+        for (member in kickedMember) {
+            member.kickCount = 0
+            member.memberType = MemberType.WITHDRAW
+            member.study!!.numOfMember--
+            memberRepository.save(member)
+            studyRepository.save(member.study!!)
+        }
+
+    }
+
+
+    fun test() { //todo 테스트용 나중에 삭제
+        val user1 = userRepository.findByIdOrNull(1)
+        val user2 = userRepository.findByIdOrNull(2)
+        val user3 = userRepository.findByIdOrNull(3)
+        val user4 = userRepository.findByIdOrNull(4)
+        val user5 = userRepository.findByIdOrNull(5)
+        val user6 = userRepository.findByIdOrNull(6)
+        val user7 = userRepository.findByIdOrNull(7)
+        val user8 = userRepository.findByIdOrNull(8)
+        val user9 = userRepository.findByIdOrNull(9)
+        val user10 = userRepository.findByIdOrNull(10)
+        val study1 = studyRepository.findByIdOrNull(1)
+        val study2 = studyRepository.findByIdOrNull(2)
+        memberRepository.save(
+            Member(
+                study = study1,
+                user = user2!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study1!!.numOfMember++
+        memberRepository.save(
+            Member(
+                study = study1,
+                user = user3!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study1!!.numOfMember++
+        memberRepository.save(
+            Member(
+                study = study1,
+                user = user4!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study1!!.numOfMember++
+        memberRepository.save(
+            Member(
+                study = study1,
+                user = user5!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study1!!.numOfMember++
+        studyRepository.save(study1)
+
+
+        memberRepository.save(
+            Member(
+                study = study2,
+                user = user6!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study2!!.numOfMember++
+        memberRepository.save(
+            Member(
+                study = study2,
+                user = user7!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study2!!.numOfMember++
+        memberRepository.save(
+            Member(
+                study = study2,
+                user = user8!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study2!!.numOfMember++
+        memberRepository.save(
+            Member(
+                study = study2,
+                user = user9!!,
+                memberType = MemberType.MEMBER,
+                // todo: 일단은 dummy 값, 추후 어떻게 할지 논의 필요
+                notifyTime = LocalDateTime.now(),
+            )
+        )
+        study2!!.numOfMember++
+        studyRepository.save(study2)
+
+
+    }
 }

@@ -23,7 +23,11 @@ class UserController(
     private val userService: UserService,
 
 ) {
-
+    @Operation(summary = "유저 생성(테스트 용)")
+    @GetMapping("/test")
+    fun test(): ResponseEntity<List<String>> {
+        return ResponseEntity.ok().body(userService.test())
+    }
     @Operation(summary = "유저 토큰 생성(테스트 용)")
     @GetMapping("/token/{id}")
     fun getToken(@PathVariable("id") id: Long): ResponseEntity<String> {

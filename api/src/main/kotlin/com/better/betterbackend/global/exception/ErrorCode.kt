@@ -19,6 +19,7 @@ enum class ErrorCode(
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다"),
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 스터디를 찾을 수 없습니다"),
     INPROGRESS_NOT_FOUND(HttpStatus.NOT_FOUND,"진행중인 태스크 그룹을 찾을 수 없습니다"),
+    GROUPRANKHISTORY_NOT_FOUND(HttpStatus.NOT_FOUND,"진행중인 그룹랭크히스토리를 찾을 수 없습니다"),
     JSON_FORMAT_ERROR(HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다"),
     USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 가입된 유저입니다"),
     CHALLENGE_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 챌린지가 존재합니다"),
