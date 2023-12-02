@@ -1,12 +1,11 @@
 package com.better.betterbackend.domain.user.service
 
+import com.better.betterbackend.category.dao.CategoryRepository
+import com.better.betterbackend.category.domain.Category
 import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.task.dto.TaskDto
-import com.better.betterbackend.domain.task.dto.response.TaskWithStudyResponseDto
-import com.better.betterbackend.domain.user.dto.SimpleUserDto
+import com.better.betterbackend.domain.task.dto.response.TaskStudyUserResponseDto
 import com.better.betterbackend.domain.user.dto.UserDto
-
-
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.*
 import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryDto
@@ -30,8 +29,31 @@ class UserService (
     private val userRepository: UserRepository,
   
     private val tokenProvider: JwtTokenProvider,
-  
+
+    private val categoryRepository: CategoryRepository,
+
 ) {
+
+    fun test(): String {
+        val category = Category(
+            name = "test1"
+        )
+
+        categoryRepository.save(category)
+
+        val userRank = UserRank()
+        val user = User(
+            id = 1,
+            nickname = "test1",
+            name = "test1",
+            userRank = userRank,
+        )
+
+        userRank.user = user
+        userRepository.save(user)
+
+        return tokenProvider.createToken(user.id.toString())
+    }
 
     fun getToken(id: Long): String {
         return tokenProvider.createToken(id.toString())
@@ -96,10 +118,10 @@ class UserService (
     fun getTask(id: Long) : List<TaskDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        val list = ArrayList<TaskWithStudyResponseDto>()
+        val list = ArrayList<TaskStudyUserResponseDto>()
         for (member:Member in user.memberList){
             for (task:Task in member.taskList){
-                list.add(TaskWithStudyResponseDto(task, task.taskGroup.study!!))
+                list.add(TaskStudyUserResponseDto(task, task.taskGroup.study!!, user))
             }
         }
 

@@ -5,6 +5,7 @@ import com.better.betterbackend.member.domain.Member
 import com.better.betterbackend.model.BaseTimeEntity
 import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 
 @Entity

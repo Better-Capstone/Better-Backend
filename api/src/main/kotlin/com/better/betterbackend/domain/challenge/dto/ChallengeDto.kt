@@ -4,7 +4,7 @@ import com.better.betterbackend.challenge.domain.Challenge
 import com.better.betterbackend.domain.task.dto.SimpleTaskDto
 import java.time.LocalDateTime
 
-data class ChallengeDto (
+open class ChallengeDto (
 
     var id: Long,
 
