@@ -44,9 +44,5 @@ class TaskController (
     ): ResponseEntity<ChallengeDto> {
         return ResponseEntity.ok().body(challengeService.register(request, taskId))
     }
-    @PostMapping("/test")
-    fun test(): ResponseEntity<Unit> {
-        return ResponseEntity.ok().body(taskService.test())
-    }
 
 }

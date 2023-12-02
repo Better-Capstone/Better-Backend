@@ -1,12 +1,11 @@
 package com.better.betterbackend.domain.study.web
 
 import com.better.betterbackend.domain.grouprank.dto.GroupRankDto
-import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryDto
-import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryUserDto
+import com.better.betterbackend.domain.grouprankhistory.dto.GroupRankHistoryChallengeDto
 import com.better.betterbackend.domain.study.dto.request.StudyCreateRequestDto
 import com.better.betterbackend.domain.study.dto.StudyDto
 import com.better.betterbackend.domain.study.service.StudyService
-import com.better.betterbackend.domain.task.dto.response.TaskStudyUserDto
+import com.better.betterbackend.domain.task.dto.response.TaskStudyUserResponseDto
 import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.global.validation.ValidationSequence
 import io.swagger.v3.oas.annotations.Operation
@@ -88,22 +87,14 @@ class StudyController(
 
     @Operation(summary = "스터디 랭크 기록 조회")
     @GetMapping("/{id}/report/history")
-    fun getGroupRankHistory(@PathVariable("id") studyId: Long): ResponseEntity<List<GroupRankHistoryUserDto>> {
+    fun getGroupRankHistory(@PathVariable("id") studyId: Long): ResponseEntity<List<GroupRankHistoryChallengeDto>> {
         return ResponseEntity.ok().body(studyService.getGroupRankHistory(studyId))
     }
 
     @Operation(summary = "스터디에서 현재 진행중인 테스크 목록 조회")
     @GetMapping("/{id}/tasks")
-    fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<List<TaskStudyUserDto>>{
+    fun getTask(@PathVariable("id") studyId: Long): ResponseEntity<List<TaskStudyUserResponseDto>>{
         return ResponseEntity.ok().body(studyService.getTask(studyId))
     }
-    @Operation(summary = "스터디 가입test")
-    @PostMapping("/test")
-    fun test(): ResponseEntity<Unit> {
-        return ResponseEntity.ok().body(studyService.test())
-    }
-    @PostMapping("/batch")
-    fun batch(): ResponseEntity<Unit>{
-        return ResponseEntity.ok().body(studyService.batch())
-    }
+
 }
