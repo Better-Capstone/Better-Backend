@@ -1,8 +1,7 @@
-package com.better.betterbackend.batch
+package com.better.betterbackend.batch.tasklet
 
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.member.dao.MemberRepository
-import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.study.domain.Period
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
@@ -19,7 +18,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
 
-class CustomTasklet(
+class FirstTasklet(
 
     private val taskGroupRepository: TaskGroupRepository,
 
@@ -107,18 +106,23 @@ class CustomTasklet(
 
             val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now()) // 그룹 랭크 점수 변경
             val totalReward = when (period) {
-                in 1..182 -> {
+                in 0..182 -> {
+                    println(1)
                     25 * 0.3 + (successCount / numOfMember) * 70
                 }
 
                 in 183..364 -> {
+                    println(2)
                     50 * 0.3 + (successCount / numOfMember) * 70
                 }
 
                 else -> {//1년이상
+                    println(3)
                     100 * 0.3 + (successCount / numOfMember) * 70
                 }
             }
+
+            println(totalReward)
 
             val groupRank = study.groupRank
             groupRank.score += totalReward.roundToInt()
@@ -152,17 +156,6 @@ class CustomTasklet(
             )
             study.taskGroupList += newTaskGroup
             studyRepository.save(study)
-        }
-
-        val kickedMember = memberRepository.findAll().filter {
-            it.memberType != MemberType.WITHDRAW && (it.kickCount == it.study!!.kickCondition || it.user.userRank.score < it.study!!.minRank)
-        }
-        for (member in kickedMember) {
-            member.kickCount = 0
-            member.memberType = MemberType.WITHDRAW
-            member.study!!.numOfMember--
-            memberRepository.save(member)
-            studyRepository.save(member.study!!)
         }
 
         return RepeatStatus.FINISHED

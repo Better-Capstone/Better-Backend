@@ -1,11 +1,10 @@
-package com.better.betterbackend.config
+package com.better.betterbackend.config.database
 
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
@@ -14,37 +13,35 @@ import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import javax.sql.DataSource
 
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    basePackages = ["com.better.betterbackend"],
-    entityManagerFactoryRef = "mainEntityManager",
-    transactionManagerRef = "mainTransactionManager"
+    basePackages = ["com.better.betterbackend.batch"],
+    entityManagerFactoryRef = "batchEntityManager",
+    transactionManagerRef = "batchTransactionManager"
 )
-class MainDataSourceConfig {
+class BatchDataSourceConfig {
 
-    @Primary
     @Bean
-    @ConfigurationProperties(prefix = "spring.main-database.datasource")
-    fun mainDataSource(): DataSource {
+    @ConfigurationProperties(prefix = "spring.batch-database.datasource")
+    fun batchDataSource(): DataSource {
         return DataSourceBuilder.create().type(HikariDataSource::class.java).build()
     }
 
-    @Primary
     @Bean
-    fun mainEntityManager(): LocalContainerEntityManagerFactoryBean {
+    fun batchEntityManager(): LocalContainerEntityManagerFactoryBean {
         val entityManager = LocalContainerEntityManagerFactoryBean()
-        entityManager.dataSource = mainDataSource()
-        entityManager.setPackagesToScan("com.better.betterbackend")
+        entityManager.dataSource = batchDataSource()
+        entityManager.setPackagesToScan("com.better.betterbackend.batch")
         entityManager.jpaVendorAdapter = HibernateJpaVendorAdapter()
 
         return entityManager
     }
 
-    @Primary
     @Bean
-    fun mainTransactionManager(): PlatformTransactionManager {
-        return JpaTransactionManager(mainEntityManager().`object`!!)
+    fun batchTransactionManager(): PlatformTransactionManager {
+        return JpaTransactionManager(batchEntityManager().`object`!!)
     }
 
 }
