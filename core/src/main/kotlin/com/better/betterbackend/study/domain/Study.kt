@@ -19,7 +19,7 @@ class Study (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    val owner: User,
+    var owner: User,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -53,14 +53,14 @@ class Study (
     val minRank: Int,
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "study",
         cascade = [CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE]
     )
     var memberList: List<Member>,
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "study",
         cascade = [CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE]
     )

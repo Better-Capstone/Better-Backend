@@ -29,6 +29,7 @@ enum class ErrorCode(
     SELF_APPROVE_NOT_POSSIBLE(HttpStatus.BAD_REQUEST, "자신의 챌린지에 스스로 인증할 수 없습니다"),
     ALREADY_APPROVED_MEMBER(HttpStatus.BAD_REQUEST, "이미 해당 태스크에 대해 인증을 한 멤버입니다"),
     CHALLENGE_ALREADY_REGISTERED(HttpStatus.BAD_REQUEST, "이미 챌린지가 등록되어 있는 태스크입니다"),
+    TASK_ALREADY_REGISTERED(HttpStatus.BAD_REQUEST, "이미 이번 주기 태스크를 등록하였습니다"),
     ;
 
 }

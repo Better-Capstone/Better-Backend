@@ -7,7 +7,7 @@ import com.better.betterbackend.domain.userrank.dto.SimpleUserRankDto
 import com.better.betterbackend.userrankhistory.domain.UserRankHistory
 import java.time.LocalDateTime
 
-data class UserRankHistoryDto (
+open class UserRankHistoryDto (
 
     val id: Long,
 

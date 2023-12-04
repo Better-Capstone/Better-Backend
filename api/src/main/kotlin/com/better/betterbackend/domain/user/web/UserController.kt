@@ -1,6 +1,5 @@
 package com.better.betterbackend.domain.user.web
 
-
 import com.better.betterbackend.domain.challenge.dto.ChallengeDto
 import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.user.service.UserService
@@ -23,6 +22,12 @@ class UserController(
     private val userService: UserService,
 
 ) {
+
+    @Operation(summary = "유저 생성(테스트 용)")
+    @GetMapping("/test")
+    fun test(): ResponseEntity<String> {
+        return ResponseEntity.ok().body(userService.test())
+    }
 
     @Operation(summary = "유저 토큰 생성(테스트 용)")
     @GetMapping("/token/{id}")

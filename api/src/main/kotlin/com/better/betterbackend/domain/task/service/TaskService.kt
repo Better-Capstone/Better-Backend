@@ -1,6 +1,5 @@
 package com.better.betterbackend.domain.task.service
 
-import com.better.betterbackend.challenge.dao.ChallengeRepository
 import com.better.betterbackend.domain.task.dto.TaskDto
 import com.better.betterbackend.domain.task.dto.request.TaskRegisterRequestDto
 import com.better.betterbackend.global.exception.CustomException
@@ -35,6 +34,10 @@ class TaskService (
         val member = study.memberList.find { it.user.id!! == user.id!! } ?: throw CustomException(ErrorCode.NOT_PARTICIPATED)
 
         val taskGroup = study.taskGroupList.find { it.status == TaskGroupStatus.INPROGRESS }!!
+
+        if (taskGroup.taskList.find { it.member == member } != null){
+            throw CustomException(ErrorCode.TASK_ALREADY_REGISTERED)
+        }
 
         val task = Task(
             title = request.title,

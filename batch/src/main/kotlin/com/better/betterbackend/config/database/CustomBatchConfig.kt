@@ -1,4 +1,4 @@
-package com.better.betterbackend.config
+package com.better.betterbackend.config.database
 
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration
 import org.springframework.beans.factory.annotation.Qualifier

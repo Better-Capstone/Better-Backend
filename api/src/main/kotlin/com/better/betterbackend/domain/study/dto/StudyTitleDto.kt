@@ -2,7 +2,7 @@ package com.better.betterbackend.domain.study.dto
 
 import com.better.betterbackend.study.domain.Study
 
-class StudyIdAndTitleDto(
+class StudyTitleDto(
 
     val id: Long,
 

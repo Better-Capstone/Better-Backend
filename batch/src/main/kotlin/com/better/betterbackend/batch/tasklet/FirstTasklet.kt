@@ -1,10 +1,11 @@
-package com.better.betterbackend.batch
+package com.better.betterbackend.batch.tasklet
 
 import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.member.dao.MemberRepository
-import com.better.betterbackend.member.domain.MemberType
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.study.domain.Period
+import com.better.betterbackend.task.dao.TaskRepository
+import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
@@ -19,7 +20,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
 
-class CustomTasklet(
+class FirstTasklet(
 
     private val taskGroupRepository: TaskGroupRepository,
 
@@ -28,6 +29,8 @@ class CustomTasklet(
     private val studyRepository: StudyRepository,
 
     private val memberRepository: MemberRepository,
+
+    private val taskRepository: TaskRepository,
 
 ) : Tasklet {
 
@@ -46,7 +49,7 @@ class CustomTasklet(
 
             for (member in study.memberList) {
                 var success = false
-                val task = taskList.find { it.member.id == member.id }
+                var task = taskList.find { it.member.id == member.id }
                 val userRank = member.user.userRank
 
                 if (task?.challenge != null) {
@@ -72,6 +75,14 @@ class CustomTasklet(
                     memberRepository.save(member)
                     if (member.kickCount == study.kickCondition) { // 퇴출 조건 만족시 퇴출 + 점수 깎기
                         userRank.score -= (300 + study.kickCondition * 200)
+                        if (task == null) {
+                            task = Task(
+                                title = "미등록",
+                                member = member,
+                                taskGroup = taskGroup,
+                            )
+                            taskRepository.save(task)
+                        }
                         val userRankHistory = UserRankHistory(
                             score = -(300 + study.kickCondition * 200),
                             description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출",
@@ -107,7 +118,7 @@ class CustomTasklet(
 
             val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now()) // 그룹 랭크 점수 변경
             val totalReward = when (period) {
-                in 1..182 -> {
+                in 0..182 -> {
                     25 * 0.3 + (successCount / numOfMember) * 70
                 }
 
@@ -152,17 +163,6 @@ class CustomTasklet(
             )
             study.taskGroupList += newTaskGroup
             studyRepository.save(study)
-        }
-
-        val kickedMember = memberRepository.findAll().filter {
-            it.memberType != MemberType.WITHDRAW && (it.kickCount == it.study!!.kickCondition || it.user.userRank.score < it.study!!.minRank)
-        }
-        for (member in kickedMember) {
-            member.kickCount = 0
-            member.memberType = MemberType.WITHDRAW
-            member.study!!.numOfMember--
-            memberRepository.save(member)
-            studyRepository.save(member.study!!)
         }
 
         return RepeatStatus.FINISHED
