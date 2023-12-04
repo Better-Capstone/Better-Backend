@@ -4,6 +4,7 @@ import com.better.betterbackend.batch.tasklet.FirstTasklet
 import com.better.betterbackend.batch.tasklet.SecondTasklet
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.study.dao.StudyRepository
+import com.better.betterbackend.task.dao.TaskRepository
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.userrank.dao.UserRankRepository
 import org.springframework.batch.core.Job
@@ -28,6 +29,8 @@ class BatchJobConfig(
 
     private val memberRepository: MemberRepository,
 
+    private val taskRepository: TaskRepository,
+
     private val jobRepository: JobRepository,
 
     @Qualifier("batchTransactionManager")
@@ -47,7 +50,7 @@ class BatchJobConfig(
     fun firstStep(): Step {
         return StepBuilder("firstStep", jobRepository)
             .tasklet(
-                FirstTasklet(taskGroupRepository, userRankRepository, studyRepository, memberRepository),
+                FirstTasklet(taskGroupRepository, userRankRepository, studyRepository, memberRepository, taskRepository),
                 transactionManager
             )
             .build()

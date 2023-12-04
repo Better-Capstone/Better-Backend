@@ -9,6 +9,7 @@ import com.better.betterbackend.domain.user.dto.UserDto
 import com.better.betterbackend.domain.user.dto.request.UserRegisterRequestDto
 import com.better.betterbackend.domain.user.dto.response.*
 import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryDto
+import com.better.betterbackend.domain.userRankHistory.dto.UserRankHistoryStudyDto
 import com.better.betterbackend.domain.userrank.dto.UserRankDto
 import com.better.betterbackend.global.exception.CustomException
 import com.better.betterbackend.global.exception.ErrorCode
@@ -112,7 +113,7 @@ class UserService (
     fun getRankHistory(id: Long) : List<UserRankHistoryDto> {
         val user = userRepository.findByIdOrNull(id) ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        return user.userRank.userRankHistoryList.map { UserRankHistoryDto(it) }
+        return user.userRank.userRankHistoryList.map { UserRankHistoryStudyDto(it, it.task!!.taskGroup.study!!) }
     }
 
     fun getTask(id: Long) : List<TaskDto> {

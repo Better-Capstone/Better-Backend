@@ -4,6 +4,8 @@ import com.better.betterbackend.grouprankhistory.domain.GroupRankHistory
 import com.better.betterbackend.member.dao.MemberRepository
 import com.better.betterbackend.study.dao.StudyRepository
 import com.better.betterbackend.study.domain.Period
+import com.better.betterbackend.task.dao.TaskRepository
+import com.better.betterbackend.task.domain.Task
 import com.better.betterbackend.taskgroup.dao.TaskGroupRepository
 import com.better.betterbackend.taskgroup.domain.TaskGroup
 import com.better.betterbackend.taskgroup.domain.TaskGroupStatus
@@ -28,6 +30,8 @@ class FirstTasklet(
 
     private val memberRepository: MemberRepository,
 
+    private val taskRepository: TaskRepository,
+
 ) : Tasklet {
 
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
@@ -45,7 +49,7 @@ class FirstTasklet(
 
             for (member in study.memberList) {
                 var success = false
-                val task = taskList.find { it.member.id == member.id }
+                var task = taskList.find { it.member.id == member.id }
                 val userRank = member.user.userRank
 
                 if (task?.challenge != null) {
@@ -71,6 +75,14 @@ class FirstTasklet(
                     memberRepository.save(member)
                     if (member.kickCount == study.kickCondition) { // 퇴출 조건 만족시 퇴출 + 점수 깎기
                         userRank.score -= (300 + study.kickCondition * 200)
+                        if (task == null) {
+                            task = Task(
+                                title = "미등록",
+                                member = member,
+                                taskGroup = taskGroup,
+                            )
+                            taskRepository.save(task)
+                        }
                         val userRankHistory = UserRankHistory(
                             score = -(300 + study.kickCondition * 200),
                             description = "태스크 인증 실패 횟수 초과로 점수감점후 퇴출",
@@ -107,22 +119,17 @@ class FirstTasklet(
             val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now()) // 그룹 랭크 점수 변경
             val totalReward = when (period) {
                 in 0..182 -> {
-                    println(1)
                     25 * 0.3 + (successCount / numOfMember) * 70
                 }
 
                 in 183..364 -> {
-                    println(2)
                     50 * 0.3 + (successCount / numOfMember) * 70
                 }
 
                 else -> {//1년이상
-                    println(3)
                     100 * 0.3 + (successCount / numOfMember) * 70
                 }
             }
-
-            println(totalReward)
 
             val groupRank = study.groupRank
             groupRank.score += totalReward.roundToInt()
