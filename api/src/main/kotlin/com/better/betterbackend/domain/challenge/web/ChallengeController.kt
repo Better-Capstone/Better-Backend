@@ -22,7 +22,7 @@ class ChallengeController(
     }
 
     @Operation(summary = "챌린지 인증")
-    @PostMapping("/comment/:{id}")
+    @PostMapping("/comment/{id}")
     fun approve(@PathVariable("id") id: Long, @RequestBody request: ChallengeApproveRequestDto): ResponseEntity<Unit> {
         return ResponseEntity.ok().body(challengeService.approve(id,request))
     }
