@@ -61,7 +61,7 @@ class FirstTasklet(
                 }
 
                 if (success) {
-                    userRank.score += 20 // 성공했을 때 올라가는 점수
+                    userRank.score = if (userRank.score + 20 <= 10000) userRank.score + 20 else 10000 // 성공했을 때 올라가는 점수
                     val userRankHistory = UserRankHistory(
                         score = 20,
                         description = "태스크 인증 완료",
@@ -74,7 +74,7 @@ class FirstTasklet(
                     member.kickCount += 1
                     memberRepository.save(member)
                     if (member.kickCount == study.kickCondition) { // 퇴출 조건 만족시 퇴출 + 점수 깎기
-                        userRank.score -= (300 + study.kickCondition * 200)
+                        userRank.score = if (userRank.score - (300 + study.kickCondition * 200) >= 0) userRank.score - (300 + study.kickCondition * 200) else 0
                         if (task == null) {
                             task = Task(
                                 title = "미등록",
@@ -110,14 +110,13 @@ class FirstTasklet(
                         task = task!!,
                     )
                     userRank.userRankHistoryList += userRankHistory
-                    userRank.score += (5 * numOfMember)
+                    userRank.score = if (userRank.score + (5 * numOfMember) <= 10000) userRank.score + (5 * numOfMember) else 10000
                     userRankUpdateList.add(userRank)
                 }
                 userRankRepository.saveAll(userRankUpdateList)
             }
 
-            val period = ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now()) // 그룹 랭크 점수 변경
-            val totalReward = when (period) {
+            val totalReward = when (ChronoUnit.DAYS.between(study.createdAt.toLocalDate(), LocalDate.now())) { // 그룹 랭크 점수 변경
                 in 0..182 -> {
                     25 * 0.3 + (successCount / numOfMember) * 70
                 }
